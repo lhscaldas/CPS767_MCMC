@@ -1,0 +1,284 @@
+\documentclass[12 pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{matlab-prettifier}
+\usepackage[portuguese]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage[font=small,labelfont=bf]{caption}
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{myyellow}{rgb}{1.0, 1.0, 0.8}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{comment}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage[normalem]{ulem}               % to striketrhourhg text
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{longtable}
+\usepackage{enumitem}
+\newcommand\redout{\bgroup\markoverwith
+{\textcolor{red}{\rule[0.5ex]{2pt}{0.8pt}}}\ULon}
+\renewcommand{\lstlistingname}{Código}% Listing -> Algorithm
+\renewcommand{\lstlistlistingname}{Lista de \lstlistingname s}% List of Listings -> List of Algorithms
+
+\usepackage[top=3cm,left=2cm,bottom=2cm, right=2cm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{automata}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta, positioning}
+
+\usepackage{adjustbox}
+
+
+% Configuração para destacar a sintaxe do Python
+\lstset{ 
+    language=Python,                     % A linguagem do código
+    backgroundcolor=\color{myyellow}, % A cor do fundo 
+    basicstyle=\ttfamily\footnotesize,   % O estilo do texto básico
+    keywordstyle=\color{blue},           % Cor das palavras-chave
+    stringstyle=\color{red},             % Cor das strings
+    commentstyle=\color{mygreen},          % Cor dos comentários
+    numbers=left,                        % Números das linhas à esquerda
+    numberstyle=\tiny\color{gray},       % Estilo dos números das linhas
+    stepnumber=1,                        % Número de linhas entre os números das linhas
+    frame=single,                        % Moldura ao redor do código
+    breaklines=true,                     % Quebra automática das linhas longas
+    captionpos=t,                        % Posição da legenda
+    showstringspaces=false               % Não mostra espaços em branco nas strings
+    extendedchars=true,
+    literate={º}{{${ }^{\underline{o}}$}}1 {á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {É}{{\'E}}1 {ê}{{\^e}}1 {ë}{{\"e}}1 {í}{{\'i}}1 {ç}{{\c{c}}}1 {Ç}{{\c{C}}}1 {õ}{{\~o}}1 {ó}{{\'o}}1 {ô}{{\^o}}1 {ú}{{\'u}}1 {â}{{\^a}}1 {~}{{$\sim$}}1
+}
+
+
+\title{%
+\textbf{\huge Universidade Federal do Rio de Janeiro} \par
+\textbf{\LARGE Instituto Alberto Luiz Coimbra de Pós-Graduação e Pesquisa de Engenharia} \par
+
+\includegraphics[width=8cm]{COPPE UFRJ.png} \par
+
+\textbf{Programa de Engenharia de Sistemas e Computação} \par
+
+CPS767 - Algoritmos de Monte Carlo e Cadeias de Markov  \par
+
+Prof. Daniel Ratton Figueiredo\par
+
+\vspace{1\baselineskip}
+\textbf{\textit{1ª Lista de Exercícios}} \par
+}
+
+\author{Luiz Henrique Souza Caldas\\email: lhscaldas@cos.ufrj.br}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% \tableofcontents
+
+\section*{Questão 1: Filhos e filhas}
+Considere um casal que tem dois descendentes e que as chances de cada um deles ser filho ou filha são
+iguais. Responda às perguntas abaixo:
+
+\begin{enumerate}
+    \item Calcule a probabilidade dos descendentes formar um casal (ou seja, um filho e uma filha).
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Seja $X_1$ a variável aleatória que representa o sexo do primeiro filho e $X_2$ a variável aleatória que representa o sexo do segundo filho, as quais assumem valor 0 se for uma filha e 1 se for um filho. O espaço amostral é dado por todas as combinações possíveis de sexos para os dois filhos, ou seja, $\Omega = \{(0,0), (0,1), (1,0), (1,1)\}$. Já o evento ``Formar um casal'' ocorre quando há um filho e uma filha, ou seja, $C = \{(0,1), (1,0)\}$. Como há $|C| = 2$ elementos no evento de interesse e $|\Omega| = 4$ no total, a probabilidade de formar um casal é dada por:
+        $$P(C) = \frac{|C|}{|\Omega|} = \frac{2}{4} = \underline{ \frac{1}{2}\quad \vline}$$
+    \end{tcolorbox}
+
+    \item Calcule a probabilidade de ao menos um dos descendentes ser filho.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Novamente espaço amostral é dado por todas as combinações possiveis de filhos e filhas, ou seja, $\Omega = \{(0,0), (0,1), (1,0), (1,1)\}$. O evento ``Ao menos um filho'' ocorre quando há um filho e uma filha ou dois filhos, ou seja, $F = \{(0,1), (1,0), (1,1)\}$. Como há $|F| = 3$ elementos no evento de interesse e $|\Omega| = 4$ no total, a probabilidade de ao menos um dos descendentes ser filho é dada por:
+        $$P(F) = \frac{|F|}{|\Omega|} = \underline{\frac{3}{4} \quad \vline}$$
+    \end{tcolorbox}
+    
+    \item Calcule a probabilidade das duas serem filhas dado que uma é filha (cuidado!).
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Se uma já é filha, o espaço amostral é reduzido para $\Omega_F = \{(0,1), (1,0), (0,0)\}$ e o evento de interesse é $D = \{(0,0)\}$. Como há $|D| = 1$ elemento no evento de interesse e $|\Omega_F| = 3$ no total, a probabilidade das duas serem filhas dado que uma é filha é dada por:
+        $$P(D|F) = \frac{|D|}{|F|} = \underline{ \frac{1}{3} \quad \vline}$$
+    \end{tcolorbox}
+    \newpage
+    \item Calcule a probabilidade dos descendentes nascerem no mesmo dia (assuma que a chance de nascer em um determinado dia é igual a qualquer outro).
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Supondo que o ano não seja bisexto, a probabilidade de nascer em um determinado dia é $\frac{1}{365}$. Como os nascimentos são independentes, a probabilidade dos descendentes nascerem no mesmo dia é dada por:
+        $$P(\text{Mesmo dia}) = \left(\frac{1}{365}\right)^2 = \underline{ \frac{1}{133225} \quad \vline}$$
+    \end{tcolorbox}
+\end{enumerate}
+
+\section*{Questão 2: Dado}
+Considere um icosaedro (um sólido Platônico de 20 faces) tal que a chance de sair a face $i = 1, \dots, 20$ seja
+linearmente proporcional a $i$. Ou seja, $P [X = i] = ci$ para alguma constante $c$, onde $X$ é uma variável
+aleatória que denota a face do dado. Responda às perguntas abaixo:
+
+\begin{enumerate}
+    \item Determine o valor de $c$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        A soma da probabilidade de sair cada face do dado deve ser igual a 1, ou seja:
+        $$\sum_{i=1}^{20} P [X = i] = \sum_{i=1}^{20} ci = 1 \Rightarrow c\sum_{i=1}^{20} i = 1 \Rightarrow c\frac{20 \cdot 21}{2} = 1 \Rightarrow c = \underline{ \frac{1}{210} \quad \vline}$$
+    \end{tcolorbox}
+    \item Calcule o valor esperado de $X$ (obtenha também o valor numérico).
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        O valor esperado de uma variável aleatória discreta é dado por:
+        $$E[X] = \sum_{i=1}^{20} i \cdot P [X = i] = \sum_{i=1}^{20} i \cdot \frac{i}{210} = \frac{1}{210} \sum_{i=1}^{20} i^2 = \frac{1}{210} \cdot \frac{20 \cdot 21 \cdot 41}{6} = \frac{41}{3} \approx \underline{13,67 \quad \vline}$$
+    \end{tcolorbox}
+    \newpage
+    \item Calcule a probabilidade de $X$ ser maior do que seu valor esperado.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Como o valor esperado de $X$ é $E[X] = 13,67$, mas $X$ só pode assumir valores inteiros, a probabilidade de $X$ ser maior do que seu valor esperado é a mesma de $X$ ser maior ou igual a 14., dada por:
+        $$P [X > E[X]] = P [X \geq 14] =  \sum_{i=14}^{20} \frac{i}{210} $$
+        $$P [X > E[X]] = \frac{14+15+16+17+18+19+20}{210} \approx \underline{0,5667 \quad \vline}$$
+
+    \end{tcolorbox}
+    \item Calcule a variância de $X$ (obtenha também o valor numérico).
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        A variância de uma variável aleatória discreta é dada por:
+        $$\text{Var}[X] = E[X^2] - E[X]^2$$
+        Onde $E[X^2]$ é dado por:
+        $$E[X^2] = \sum_{i=1}^{20} i^2 \cdot P [X = i] = \sum_{i=1}^{20} i^2 \cdot \frac{i}{210} = \frac{1}{210} \sum_{i=1}^{20} i^3 = \frac{1}{210} \cdot \left(\frac{20 \cdot 21}{2}\right)^2 = 210$$
+        Portanto, a variância de $X$ é dada por:
+        $$\text{Var}[X] = 210 - \left(\frac{41}{3}\right)^2 \approx 210 - 186,77 = \underline{23,23 \quad \vline}$$
+    \end{tcolorbox}
+    \item Repita os últimos três itens para o caso do dado ser uniforme, ou seja, $P [X = i] = \frac{1}{20}$, $i = 1, \dots, 20$. Qual dado possui maior variância? Explique intuitivamente sua descoberta.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        $$E[X] = \sum_{i=1}^{20} i \cdot \frac{1}{20} = \frac{21}{2} = \underline{10,5 \quad \vline}$$
+        $$P [X > E[X]] = \sum_{i=11}^{20} \frac{1}{20} = \frac{10}{20} = \frac{1}{2} = \underline{0,5 \quad \vline}$$
+        $$E[X^2] = \sum_{i=1}^{20} i^2 \cdot \frac{1}{20} = \frac{20 \cdot 21 \cdot 41}{20 \cdot 6} = \frac{287}{2}$$
+        $$\text{Var}[X] = E[X^2] - E[X]^2 = \frac{287}{2} - \left(\frac{21}{2}\right)^2 = \frac{287}{2} - \frac{441}{4} = \frac{133}{4} \approx \underline{33,25 \quad \vline}$$
+        O dado uniforme possui uma variância maior, ou seja, é esperado que haja uma distância numérica maior entre seus valores tirados em comparação com o outro dado.
+    \end{tcolorbox}
+\end{enumerate}
+
+\section*{Questão 3: Dado em ação}
+Considere a versão uniforme do dado acima, ou seja, $P [X = i] = \frac{1}{20}$, $i = 1, \dots, 20$. Seja $Y$ uma variável
+aleatória indicadora da primalidade da face do dado. Ou seja, $Y = 1$ quando o $X$ é um número primo,
+e $Y = 0$ caso contrário. Responda às perguntas abaixo:
+
+\begin{enumerate}
+    \item Determine $P [Y = 1]$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
+    \item Considere que o dado será jogado $n$ vezes. Seja $Y_i$ a indicadora da primalidade da $i$-ésima rodada,
+          para $i = 1, \dots, n$, e defina $Z = \sum_{i=1}^{n} Y_i$. Repare que $Z$ é uma variável aleatória que denota o
+          número de vezes que o resultado é primo. Determine a distribuição de $Z$, ou seja, $P [Z = k]$, para
+          $k = 0, \dots, n$. Que distribuição é esta?
+          \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+          \end{tcolorbox}
+    \item Considere que o dado será jogado até que um número primo seja obtido. Seja $Y_i$ a indicadora da
+          primalidade da $i$-ésima rodada, para $i = 1, \dots$, e defina $Z = \min\{i | Y_i = 1\}$. Repare que $Z$ denota o
+          número de vezes que o dado é jogado até que o resultado seja um número primo. Determine a
+          distribuição de $Z$, ou seja $P [Z = k]$, para $k = 1, \dots$. Que distribuição é esta?
+          \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+          \end{tcolorbox}
+\end{enumerate}
+
+\section*{Questão 4: Cobra}
+Considere três imagens tiradas em uma floresta, $I_1, I_2$, e $I_3$. Em apenas uma das imagens existe uma
+pequena cobra. Um algoritmo de detecção de cobras em imagens detecta a cobra na imagem $i$ com
+probabilidade $\alpha_i$. Suponha que o algoritmo não encontrou a cobra na imagem $I_1$. Defina o espaço
+amostral e os eventos apropriados e use a regra de Bayes para determinar:
+
+\begin{enumerate}
+    \item A probabilidade da cobra estar na imagem $I_1$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
+    \item A probabilidade da cobra estar na imagem $I_2$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
+\end{enumerate}
+
+\section*{Questão 5: Sem memória}
+Seja $X \sim \text{Geo}(p)$ uma variável aleatória Geométrica com parâmetro $p$. Mostre que a distribuição
+geométrica não tem memória. Ou seja, dado que $X > k$, o número de rodadas adicionais até que o evento
+de interesse ocorra possui a mesma distribuição (dica: formalize esta afirmação).
+\begin{tcolorbox}[colframe=black, title=Resposta:]
+
+\end{tcolorbox}
+
+\section*{Questão 6: Ônibus}
+Considere que o processo de chegada do ônibus 485 no ponto do CT seja bem representado por um
+processo de Poisson. Ou seja, $X \sim \text{Poi}(\lambda, t)$ denota o número (aleatório) de ônibus que chegam ao ponto
+em um intervalo de tempo $t$ com taxa média de chegada igual a $\lambda$. Assuma que $\lambda = 10$ ônibus por hora.
+
+\begin{enumerate}
+    \item Determine a probabilidade de não chegar nenhum ônibus em um intervalo de 30 minutos (inclusive
+          numericamente).
+          \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+          \end{tcolorbox}
+    \item Determine a probabilidade da média ocorrer, ou seja, de chegarem exatamente 10 ônibus em uma
+          hora (inclusive numericamente).
+          \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+          \end{tcolorbox}
+    \item Determine a taxa $\lambda$ tal que a probabilidade de chegar ao menos um ônibus em um intervalo de 5
+          minutos seja maior que 90\% (inclusive numericamente).
+          \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+          \end{tcolorbox}
+\end{enumerate}
+
+\section*{Questão 7: Propriedades}
+Sejam $X$ e $Y$ duas variáveis aleatórias discretas. Mostre as seguintes equivalências usando as definições:
+
+\begin{enumerate}
+    \item $E[X] = E[E[X|Y]]$, conhecida como regra da torre da esperança.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
+    \item $\text{Var}[X] = E[X^2] - E[X]^2$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
+\end{enumerate}
+
+\section*{Questão 8: Paradoxo do Aniversário}
+Considere um grupo com $n$ pessoas e assuma que a data de nascimento de cada uma é uniforme dentre
+os 365 dias do ano. Vamos calcular a chance de duas ou mais pessoas fazerem aniversário no mesmo dia.
+
+\begin{enumerate}
+    \item Seja $c(n)$ a probabilidade de duas ou mais pessoas fazerem aniversário no mesmo dia. Determine explicitamente $c(n)$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
+    \item Usando a aproximação $e^x \approx 1 + x$, determine o valor aproximado para $c(n)$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
+    \item Usando o valor aproximado de $c(n)$, determine o menor valor de $n$ tal que a chance de colisão na data de aniversário seja maior do que $1/2$. Você considera este número alto ou baixo?
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
+\end{enumerate}
+
+\section*{Questão 9: Caras em sequência}
+Considere uma moeda enviesada, tal que a probabilidade do resultado ser cara é $p$ (e coroa $1 - p$).
+Considere o número de vezes que a moeda precisa ser jogada para obtermos $k$ caras consecutivas. Por exemplo, na sequência ``COCOCCOOCOCCC'' a moeda teve que ser jogada 13 vezes até o aparecimento de $k = 3$ caras consecutivas, onde C = cara e O = coroa.
+
+
+\begin{enumerate}
+    \item Seja $N_k$ a variável aleatória que denota esta quantidade. Qual é o número médio de vezes que a moeda precisa ser jogada para obtermos $k$ caras consecutivas, ou seja, qual é o valor esperado de $N_k$? Dica: comece com $k = 1$, monte uma recursão em $k$, e use a regra da torre da esperança.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
+\end{enumerate}
+
+% \section*{Códigos}
+
+% Os códigos utilizados para a resolução dos exercícios estão disponíveis no repositório do GitHub: \url{https://github.com/lhscaldas/cps863/}
+
+% \bibliographystyle{abntex2-num} % Escolha o estilo de citação desejado
+% \nocite{sutton2018reinforcement}
+% \bibliography{bibliografia} % Nome do arquivo .bib (sem a extensão)
+
+\end{document}
