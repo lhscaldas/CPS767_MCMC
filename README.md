@@ -20,5 +20,5 @@ Revisão de probabilidade, lei dos grandes números, algoritmos de amostragem, i
 
 # Listas
 
-1. [1ª Lista de Exercícios](Lista_1)
+* [1ª Lista de Exercícios:](Lista_1)
 Revisão de probabilidade.
