@@ -235,13 +235,11 @@ amostral e os eventos apropriados e use a regra de Bayes para determinar:
         $$
         P[C_2 | \bar{D}_1] = \frac{P[\bar{D}_1 | C_2]P[C_2]}{P[\bar{D}_1]}
         $$
-        Onde $P[\bar{D}_1 | C_2] = 1$ é a probabilidade de o algoritmo não detectar a cobra na imagem $I_1$, dado que a cobra está em $I_2$ (mais uma vez assumindo que a probabilidade de Falso Positivo é nula). Como os outros termos já foram calculados no item anterior, temos:
+        Como todos os termos já foram calculados no item anterior, temos:
         $$
         P[C_2 | \bar{D}_1] = \frac{1 \cdot \frac{1}{3}}{\frac{3 - \alpha_1}{3}} = \frac{1}{3 - \alpha_1}
         $$
         $$\boxed{P[C_2 | \bar{D}_1] = \frac{1}{3 - \alpha_1}}$$
-        
-
     \end{tcolorbox}
 \end{enumerate}
 
@@ -250,7 +248,13 @@ Seja $X \sim \text{Geo}(p)$ uma variável aleatória Geométrica com parâmetro 
 geométrica não tem memória. Ou seja, dado que $X > k$, o número de rodadas adicionais até que o evento
 de interesse ocorra possui a mesma distribuição (dica: formalize esta afirmação).
 \begin{tcolorbox}[colframe=black, title=Resposta:]
-
+Se $X \sim \text{Geo}(p)$ é uma variável aleatória Geométrica com parâmetro $p$, temos:
+$$P[X > k] = \prod_{i=1}^k (1-p) = (1-p)^k$$
+Ou seja, $k$ fracassos seguidos em uma sequência de variáveis aleatórias de Bernoulli, pois o restante da sequência para $i>k$ é irrelevante. Seja $m$ um número inteiro positivo, pela regra do produto, temos:
+$$P[X > k + m | X > k] = \frac{P[(X > k + m) \cap (X > k)]}{P[X > k]}$$
+Porém $m$ e $k$ são inteiros positivos, então $P[(X > k + m) \cap (X > k)] = P[X > k + m]$. Portanto:
+$$P[X > k + m | X > k] = \frac{P[X > k + m]}{P[X > k]} = \frac{(1-p)^{k+m}}{(1-p)^k} = (1-p)^m$$ 
+$$ \boxed{P[X > k + m | X > k] = (1-p)^m = P[X > m]}$$
 \end{tcolorbox}
 
 \section*{Questão 6: Ônibus}
