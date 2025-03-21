@@ -163,22 +163,31 @@ e $Y = 0$ caso contrário. Responda às perguntas abaixo:
 \begin{enumerate}
     \item Determine $P [Y = 1]$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-
+        Seja $U$ o espaço amostral com todos os valores possíveis de $X$, ou seja, $U = \{1, 2, 3, \dots, 20\}$. Seja $C=\{2, 3, 5, 7, 11, 13, 17, 19\}$ o evento com os números primos em $U$. Como os lançamentos são intependentes e a probabilidade de sair um número primo é $P[x_i] = \frac{1}{20}, \quad \forall i \in U$, a probabilidade de $Y = 1$ é dada por:
+        $$P[Y = 1] = \sum_{j \in C} P[X = j] = \sum_{j \in C} \frac{1}{20} = \frac{|C|}{20} = \frac{8}{20} = \underline{\frac{2}{5} \quad \vline}$$
     \end{tcolorbox}
-    \item Considere que o dado será jogado $n$ vezes. Seja $Y_i$ a indicadora da primalidade da $i$-ésima rodada,
-          para $i = 1, \dots, n$, e defina $Z = \sum_{i=1}^{n} Y_i$. Repare que $Z$ é uma variável aleatória que denota o
-          número de vezes que o resultado é primo. Determine a distribuição de $Z$, ou seja, $P [Z = k]$, para
-          $k = 0, \dots, n$. Que distribuição é esta?
-          \begin{tcolorbox}[colframe=black, title=Resposta:]
+    \newpage
+    \item Considere que o dado será jogado $n$ vezes. Seja $Y_i$ a indicadora da primalidade da $i$-ésima rodada, para $i = 1, \dots, n$, e defina $Z = \sum_{i=1}^{n} Y_i$. Repare que $Z$ é uma variável aleatória que denota o número de vezes que o resultado é primo. Determine a distribuição de $Z$, ou seja, $P [Z = k]$, para $k = 0, \dots, n$. Que distribuição é esta?
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Seja $S=\{Y_1=0, Y_2=1, ..., Y_n=1\}$ uma sequêcia de $n$ lançamentos de dado, com $k$ sucessos (números primos) e $n-k$ fracassos (números não primos). Se os lançamentos são independentes, a probabilidade de $k$ sucessos em $n$ tentativas é dada por:
+        $$P[S] = \left(\prod_{i=1}^{n} P[Y_i] \cdot \mathbb{I}(Y_i = 1) \right) \left(\prod_{i=1}^{n} P[Y_i] \cdot \mathbb{I}(Y_i = 0) \right),$$
+        onde $\mathbb{I}(Y_i = 1)$ é a função indicadora que vale 1 se $Y_i = 1$ e 0 caso contrário. Como $P[Y_i = 1] = \frac{2}{5}$ e $P[Y_i = 0] = \frac{3}{5}$, a probabilidade de $k$ sucessos em $n$ tentativas é dada por:
+        $$P[S] = \left(\frac{2}{5}\right)^k \left(\frac{3}{5}\right)^{n-k}$$.
+        Esta é a probabilidade para uma sequência específica $S$ de $k$ sucessos e $n-k$ fracassos. Como há $\binom{n}{k}$ maneiras de escolher $k$ sucessos em $n$ tentativas, a probabilidade de $Z = k$ é dada por:
+        $$\boxed{P[Z = k] = \binom{n}{k} \left(\frac{2}{5}\right)^k \left(\frac{3}{5}\right)^{n-k}}$$
 
-          \end{tcolorbox}
-    \item Considere que o dado será jogado até que um número primo seja obtido. Seja $Y_i$ a indicadora da
-          primalidade da $i$-ésima rodada, para $i = 1, \dots$, e defina $Z = \min\{i | Y_i = 1\}$. Repare que $Z$ denota o
-          número de vezes que o dado é jogado até que o resultado seja um número primo. Determine a
-          distribuição de $Z$, ou seja $P [Z = k]$, para $k = 1, \dots$. Que distribuição é esta?
-          \begin{tcolorbox}[colframe=black, title=Resposta:]
-
-          \end{tcolorbox}
+        Por $Z$ representar um somatório de $n$ variáveis aleatórias de Bernoulli $Y_i$, a distribuição de $Z$ é, por definição, uma \underline{distribuição Binomial}.
+    \end{tcolorbox}
+    \newpage
+    \item Considere que o dado será jogado até que um número primo seja obtido. Seja $Y_i$ a indicadora da primalidade da $i$-ésima rodada, para $i = 1, \dots$, e defina $Z = \min\{i | Y_i = 1\}$. Repare que $Z$ denota o número de vezes que o dado é jogado até que o resultado seja um número primo. Determine a distribuição de $Z$, ou seja $P [Z = k]$, para $k = 1, \dots$. Que distribuição é esta?
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Seja $S=\{Y_1=0, Y_2=0, ..., Y_{k-1}=0, Y_k=1\}$ uma sequência de $k$ lançamentos de dado, com $k-1$ fracassos (números não primos) e 1 sucesso (número primo), na última posição. Como os lançamentos são independentes, a probabilidade de $S$ é dada por:
+        $$P[S] = \left(\prod_{i=1}^{k-1} P[Y_i = 0] \right)  P[Y_k=1]$$
+        $$P[S] = \left(\frac{3}{5}\right)^{k-1} \frac{2}{5}$$
+        Pela definição do enunciado, a sequencia $S$ é a única possível, então:
+        $$\boxed{P[Z = k] = \left(\frac{3}{5}\right)^{k-1} \frac{2}{5}}$$
+        Por $Z$ representar o número de tentativas até o primeiro sucesso, a distribuição de $Z$ é, por definição, uma \underline{distribuição Geométrica}.
+    \end{tcolorbox}
 \end{enumerate}
 
 \section*{Questão 4: Cobra}
@@ -187,13 +196,51 @@ pequena cobra. Um algoritmo de detecção de cobras em imagens detecta a cobra n
 probabilidade $\alpha_i$. Suponha que o algoritmo não encontrou a cobra na imagem $I_1$. Defina o espaço
 amostral e os eventos apropriados e use a regra de Bayes para determinar:
 
+\newpage
 \begin{enumerate}
     \item A probabilidade da cobra estar na imagem $I_1$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Seja $D_i$ o evento de o algoritmo detectar a cobra na imagem $I_i$, e $\bar{D}_i$ o evento complementar (o algoritmo não detectar a cobra na imagem $I_i$). Seja $C_i$ o evento de a cobra estar na imagem $I_i$, e $\bar{C}_i$ o evento complementar (a cobra não estar na imagem $I_i$). O problema pede $P[C_1 | \bar{D}_1]$, ou seja, a probabilidade de a cobra estar na imagem $I_1$, dado que o algoritmo não a detectou nessa imagem (Falso Negativo). Pela regra de Bayes, temos:
+        $$
+        P[C_1 | \bar{D}_1] = \frac{P[\bar{D}_1 | C_1]P[C_1]}{P[\bar{D}_1]}
+        $$
+        Onde:
+        \begin{itemize}
+            \item $P[\bar{D}_1 | C_1] = 1 - \alpha_1$ é a probabilidade de o algoritmo não detectar a cobra na imagem $I_1$, dado que a cobra está em $I_1$;
+            \item $P[C_1] = P[C_2] = P[C_3] = \frac{1}{3}$ é a probabilidade a priori de a cobra estar na imagem $I_1$, assumindo que ela está em uma, e apenas uma, das três imagens com igual probabilidade;
+            \item $P[\bar{D}_1]$ é a probabilidade total de o algoritmo não detectar a cobra na imagem $I_1$, calculada por $ P[\bar{D}_1] = \sum_{i=1}^{3} P[\bar{D}_1 | C_i]P[C_i]$.
+        \end{itemize}
 
+        Sabemos que:
+        \begin{itemize}
+            \item Se a cobra está em $I_1$, $P[\bar{D}_1 | C_1] = 1 - \alpha_1$;
+            \item Se a cobra está em $I_2$ ou $I_3$, o algoritmo não pode detectá-la em $I_1$, pois ela não está lá (assumindo que não há Falsos Positivos). Portanto, $P[\bar{D}_1 | C_2] = P[\bar{D}_1 | C_3] = 1$.
+        \end{itemize}
+
+        Substituindo esses valores, temos:
+        $$
+        P[\bar{D}_1] = (1 - \alpha_1) \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} = \frac{3 - \alpha_1}{3}
+        $$
+
+        Portanto, a probabilidade de a cobra estar na imagem $I_1$, dado que o algoritmo não a detectou nessa imagem, é:
+        $$
+        P[C_1 | \bar{D}_1] = \frac{P[\bar{D}_1 | C_1]P[C_1]}{P[\bar{D}_1]} = \frac{(1 - \alpha_1) \cdot \frac{1}{3}}{\frac{3 - \alpha_1}{3}} $$
+
+        $$\boxed{P[C_1 | \bar{D}_1] = \frac{1 - \alpha_1}{3 - \alpha_1}}$$
     \end{tcolorbox}
+    \newpage
     \item A probabilidade da cobra estar na imagem $I_2$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Este item pede $P[C_2 | \bar{D}_1]$, ou seja, a probabilidade de a cobra estar na imagem $I_2$, dado que o algoritmo não a detectou na imagem $I_1$. Pela regra de Bayes, temos:
+        $$
+        P[C_2 | \bar{D}_1] = \frac{P[\bar{D}_1 | C_2]P[C_2]}{P[\bar{D}_1]}
+        $$
+        Onde $P[\bar{D}_1 | C_2] = 1$ é a probabilidade de o algoritmo não detectar a cobra na imagem $I_1$, dado que a cobra está em $I_2$ (mais uma vez assumindo que a probabilidade de Falso Positivo é nula). Como os outros termos já foram calculados no item anterior, temos:
+        $$
+        P[C_2 | \bar{D}_1] = \frac{1 \cdot \frac{1}{3}}{\frac{3 - \alpha_1}{3}} = \frac{1}{3 - \alpha_1}
+        $$
+        $$\boxed{P[C_2 | \bar{D}_1] = \frac{1}{3 - \alpha_1}}$$
+        
 
     \end{tcolorbox}
 \end{enumerate}
