@@ -263,19 +263,29 @@ processo de Poisson. Ou seja, $X \sim \text{Poi}(\lambda, t)$ denota o número (
 em um intervalo de tempo $t$ com taxa média de chegada igual a $\lambda$. Assuma que $\lambda = 10$ ônibus por hora.
 
 \begin{enumerate}
-    \item Determine a probabilidade de não chegar nenhum ônibus em um intervalo de 30 minutos (inclusive
-          numericamente).
-          \begin{tcolorbox}[colframe=black, title=Resposta:]
+    \item Determine a probabilidade de não chegar nenhum ônibus em um intervalo de 30 minutos (inclusive numericamente).
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        A distribuição de Poisson é dada por $$ P[X = k | \lambda, t] = \frac{e^{-\lambda t}(\lambda t)^k}{k!}$$
+        Para $k=0$, $\lambda = 10$ ônibus por hora e $t = 0.5$ horas (30 minutos), temos: 
 
-          \end{tcolorbox}
-    \item Determine a probabilidade da média ocorrer, ou seja, de chegarem exatamente 10 ônibus em uma
-          hora (inclusive numericamente).
-          \begin{tcolorbox}[colframe=black, title=Resposta:]
+        $$P[X = 0 | 10, 0.5] = \frac{e^{-10 \cdot 0.5}(10 \cdot 0,5)^0}{0!} = e^{-5} \approx \underline{6.74 \times 10^{-3} \quad \vline}$$
+    \end{tcolorbox}
+    \item Determine a probabilidade da média ocorrer, ou seja, de chegarem exatamente 10 ônibus em uma hora (inclusive numericamente).
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Para $k=10$, $\lambda = 10$ ônibus por hora e $t = 1$ hora, temos: 
 
-          \end{tcolorbox}
+        $$ P[X = 10 | 10, 1] = \frac{e^{-10 \cdot 1}(10 \cdot 1)^{10}}{10!} = \frac{e^{-10} \cdot 10^{10}}{3628800} \approx \underline{0.1251 \quad \vline}$$
+    
+
+    \end{tcolorbox}
     \item Determine a taxa $\lambda$ tal que a probabilidade de chegar ao menos um ônibus em um intervalo de 5
           minutos seja maior que 90\% (inclusive numericamente).
           \begin{tcolorbox}[colframe=black, title=Resposta:]
+            $$P[X>1 | \lambda, t] = 1 - P[X=0 | \lambda, t] = 1 - \frac{e^{-\lambda t}(\lambda t)^0}{0!} = 1 - e^{-\lambda t}$$
+            Para $t = 1/12$ horas (5 minutos), temos:
+            $$1 - e^{-\lambda \cdot 1/12} > 0.9 \Rightarrow e^{-\lambda \cdot 1/12} < 0.1 $$
+            $$-\lambda \cdot 1/12 < \ln(0.1) \Rightarrow \lambda > 12 \ln(10) $$
+            $$\boxed{\lambda > 27.63 \quad \text{ônibus/hora}}$$
 
           \end{tcolorbox}
 \end{enumerate}
