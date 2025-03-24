@@ -333,6 +333,7 @@ Sejam $X$ e $Y$ duas variáveis aleatórias discretas. Mostre as seguintes equiv
     \end{tcolorbox}
 \end{enumerate}
 
+\newpage
 \section*{Questão 8: Paradoxo do Aniversário}
 Considere um grupo com $n$ pessoas e assuma que a data de nascimento de cada uma é uniforme dentre
 os 365 dias do ano. Vamos calcular a chance de duas ou mais pessoas fazerem aniversário no mesmo dia.
@@ -340,17 +341,47 @@ os 365 dias do ano. Vamos calcular a chance de duas ou mais pessoas fazerem aniv
 \begin{enumerate}
     \item Seja $c(n)$ a probabilidade de duas ou mais pessoas fazerem aniversário no mesmo dia. Determine explicitamente $c(n)$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-    
+        Seja $p(n)$ a probabilidade de cada pessoa fazer aniversário em um dia diferente, considerando que o ano não é bissexto temos:
+        \begin{itemize}
+            \item A primeira pessoa pode nascer em qualquer um dos 365 dias do ano;
+            \item A segunda pessoa pode nascer nos 364 dias restantes;
+            \item E assim por diante...
+        \end{itemize}
 
+        Assim:
+        $$p(n) = 1 \cdot \frac{364}{365} \cdot \frac{363}{365} \cdot \dots \cdot \frac{365-n+1}{365} = \prod _{k=0}^{n-1} \frac{365-k}{365}$$
+
+        Usando lógica proposicional, o complementar de ninguém fazer aniversário no mesmo dia é que pelo menos duas pessoas fazem aniversário no mesmo dia. Portanto:	
+        
+        $$c(n) = 1 - p(n) = 1 - \prod _{k=0}^{n-1} \frac{365-k}{365}$$
+
+        $$\boxed{c(n) = 1 - \prod _{k=0}^{n-1} \frac{365-k}{365}}$$
 
     \end{tcolorbox}
+    \newpage
     \item Usando a aproximação $e^x \approx 1 + x$, determine o valor aproximado para $c(n)$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-
+        Aplicando o logaritmo natural em $p(n)$, temos:
+        $$\ln(p(n)) = \ln\left(\prod _{k=0}^{n-1} \frac{365-k}{365}\right) = \sum _{k=0}^{n-1} \ln\left(\frac{365-k}{365}\right) = \sum _{k=0}^{n-1} \ln\left(1 - \frac{k}{365}\right)$$
+        Se $e^x \approx 1 + x$, então, $\ln(1 + x) \approx x$. Fazendo $x=-\frac{k}{365}$, temos:
+        $$\ln(p(n)) \approx \sum _{k=0}^{n-1} -\frac{k}{365} = -\frac{1}{365} \sum _{k=0}^{n-1} k = -\frac{1}{365}\frac{n(n-1)}{2} = -\frac{n(n-1)}{730}$$
+        Aplicando a exponencial em ambos os lados, temos:
+        $$p(n) \approx e^{-\frac{n(n-1)}{730}}$$
+        Se $c(n) = 1 - p(n)$, então:
+        $$\boxed{c(n) \approx 1 - e^{-\frac{n(n-1)}{730}}}$$
     \end{tcolorbox}
     \item Usando o valor aproximado de $c(n)$, determine o menor valor de $n$ tal que a chance de colisão na data de aniversário seja maior do que $1/2$. Você considera este número alto ou baixo?
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-
+        Fazendo $c(n) > 1/2$, temos a inequação abaixo:
+        $$ c(n) \approx 1 - e^{-\frac{n(n-1)}{730}} > \frac{1}{2} \Rightarrow e^{-\frac{n(n-1)}{730}} < \frac{1}{2}$$
+        Aplicando o logaritmo natural em ambos os lados, temos:
+        $$ -\frac{n(n-1)}{730} < \ln\left(\frac{1}{2}\right)$$
+        Reorganizando os termos e resolvendo a inequação, temos:
+        $$ n^2 - n - 730 \ln(2) > 0$$
+        $$ n > \frac{1 + \sqrt{1 + 4 \cdot 730 \ln(2)}}{2} \approx 23.13$$
+        Portanto: 
+        $$\boxed{n = 24}$$
+        Um valor consideravelmente \underline{baixo}, dado que o ano possui 365 dias ($\approx 15.2 \times 24$).
     \end{tcolorbox}
 \end{enumerate}
 
