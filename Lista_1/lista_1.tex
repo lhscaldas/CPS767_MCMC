@@ -296,11 +296,40 @@ Sejam $X$ e $Y$ duas variáveis aleatórias discretas. Mostre as seguintes equiv
 \begin{enumerate}
     \item $E[X] = E[E[X|Y]]$, conhecida como regra da torre da esperança.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Aplicando a definição de valor esperado no lado esquerdo da equação, temos:
+            $$E[E[X|Y]] = \sum_y E[X|Y=y] \cdot P[Y=y] $$ 
+        Aplicando a definição de valor esperado condicional, temos:
+            $$E[E[X|Y]] = \sum_y \left( \underbrace{\sum_x x \cdot P[X=x|Y=y]}_{E[X|Y]} \right)\cdot P[Y=y]$$
+            $$E[E[X|Y]] = \sum_y \sum_x x \cdot P[X=x|Y=y] \cdot P[Y=y]$$
+        Como $x$ não é função de $y$, podemos trocar a ordem dos somatórios e remover $x$ do somatório interno:
+            $$E[E[X|Y]] = \sum_x x \sum_y P[X=x|Y=y] \cdot P[Y=y]$$
+        Pela Regra do Produto, temos:
+            $$E[E[X|Y]] = \sum_x x \sum_y \frac{P[X=x , Y=y]}{P[Y=y]} \cdot P[Y=y] = \sum_x x \sum_y P[X=x , Y=y]$$
+        Pela regra da soma (marginalização), temos:
+            $$E[E[X|Y]] = \sum_x x \cdot P[X=x]$$
+        Sendo que, por definição:
+            $$E[X] = \sum_x x \cdot P[X=x]$$
+        Portanto:
+            $$\boxed{E[E[X|Y]] = E[X]}$$
 
     \end{tcolorbox}
+    \newpage
     \item $\text{Var}[X] = E[X^2] - E[X]^2$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-
+        Pela definição de variância:
+        $$\text{Var}[X] = E[(X - E[X])^2] = E[X^2 - 2X E[X] + E[X]^2]$$
+        Pela definição de valor esperado, temos:
+        $$\text{Var}[X] = \sum_x (x^2 - 2x E[X] + E[X]^2) P[X=x]$$
+        Separando o somatório, temos:
+        $$\text{Var}[X] = \sum_x x^2 P[X=x] - 2 E[X] \sum_x x P[X=x] + E[X]^2 \sum_x P[X=x]$$
+        Porém, por definição, temos:
+        $$E[X] = \sum_x x P[X=x] \quad \text{e} \quad \sum_x P[X=x] = 1$$
+        Assim:
+        $$\text{Var}[X] = \sum_x x^2 P[X=x] - 2 E[X]^2 + E[X]^2 = \sum_x x^2 P[X=x] - E[X]^2$$
+        Mas:
+        $$\sum_x x^2 P[X=x] = E[X^2] $$
+        Portanto:
+        $$\boxed{\text{Var}[X] = E[X^2] - E[X]^2}$$
     \end{tcolorbox}
 \end{enumerate}
 
@@ -311,6 +340,8 @@ os 365 dias do ano. Vamos calcular a chance de duas ou mais pessoas fazerem aniv
 \begin{enumerate}
     \item Seja $c(n)$ a probabilidade de duas ou mais pessoas fazerem aniversário no mesmo dia. Determine explicitamente $c(n)$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+    
+
 
     \end{tcolorbox}
     \item Usando a aproximação $e^x \approx 1 + x$, determine o valor aproximado para $c(n)$.
