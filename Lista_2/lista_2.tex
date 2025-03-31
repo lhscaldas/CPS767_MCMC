@@ -1,0 +1,169 @@
+\documentclass[12 pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{matlab-prettifier}
+\usepackage[portuguese]{babel}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage[font=small,labelfont=bf]{caption}
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{myyellow}{rgb}{1.0, 1.0, 0.8}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{comment}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage[normalem]{ulem}               % to striketrhourhg text
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{tcolorbox}
+\usepackage{longtable}
+\usepackage{enumitem}
+\newcommand\redout{\bgroup\markoverwith
+{\textcolor{red}{\rule[0.5ex]{2pt}{0.8pt}}}\ULon}
+\renewcommand{\lstlistingname}{Código}% Listing -> Algorithm
+\renewcommand{\lstlistlistingname}{Lista de \lstlistingname s}% List of Listings -> List of Algorithms
+
+\usepackage[top=3cm,left=2cm,bottom=2cm, right=2cm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{automata}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta, positioning}
+
+\usepackage{adjustbox}
+
+
+% Configuração para destacar a sintaxe do Python
+\lstset{ 
+    language=Python,                     % A linguagem do código
+    backgroundcolor=\color{myyellow}, % A cor do fundo 
+    basicstyle=\ttfamily\footnotesize,   % O estilo do texto básico
+    keywordstyle=\color{blue},           % Cor das palavras-chave
+    stringstyle=\color{red},             % Cor das strings
+    commentstyle=\color{mygreen},          % Cor dos comentários
+    numbers=left,                        % Números das linhas à esquerda
+    numberstyle=\tiny\color{gray},       % Estilo dos números das linhas
+    stepnumber=1,                        % Número de linhas entre os números das linhas
+    frame=single,                        % Moldura ao redor do código
+    breaklines=true,                     % Quebra automática das linhas longas
+    captionpos=t,                        % Posição da legenda
+    showstringspaces=false               % Não mostra espaços em branco nas strings
+    extendedchars=true,
+    literate={º}{{${ }^{\underline{o}}$}}1 {á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {É}{{\'E}}1 {ê}{{\^e}}1 {ë}{{\"e}}1 {í}{{\'i}}1 {ç}{{\c{c}}}1 {Ç}{{\c{C}}}1 {õ}{{\~o}}1 {ó}{{\'o}}1 {ô}{{\^o}}1 {ú}{{\'u}}1 {â}{{\^a}}1 {~}{{$\sim$}}1
+}
+
+
+\title{%
+\textbf{\huge Universidade Federal do Rio de Janeiro} \par
+\textbf{\LARGE Instituto Alberto Luiz Coimbra de Pós-Graduação e Pesquisa de Engenharia} \par
+
+\includegraphics[width=8cm]{COPPE UFRJ.png} \par
+
+\textbf{Programa de Engenharia de Sistemas e Computação} \par
+
+CPS767 - Algoritmos de Monte Carlo e Cadeias de Markov  \par
+
+Prof. Daniel Ratton Figueiredo\par
+
+\vspace{1\baselineskip}
+\textbf{\textit{2ª Lista de Exercícios}} \par
+}
+
+\author{Luiz Henrique Souza Caldas\\email: lhscaldas@cos.ufrj.br}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% \tableofcontents
+
+\section*{Questão 1: Cauda do dado}
+
+Considere um icosaedro (um sólido Platônico de 20 faces) honesto, tal que a probabilidade associada a cada face é 1/20. Considere que o dado será lançado até que um número primo seja observado, e seja $Z$ a variável aleatória que denota o número de vezes que o dado é lançado. Responda às perguntas abaixo:
+
+\begin{enumerate}
+    \item Determine a distribuição de $Z$, ou seja $P[Z = k], k = 1, 2, \dots$. Que distribuição é esta?
+    \item Utilize a desigualdade de Markov para calcular um limitante para $P[Z \geq 10]$.
+    \item Utilize a desigualdade de Chebyshev para calcular um limitante para $P[Z \geq 10]$.
+    \item Calcule o valor exato de $P[Z \geq 10]$ (dica: use probabilidade complementar). Compare os valores obtidos.
+\end{enumerate}
+
+\section*{Questão 2: Pesquisa eleitoral}
+
+Você leu no jornal que uma pesquisa eleitoral com 1500 pessoas indicou que 40\% dos entrevistados prefere o candidato A enquanto 60\% preferem o candidato B. Determine a margem de erro desta pesquisa usando uma confiança de 95\%. O que você precisou assumir para calcular a margem de erro?
+
+\section*{Questão 3: Sanduíches}
+
+Você convidou 64 pessoas para uma festa e agora precisa preparar sanduíches para os convidados. Você acredita que cada convidado irá comer 0, 1 ou 2 sanduíches com probabilidades 1/4, 1/2 e 1/4, respectivamente. Assuma que o número de sanduíches que cada convidado irá comer é independente de qualquer outro convidado. Quantos sanduíches você deve preparar para ter uma confiança de 95\% de que não vai faltar sanduíches para os convidados?
+
+\section*{Questão 4: Graus improváveis}
+
+Considere o modelo de grafo aleatório de Erdős-Rényi (também conhecido por $G(n, p)$), onde cada possível aresta de um grafo rotulado com $n$ vértices ocorre com probabilidade $p$, independentemente. Responda às perguntas abaixo:
+
+\begin{enumerate}
+    \item Determine a distribuição do grau do vértice 1 (em função de $n$ e $p$).
+    \item Determine o valor $\gamma$ (em função de $n$ e $p$) tal que com alta probabilidade ($1 - 1/n$) o grau observado no vértice 1 é menor ou igual a $\gamma$.
+\end{enumerate}
+
+\section*{Questão 5: Calculando uma importante constante}
+
+Seja $X_i$ uma sequência i.i.d. de v.a. contínuas uniformes em $[0, 1]$. Seja $V$ o menor número $k$ tal que a soma das primeiras $k$ variáveis seja maior do que 1. Ou seja, $V = \min\{k \mid X_1 + \cdots + X_k \geq 1\}$.
+
+\begin{enumerate}
+    \item Escreva e implemente um algoritmo para gerar uma amostra de $V$.
+    \item Escreva e implemente um algoritmo de Monte Carlo para estimar o valor esperado de $V$.
+    \item Trace um gráfico do valor estimado em função do número de amostras. Para qual valor seu estimador está convergindo?
+\end{enumerate}
+
+\section*{Questão 6: Transformada inversa}
+
+Mostre como o método da transformada inversa pode ser usado para gerar amostras de uma v.a. contínua $X$ com as seguintes distribuições:
+
+\begin{enumerate}
+    \item Distribuição exponencial com parâmetro $\lambda > 0$, cuja função densidade é dada por $f_X(x) = \lambda e^{-\lambda x}$, para $x \geq 0$.
+    \item Distribuição de Pareto com parâmetros $x_0 > 0$ e $\alpha > 0$, cuja função densidade é dada por $f_X(x) = \frac{\alpha x_0^\alpha}{x^{\alpha + 1}}$, para $x \geq x_0$.
+\end{enumerate}
+
+\section*{Questão 7: Contando domínios na Web}
+
+Quantos domínios web existem dentro da UFRJ? Mais precisamente, quantos domínios existem dentro do padrão de nomes \texttt{http://www.[a-z](k).ufrj.br}, onde $[a-z](k)$ é qualquer sequência de caracteres de comprimento $k$ ou menor? Construa um algoritmo de Monte Carlo para estimar este número.
+
+\begin{enumerate}
+    \item Descreva a variável aleatória cujo valor esperado está relacionado com a medida de interesse. Relacione analiticamente o valor esperado com a medida de interesse.
+    \item Implemente o método de Monte Carlo para gerar amostras e estimar a medida de interesse. Para determinar o valor de uma amostra, você deve consultar o domínio gerado para determinar se o mesmo existe (utilize uma biblioteca web para isto).
+    \item Assuma que $k = 4$. Seja $\hat{w}_n$ o valor do estimador do número de domínios após $n$ amostras. Trace um gráfico em escala semi-log (eixo-$x$ em escala log) de $\hat{w}_n$ em função de $n$ para $n = 1, \dots, 10^5$ (ou mais, se conseguir). O que você pode dizer sobre a convergência de $\hat{w}_n$?
+\end{enumerate}
+
+\section*{Questão 8: Rejection Sampling}
+
+Considere o problema de gerar amostras de uma v.a. $X \sim \text{Binomial}(1000, 0.2)$.
+
+\begin{enumerate}
+    \item Descreva uma proposta simples de função de probabilidade para gerar amostras de $X$ usando Rejection Sampling. Calcule a eficiência dessa proposta.
+    \item Lembrando que a distribuição Binomial tem a forma de sino, centrada em sua média, proponha outra função de probabilidade para gerar amostras de $X$ usando Rejection Sampling. Calcule a eficiência dessa proposta e compare com a eficiência acima. O que você pode concluir?
+\end{enumerate}
+
+\section*{Questão 9: Integração de Monte Carlo e Importance Sampling}
+
+Considere a função $g(x) = e^{-x^2}$ e a integral de $g(x)$ no intervalo $[0, 1]$.
+
+\begin{enumerate}
+    \item Implemente um método de Monte Carlo simples para estimar o valor da integral.
+    \item Intuitivamente, muitas amostras de $g(x)$ vão ter valores muito baixos. Dessa forma, utilize Importance Sampling para melhorar a qualidade do estimador do valor da integral. Em particular, utilize a função de densidade $h(x) = Ae^{-x}$ definida em $[0, 1]$ onde $A$ é o valor da constante de normalização. Mostre como gerar amostras de $h(x)$.
+    \item Compare os dois métodos. Trace um gráfico do erro relativo de cada um dos estimadores em função do número de amostras. Ou seja, $|\hat{I}_n - I|/I$ onde $I$ é o valor exato da integral e $\hat{I}_n$ é o valor do estimador com $n$ amostras, para $n = 10^1, 10^2, \dots, 10^6$.
+\end{enumerate}
+
+
+\section*{Códigos}
+
+Os códigos utilizados para a resolução dos exercícios estão disponíveis no repositório do GitHub: \url{https://github.com/lhscaldas/CPS767_MCMC/}
+
+% \bibliographystyle{abntex2-num} % Escolha o estilo de citação desejado
+% \nocite{sutton2018reinforcement}
+% \bibliography{bibliografia} % Nome do arquivo .bib (sem a extensão)
+
+\end{document}

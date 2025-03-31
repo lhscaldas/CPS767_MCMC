@@ -22,3 +22,6 @@ Revisão de probabilidade, lei dos grandes números, algoritmos de amostragem, i
 
 * [1ª Lista de Exercícios:](Lista_1)
 Revisão de probabilidade.
+
+* [2ª Lista de Exercícios:](Lista_2)
+Desigualdades probabilísticas, estimativas de erro, geração de amostras e algoritmos baseados em Monte Carlo.

@@ -106,8 +106,8 @@ iguais. Responda às perguntas abaixo:
     \newpage
     \item Calcule a probabilidade dos descendentes nascerem no mesmo dia (assuma que a chance de nascer em um determinado dia é igual a qualquer outro).
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-        Supondo que o ano não seja bisexto, a probabilidade de nascer em um determinado dia é $\frac{1}{365}$. Como os nascimentos são independentes, a probabilidade dos descendentes nascerem no mesmo dia é dada por:
-        $$P(\text{Mesmo dia}) = \left(\frac{1}{365}\right)^2 = \underline{ \frac{1}{133225} \quad \vline}$$
+        Para que os dois filhos nasçam no mesmo dia, o espaço amostral é dado por todas as combinações possíveis de dias de nascimento para os dois filhos, ou seja, $\Omega = \{(1,1), (1,2), \dots, (365,365)\}$. O evento ``Nasceram no mesmo dia'' ocorre quando os dois filhos nascem no mesmo dia, ou seja, $S = \{(1,1), (2,2), \dots, (365,365)\}$. Como há $|S| = 365$ elementos no evento de interesse e $|\Omega| = 365 \cdot 365 = 365^2 $ no total, a probabilidade dos descendentes nascerem no mesmo dia é dada por:
+        $$P(S) = \frac{|S|}{|\Omega|} = \frac{365}{365^2} = \underline{\frac{1}{365} \quad \vline}$$
     \end{tcolorbox}
 \end{enumerate}
 
@@ -378,10 +378,10 @@ os 365 dias do ano. Vamos calcular a chance de duas ou mais pessoas fazerem aniv
         $$ -\frac{n(n-1)}{730} < \ln\left(\frac{1}{2}\right)$$
         Reorganizando os termos e resolvendo a inequação, temos:
         $$ n^2 - n - 730 \ln(2) > 0$$
-        $$ n > \frac{1 + \sqrt{1 + 4 \cdot 730 \ln(2)}}{2} \approx 23.13$$
+        $$ n > \frac{1 + \sqrt{1 + 4 \cdot 730 \ln(2)}}{2} \approx 22.9999$$
         Portanto: 
-        $$\boxed{n = 24}$$
-        Um valor consideravelmente \underline{baixo}, dado que o ano possui 365 dias ($\approx 15.2 \times 24$).
+        $$\boxed{n = 23}$$
+        Um valor consideravelmente \underline{baixo}, dado que o ano possui 365 dias ($\approx 15.87 \times 23$).
     \end{tcolorbox}
 \end{enumerate}
 
@@ -393,7 +393,40 @@ Considere o número de vezes que a moeda precisa ser jogada para obtermos $k$ ca
 \begin{enumerate}
     \item Seja $N_k$ a variável aleatória que denota esta quantidade. Qual é o número médio de vezes que a moeda precisa ser jogada para obtermos $k$ caras consecutivas, ou seja, qual é o valor esperado de $N_k$? Dica: comece com $k = 1$, monte uma recursão em $k$, e use a regra da torre da esperança.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        \begin{itemize}
+            \item Para $k = 1$, temos uma série geométrica $N_1 \sim \text{Geom}(p)$, onde estamos interessados na primeira ocorrência de cara. O valor esperado da distribuição geométrica é dado por:
+            $$E[N_1] = \frac{1}{p}$$ 
+        
+            \item Para $k=2$, temos que primeiramente obter uma cara, e então obter a segunda cara consecutiva. Após obter a primeira cara, pode acontecer duas coisas:
+            \begin{enumerate}[label=\arabic*.]
+                \item Obter cara novamente, com probabilidade $p$, e finalizar a contagem, totalizando duas caras consecutivas;
+                \item Obter coroa, com probabilidade $1-p$, e recomeçar a contagem desde o início, precisando de $E[N_2]$ lançamentos adicionais.
+            \end{enumerate}
+            O número esperado de jogadas pode então ser descrito por:
+            $$E[N_2] = E[N_1] + \underbrace{1\cdot p}_{\text{sucesso}} + \underbrace{(E[N_2] + 1) \cdot (1-p)}_{\text{falha}}$$
+            $$E[N_2] = \frac{1}{p} + p + E[N_2] + 1 - E[N_2] \cdot p - p$$
+            $$E[N_2] \cdot p = \frac{1}{p} + 1$$
+            $$E[N_2] = \frac{1}{p^2} + \frac{1}{p}$$
+            $$E[N_2] = \frac{p+1}{p^2}$$
+        \end{itemize}
+    \end{tcolorbox}
+    \newpage
+    \begin{tcolorbox}[colframe=black, title=Resposta(continuação):]
+        \begin{itemize}
+            \item Para $k=3$, analogamente:
+            $$E[N_3] = E[N_2] + \underbrace{1\cdot p}_{\text{sucesso}} + \underbrace{(E[N_3] + 1) \cdot (1-p)}_{\text{falha}}$$
+            $$E[N_3] = \frac{p+1}{p^2} + p + E[N_3] + 1 - E[N_3] \cdot p - p$$
+            $$E[N_3] \cdot p = \frac{p+1}{p^2} + 1$$
+            $$E[N_3] = \frac{p^2 + p + 1}{p^3}$$
+            \item Generalizando para qualquer $k$:
+            
+            É possível observar que o valor esperado de $N_k$ é dado por:
+            $$ E[N_k] = \frac{1}{p^k}\sum_{i=0}^{k-1} p^i $$
 
+            O somatório acima é a fórmula da soma de uma série geométrica finita, com razão $p$ e $k$ termos. Portanto:
+            $$ E[N_k] = \frac{1}{p^k} \frac{1 - p^k}{1 - p} $$
+            $$ \boxed{E[N_k] = \frac{1 - p^k}{p^k(1 - p)}}$$
+        \end{itemize}
     \end{tcolorbox}
 \end{enumerate}
 
