@@ -87,18 +87,89 @@ Considere um icosaedro (um sólido Platônico de 20 faces) honesto, tal que a pr
 
 \begin{enumerate}
     \item Determine a distribuição de $Z$, ou seja $P[Z = k], k = 1, 2, \dots$. Que distribuição é esta?
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Os números primos são {2, 3, 5, 7, 11, 13, 17, 19}. Portanto, a probabilidade de obter um número primo em um lançamento é $p = \frac{8}{20} = \frac{2}{5}$. Consequentemente, a probabilidade de não obter um número primo em um lançamento é $1 - p = \frac{3}{5}$. Assim, a distribuição de $Z$ é dada por:
+        $$
+            \boxed{P[Z = k] = (1-p)^{k-1}p = \left(\frac{3}{5}\right)^{k-1}\left(\frac{2}{5}\right)}
+        $$
+        para $k = 1, 2, \dots$. Esta é uma \underline{distribuição geométrica} com parâmetro $p = \frac{2}{5}$.
+
+    \end{tcolorbox}
     \item Utilize a desigualdade de Markov para calcular um limitante para $P[Z \geq 10]$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+        A desigualdade de Markov afirma que, para uma v.a. $Z>0$ e $a > 0$, temos:
+        $$
+            P[Z \geq a] \leq \frac{E[Z]}{a}
+        $$
+        Para calcular $E[Z]$, utilizamos a fórmula da média de uma distribuição geométrica:
+        $$
+            E[Z] = \frac{1}{p} = \frac{1}{\frac{2}{5}} = \frac{5}{2}
+        $$
+        Assim, aplicando a desigualdade de Markov com $a = 10$, obtemos:
+        $$
+            P[Z \geq 10] \leq \frac{E[Z]}{10} = \frac{\frac{5}{2}}{10} = \underline{\frac{1}{4} = 0.25 \quad \vline}
+        $$
+        Portanto, \underline{$P[Z \geq 10] \leq 0.25$}.
+        Isso significa que a probabilidade de o número de lançamentos do dado ser maior ou igual a 10 é \underline{menor ou igual a 25\%}.
+
+    \end{tcolorbox}
+    \newpage
     \item Utilize a desigualdade de Chebyshev para calcular um limitante para $P[Z \geq 10]$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+    A média e variância da distribuição geométrica são $\mu = \frac{1}{p} = \frac{5}{2}$ e $\sigma^2 = \frac{1 - p}{p^2} = \frac{15}{4}$. Aplicando Chebyshev:
+    $$
+    P[|Z - \mu| \geq k \sigma] \leq \frac{1}{k^2}
+    $$
+    Subtraindo $\mu$ de ambos os lados em  $P[Z \geq 10]$, temos:
+    $$
+    P[Z \geq 10] = P[Z - \mu \geq 10 - \tfrac{5}{2}] = P[Z - \mu \geq \tfrac{15}{2}] \leq P[|Z - \mu| \geq k \sigma]
+    $$
+
+    Fazendo $k \sigma = \tfrac{15}{2}$, então 
+    $$k = \frac{15}{2} \cdot \frac{2}{\sqrt{15}} = \sqrt{15}$$
+    
+    Assim, temos:
+    $$
+    \boxed{P[Z \geq 10] \leq \frac{1}{15} \approx 0.0667}
+    $$
+    \end{tcolorbox}
+
     \item Calcule o valor exato de $P[Z \geq 10]$ (dica: use probabilidade complementar). Compare os valores obtidos.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+    $$
+    P[Z \geq 10] = 1 - P[Z \leq 9] = 1 - \sum_{k=1}^9 P[Z = k]
+    $$
+    $$
+    P[Z \geq 10] = 1 - \frac{2}{5} \sum_{k=1}^9 \left(\frac{3}{5}\right)^{k-1} = 1 - \frac{2}{5} \cdot \frac{1 - \left(\frac{3}{5}\right)^9}{1 - \frac{3}{5}} = \left(\frac{3}{5}\right)^9
+    $$
+    $$
+    \boxed{P[Z \geq 10] = \left(\frac{3}{5}\right)^9 \approx 0{,}0101}
+    $$
+
+    Comparando os valores:
+    \begin{itemize}
+        \item Markov: $P[Z \geq 10] \leq 0{,}25$
+        \item Chebyshev: $P[Z \geq 10] \leq 0{,}0667$
+        \item Valor exato: $P[Z \geq 10] \approx 0{,}0101$
+    \end{itemize}
+    Ambas as desigualdades fornecem limites conservadores, sendo Chebyshev mais ajustado que Markov. O valor exato é o mais preciso.
+    \end{tcolorbox}
+
 \end{enumerate}
 
 \section*{Questão 2: Pesquisa eleitoral}
 
 Você leu no jornal que uma pesquisa eleitoral com 1500 pessoas indicou que 40\% dos entrevistados prefere o candidato A enquanto 60\% preferem o candidato B. Determine a margem de erro desta pesquisa usando uma confiança de 95\%. O que você precisou assumir para calcular a margem de erro?
+\begin{tcolorbox}[colframe=black, title=Resposta:]
+
+\end{tcolorbox}
 
 \section*{Questão 3: Sanduíches}
 
 Você convidou 64 pessoas para uma festa e agora precisa preparar sanduíches para os convidados. Você acredita que cada convidado irá comer 0, 1 ou 2 sanduíches com probabilidades 1/4, 1/2 e 1/4, respectivamente. Assuma que o número de sanduíches que cada convidado irá comer é independente de qualquer outro convidado. Quantos sanduíches você deve preparar para ter uma confiança de 95\% de que não vai faltar sanduíches para os convidados?
+\begin{tcolorbox}[colframe=black, title=Resposta:]
+
+\end{tcolorbox}
 
 \section*{Questão 4: Graus improváveis}
 
@@ -106,7 +177,13 @@ Considere o modelo de grafo aleatório de Erdős-Rényi (também conhecido por $
 
 \begin{enumerate}
     \item Determine a distribuição do grau do vértice 1 (em função de $n$ e $p$).
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
     \item Determine o valor $\gamma$ (em função de $n$ e $p$) tal que com alta probabilidade ($1 - 1/n$) o grau observado no vértice 1 é menor ou igual a $\gamma$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
 \end{enumerate}
 
 \section*{Questão 5: Calculando uma importante constante}
@@ -115,8 +192,17 @@ Seja $X_i$ uma sequência i.i.d. de v.a. contínuas uniformes em $[0, 1]$. Seja 
 
 \begin{enumerate}
     \item Escreva e implemente um algoritmo para gerar uma amostra de $V$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
     \item Escreva e implemente um algoritmo de Monte Carlo para estimar o valor esperado de $V$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
     \item Trace um gráfico do valor estimado em função do número de amostras. Para qual valor seu estimador está convergindo?
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
 \end{enumerate}
 
 \section*{Questão 6: Transformada inversa}
@@ -125,7 +211,13 @@ Mostre como o método da transformada inversa pode ser usado para gerar amostras
 
 \begin{enumerate}
     \item Distribuição exponencial com parâmetro $\lambda > 0$, cuja função densidade é dada por $f_X(x) = \lambda e^{-\lambda x}$, para $x \geq 0$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
     \item Distribuição de Pareto com parâmetros $x_0 > 0$ e $\alpha > 0$, cuja função densidade é dada por $f_X(x) = \frac{\alpha x_0^\alpha}{x^{\alpha + 1}}$, para $x \geq x_0$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
 \end{enumerate}
 
 \section*{Questão 7: Contando domínios na Web}
@@ -134,8 +226,17 @@ Quantos domínios web existem dentro da UFRJ? Mais precisamente, quantos domíni
 
 \begin{enumerate}
     \item Descreva a variável aleatória cujo valor esperado está relacionado com a medida de interesse. Relacione analiticamente o valor esperado com a medida de interesse.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
     \item Implemente o método de Monte Carlo para gerar amostras e estimar a medida de interesse. Para determinar o valor de uma amostra, você deve consultar o domínio gerado para determinar se o mesmo existe (utilize uma biblioteca web para isto).
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
     \item Assuma que $k = 4$. Seja $\hat{w}_n$ o valor do estimador do número de domínios após $n$ amostras. Trace um gráfico em escala semi-log (eixo-$x$ em escala log) de $\hat{w}_n$ em função de $n$ para $n = 1, \dots, 10^5$ (ou mais, se conseguir). O que você pode dizer sobre a convergência de $\hat{w}_n$?
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
 \end{enumerate}
 
 \section*{Questão 8: Rejection Sampling}
@@ -144,7 +245,13 @@ Considere o problema de gerar amostras de uma v.a. $X \sim \text{Binomial}(1000,
 
 \begin{enumerate}
     \item Descreva uma proposta simples de função de probabilidade para gerar amostras de $X$ usando Rejection Sampling. Calcule a eficiência dessa proposta.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
     \item Lembrando que a distribuição Binomial tem a forma de sino, centrada em sua média, proponha outra função de probabilidade para gerar amostras de $X$ usando Rejection Sampling. Calcule a eficiência dessa proposta e compare com a eficiência acima. O que você pode concluir?
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
 \end{enumerate}
 
 \section*{Questão 9: Integração de Monte Carlo e Importance Sampling}
@@ -153,8 +260,17 @@ Considere a função $g(x) = e^{-x^2}$ e a integral de $g(x)$ no intervalo $[0, 
 
 \begin{enumerate}
     \item Implemente um método de Monte Carlo simples para estimar o valor da integral.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
     \item Intuitivamente, muitas amostras de $g(x)$ vão ter valores muito baixos. Dessa forma, utilize Importance Sampling para melhorar a qualidade do estimador do valor da integral. Em particular, utilize a função de densidade $h(x) = Ae^{-x}$ definida em $[0, 1]$ onde $A$ é o valor da constante de normalização. Mostre como gerar amostras de $h(x)$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
     \item Compare os dois métodos. Trace um gráfico do erro relativo de cada um dos estimadores em função do número de amostras. Ou seja, $|\hat{I}_n - I|/I$ onde $I$ é o valor exato da integral e $\hat{I}_n$ é o valor do estimador com $n$ amostras, para $n = 10^1, 10^2, \dots, 10^6$.
+    \begin{tcolorbox}[colframe=black, title=Resposta:]
+
+    \end{tcolorbox}
 \end{enumerate}
 
 
