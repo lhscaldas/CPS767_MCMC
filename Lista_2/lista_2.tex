@@ -161,7 +161,59 @@ Considere um icosaedro (um sólido Platônico de 20 faces) honesto, tal que a pr
 
 Você leu no jornal que uma pesquisa eleitoral com 1500 pessoas indicou que 40\% dos entrevistados prefere o candidato A enquanto 60\% preferem o candidato B. Determine a margem de erro desta pesquisa usando uma confiança de 95\%. O que você precisou assumir para calcular a margem de erro?
 \begin{tcolorbox}[colframe=black, title=Resposta:]
+    Seja $X_i$ uma variável aleatória i.i.d. que representa a preferência do entrevistado $i$, com:
+    $$
+    X_i = \begin{cases}
+    1 & \text{se prefere o candidato A} \\
+    0 & \text{se prefere o candidato B}
+    \end{cases}
+    $$
+    
+    A média amostral de $X_i$ é dada por:
+    $$
+    M_n = \frac{1}{n}\sum_{i=1}^n X_i =  0.4
+    $$
 
+    Como $E[M_n] = \mu$, onde $\mu=p$ é a média da distribuição de Bernoulli, temos, pela desigualdade de Chebyshev:
+    $$
+    P[|M_n - p| \geq k \sigma_{M_n}] \leq \frac{1}{k^2}
+    $$
+    onde $\sigma_{M_n}$ é o desvio padrão da média amostral. 
+    
+    A variância da média amostral é dada por:
+    $$
+    \sigma_{M_n}^2 = \frac{\sigma^2}{n}
+    $$
+    onde $\sigma^2 = p(1-p)$ é a variância da distribuição de Bernoulli.
+
+    Fazendo $\epsilon = k \sigma_{M_n}$, temos:
+    $$
+    k=\frac{\epsilon}{\sigma_{M_n}} = \frac{\epsilon\sqrt{n}}{\sigma}
+    $$
+    $$
+    P[|M_n - p| \geq \epsilon] \leq \frac{\sigma^2}{\epsilon^2n}
+    $$
+
+    Aplicando o complementar, temos:
+    $$
+    P[|M_n - p| < \epsilon] = 1 - P[|M_n - p| \geq \epsilon] \geq 1 - \frac{\sigma^2}{\epsilon^2n}
+    $$
+    $$
+    P[|M_n - p| < \epsilon] \geq 1 - \frac{\sigma^2}{\epsilon^2n}=\beta
+    $$
+    onde $\beta$ é o nível de confiança que queremos.
+\end{tcolorbox}
+
+\begin{tcolorbox}[colframe=black, title=Resposta:]
+    Resolvendo para $\epsilon$:
+    $$
+    \epsilon = \sqrt{\frac{\sigma^2}{(1-\beta)n}} = \sqrt{\frac{p(1-p)}{(1-\beta)n}}
+    $$
+
+    Assumindo que $n$ é grande o suficiente para $M_n=\mu=p=0.4$, temos:
+    $$
+    \epsilon = \sqrt{\frac{0.4(1-0.4)}{(1-0.95)1500}} = \sqrt{\frac{0.4(0.6)}{0.05\cdot1500}} = \sqrt{\frac{0.24}{75}} = \sqrt{0.0032} \approx \underline{0.0565 \quad \vline}
+    $$
 \end{tcolorbox}
 
 \section*{Questão 3: Sanduíches}
