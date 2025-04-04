@@ -178,33 +178,19 @@ Você leu no jornal que uma pesquisa eleitoral com 1500 pessoas indicou que 40\%
     $$
     P[|M_n - p| \geq k \sigma_{M_n}] \leq \frac{1}{k^2}
     $$
-    onde $\sigma_{M_n}$ é o desvio padrão da média amostral. 
-    
-    A variância da média amostral é dada por:
-    $$
-    \sigma_{M_n}^2 = \frac{\sigma^2}{n}
-    $$
-    onde $\sigma^2 = p(1-p)$ é a variância da distribuição de Bernoulli.
+    onde $\sigma_{M_n} = \sqrt{\frac{\sigma^2}{n}}$ é o desvio padrão da média amostral, sendo $\sigma^2 = p(1-p)$ a variância da distribuição de Bernoulli.
 
-    Fazendo $\epsilon = k \sigma_{M_n}$, temos:
+    Fazendo a margem de erro $\epsilon = k \sigma_{M_n}$, temos:
     $$
-    k=\frac{\epsilon}{\sigma_{M_n}} = \frac{\epsilon\sqrt{n}}{\sigma}
-    $$
-    $$
-    P[|M_n - p| \geq \epsilon] \leq \frac{\sigma^2}{\epsilon^2n}
+    k=\frac{\epsilon}{\sigma_{M_n}} = \frac{\epsilon\sqrt{n}}{\sigma} \Rightarrow P[|M_n - p| \geq \epsilon] \leq \frac{\sigma^2}{\epsilon^2n}
     $$
 
     Aplicando o complementar, temos:
     $$
-    P[|M_n - p| < \epsilon] = 1 - P[|M_n - p| \geq \epsilon] \geq 1 - \frac{\sigma^2}{\epsilon^2n}
-    $$
-    $$
-    P[|M_n - p| < \epsilon] \geq 1 - \frac{\sigma^2}{\epsilon^2n}=\beta
+    P[|M_n - p| < \epsilon] = 1 - P[|M_n - p| \geq \epsilon] \geq 1 - \frac{\sigma^2}{\epsilon^2n}=\beta
     $$
     onde $\beta$ é o nível de confiança que queremos.
-\end{tcolorbox}
 
-\begin{tcolorbox}[colframe=black, title=Resposta:]
     Resolvendo para $\epsilon$:
     $$
     \epsilon = \sqrt{\frac{\sigma^2}{(1-\beta)n}} = \sqrt{\frac{p(1-p)}{(1-\beta)n}}
@@ -220,6 +206,28 @@ Você leu no jornal que uma pesquisa eleitoral com 1500 pessoas indicou que 40\%
 
 Você convidou 64 pessoas para uma festa e agora precisa preparar sanduíches para os convidados. Você acredita que cada convidado irá comer 0, 1 ou 2 sanduíches com probabilidades 1/4, 1/2 e 1/4, respectivamente. Assuma que o número de sanduíches que cada convidado irá comer é independente de qualquer outro convidado. Quantos sanduíches você deve preparar para ter uma confiança de 95\% de que não vai faltar sanduíches para os convidados?
 \begin{tcolorbox}[colframe=black, title=Resposta:]
+    Seja $X_i$ a variável aleatória que representa o número de sanduíches que o convidado $i$ irá comer, com distribuição de probabilidade dada por:
+    $$
+    p_i = \begin{cases}
+    \frac{1}{4} & \text{se } i=0 \\
+    \frac{1}{4} & \text{se } i=1 \\
+    \frac{1}{4} & \text{se } i=2 \\
+    \end{cases}
+    $$
+
+    O valor esperado de $X_i$ é dado por:
+    $$
+    E[X_i] = \sum_{i=0}^2 i \cdot p_i = 0 \cdot \frac{1}{4} + 1 \cdot \frac{1}{2} + 2 \cdot \frac{1}{4} = 0 + \frac{1}{2} + \frac{2}{4} = 1
+    $$
+
+    A variância de $X_i$ é dada por:
+    $$
+    E[X_i^2] = \sum_{i=0}^2 i^2 \cdot p_i = 0^2 \cdot \frac{1}{4} + 1^2 \cdot \frac{1}{2} + 2^2 \cdot \frac{1}{4} = 0 + \frac{1}{2} + \frac{4}{4} = 0 + \frac{1}{2} + 1 = \frac{3}{2}
+    $$
+    $$
+    Var[X_i] = E[X_i^2] - (E[X_i])^2 = \frac{3}{2} - 1^2 = \frac{3}{2} - 1 = \frac{1}{2}
+    $$
+
 
 \end{tcolorbox}
 
@@ -245,16 +253,87 @@ Seja $X_i$ uma sequência i.i.d. de v.a. contínuas uniformes em $[0, 1]$. Seja 
 \begin{enumerate}
     \item Escreva e implemente um algoritmo para gerar uma amostra de $V$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-
+        \begin{itemize}
+            \item Pseudo-código:
+            \begin{verbatim}
+    soma = 0;
+    contador = 0;
+    enquanto soma < 1 faça
+        x = amostra de U[0, 1];
+        soma = soma + x;
+        contador = contador + 1;
+    retorne contador;
+            \end{verbatim}
+            \item Implementação em Python:
+            \begin{lstlisting}[language=Python]
+    def amostra_V():
+        soma = 0
+        contador = 0
+        while soma < 1:
+            x = random()
+            soma += x
+            contador += 1
+        return contador
+            \end{lstlisting}
+        \end{itemize}
     \end{tcolorbox}
     \item Escreva e implemente um algoritmo de Monte Carlo para estimar o valor esperado de $V$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-
+        \begin{itemize}
+            \item Definição do estimador:
+            Pela Lei dos Grandes Números, temos que, para $n$ suficientemente grande, a média amostral converge para o valor esperado:
+            $$
+            E[V] \approx \frac{1}{n} \sum_{i=1}^n V_i
+            $$
+            onde $V_i$ é a amostra de $V$ obtida na iteração $i$.
+            \item Pseudo-código:
+            \begin{verbatim}
+    n = N; // número de amostras
+    soma = 0;
+    para i = 1 até n faça
+        soma = soma + amostra_V();
+    estimador = soma / n;
+    retorne estimador;
+            \end{verbatim}
+            \item Implementação em Python:
+            \begin{lstlisting}[language=Python]
+    def estimador_E(n):
+        soma = 0
+        for i in range(n):
+            x = amostra_V()
+            soma += x
+        return soma / n
+            \end{lstlisting}
+        \end{itemize}
     \end{tcolorbox}
     \item Trace um gráfico do valor estimado em função do número de amostras. Para qual valor seu estimador está convergindo?
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Código para gerar o gráfico:
+        \begin{lstlisting}[language=Python]
+    def grafico_E(n_max):
+    
+        n_values = list(range(1, n_max + 1))
+        E_values = [estimador_E(n) for n in n_values]
 
+        plt.plot(n_values, E_values, label='E[V] a cada n')
+        label = f'Limite E[V] = {E_values[-1]}'
+        plt.axhline(y=E_values[-1], color='r', linestyle='--', label=label)
+        plt.title('Estimador de E[V] em função de n')
+        plt.xlabel('n')
+        plt.ylabel('E[V]')
+        plt.grid(True)
+        plt.legend()
+        plt.show()
+        \end{lstlisting}
+        Para $10^4$ amostras, o estimador converge para aproximadamente $E[V] \approx 2.7076$, como visto na figura abaixo.
     \end{tcolorbox}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{q5_3.png}
+        \caption{Estimador de $E[V]$ em função de $n$}
+        \label{fig:estimador_E}
+    \end{figure}
 \end{enumerate}
 
 \section*{Questão 6: Transformada inversa}
