@@ -394,40 +394,32 @@ Mostre como o método da transformada inversa pode ser usado para gerar amostras
         $$
         F_X(x) = 1 - e^{-\lambda x}, \quad x \geq 0
         $$
-        Para gerar amostras, igualamos a CDF a uma variável aleatória uniforme $U \sim Unif(0, 1)$:
+        Para gerar amostras, igualamos a CDF a uma variável aleatória uniforme $U \sim \text{Unif}(0, 1)$:
         $$
-        U =  1 - e^{-\lambda x} \Rightarrow e^{-\lambda x} = 1-U 
+        U =  1 - e^{-\lambda x} \Rightarrow e^{-\lambda x} = 1-U \Rightarrow -\lambda x = \ln(1-U) \Rightarrow x = -\frac{1}{\lambda} \ln(1-U)
         $$
+        Como $1-U$ também é uma distribuição uniforme em $[0,1]$: 
         $$
-        -\lambda x = \ln(1-U) \Rightarrow x = -\frac{1}{\lambda} \ln(1-U)
-        $$
-        Como $1-U$ também é uma distribuição uniforme em $[0,1]$, podemos gerar amostras de $X$ usando a seguinte fórmula:
-        $$
-        \boxed{X = -\frac{1}{\lambda} \ln(U)}
+        \boxed{x = -\frac{1}{\lambda} \ln(U)}
         $$
 
     \end{tcolorbox}
     \item Distribuição de Pareto com parâmetros $x_0 > 0$ e $\alpha > 0$, cuja função densidade é dada por $f_X(x) = \frac{\alpha x_0^\alpha}{x^{\alpha + 1}}$, para $x \geq x_0$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-        A função de distribuição acumulada (CDF) da distribuição de Pareto é dada por:
+        Analogamente ao item anterior:
         $$
         F_X(x) = \int_{x_0}^x f_X(t) dt = \int_{x_0}^x \frac{\alpha x_0^\alpha}{t^{\alpha + 1}} dt = -\left[\frac{x_0^\alpha}{t^\alpha}\right]_{x_0}^x
         $$
         $$
         F_X(x) = 1 - \left(\frac{x_0}{x}\right)^\alpha, \quad x \geq x_0
         $$
-        Para gerar amostras, igualamos a CDF a uma variável aleatória uniforme $U \sim Unif(0, 1)$:
         $$
-        U = 1 - \left(\frac{x_0}{x}\right)^\alpha \Rightarrow \left(\frac{x_0}{x}\right)^\alpha = 1-U 
+        U = 1 - \left(\frac{x_0}{x}\right)^\alpha \Rightarrow \left(\frac{x_0}{x}\right)^\alpha = 1-U \Rightarrow x = \frac{x_0}{(1-U)^{1/\alpha}}
         $$
+        Como $1-U$ também é uma distribuição uniforme em $[0,1]$:
         $$
-        x = \frac{x_0}{(1-U)^{1/\alpha}}
+        \boxed{x = \frac{x_0}{(U)^{1/\alpha}}}
         $$
-        Como $1-U$ também é uma distribuição uniforme em $[0,1]$, podemos gerar amostras de $X$ usando a seguinte fórmula:
-        $$
-        \boxed{X = \frac{x_0}{(U)^{1/\alpha}}}
-        $$
-
     \end{tcolorbox}
 \end{enumerate}
 
