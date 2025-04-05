@@ -206,29 +206,38 @@ Você leu no jornal que uma pesquisa eleitoral com 1500 pessoas indicou que 40\%
 
 Você convidou 64 pessoas para uma festa e agora precisa preparar sanduíches para os convidados. Você acredita que cada convidado irá comer 0, 1 ou 2 sanduíches com probabilidades 1/4, 1/2 e 1/4, respectivamente. Assuma que o número de sanduíches que cada convidado irá comer é independente de qualquer outro convidado. Quantos sanduíches você deve preparar para ter uma confiança de 95\% de que não vai faltar sanduíches para os convidados?
 \begin{tcolorbox}[colframe=black, title=Resposta:]
-    Seja $X_i$ a variável aleatória que representa o número de sanduíches que o convidado $i$ irá comer, com distribuição de probabilidade dada por:
+    Seja $X_i$ a variável aleatória que representa o número de sanduíches que o convidado $i$ irá comer, com distribuição de probabilidade dada por $p_1=\frac{1}{4}$, $p_2=\frac{1}{2}$ e $p_3=\frac{1}{4}$, onde $p_i$ é a probabilidade de o convidado comer $i$ sanduíches. O valor esperado e a variância de $X_i$ são dados por:
     $$
-    p_i = \begin{cases}
-    \frac{1}{4} & \text{se } i=0 \\
-    \frac{1}{4} & \text{se } i=1 \\
-    \frac{1}{4} & \text{se } i=2 \\
-    \end{cases}
+    \mu = E[X_i] = \sum_{i=0}^2 i \cdot p_i = 0 \cdot \frac{1}{4} + 1 \cdot \frac{1}{2} + 2 \cdot \frac{1}{4} = 0 + \frac{1}{2} + \frac{2}{4} = 1
     $$
-
-    O valor esperado de $X_i$ é dado por:
-    $$
-    E[X_i] = \sum_{i=0}^2 i \cdot p_i = 0 \cdot \frac{1}{4} + 1 \cdot \frac{1}{2} + 2 \cdot \frac{1}{4} = 0 + \frac{1}{2} + \frac{2}{4} = 1
-    $$
-
-    A variância de $X_i$ é dada por:
     $$
     E[X_i^2] = \sum_{i=0}^2 i^2 \cdot p_i = 0^2 \cdot \frac{1}{4} + 1^2 \cdot \frac{1}{2} + 2^2 \cdot \frac{1}{4} = 0 + \frac{1}{2} + \frac{4}{4} = 0 + \frac{1}{2} + 1 = \frac{3}{2}
     $$
     $$
-    Var[X_i] = E[X_i^2] - (E[X_i])^2 = \frac{3}{2} - 1^2 = \frac{3}{2} - 1 = \frac{1}{2}
+    \sigma^2 = Var[X_i] = E[X_i^2] - (E[X_i])^2 = \frac{3}{2} - 1^2 = \frac{3}{2} - 1 = \frac{1}{2}
     $$
 
+    Como vimos na questão anterior, aplicando a desigualdade de Chebyshev, temos:
+    $$
+    P[|M_n - \mu| \geq \epsilon] \leq \frac{\sigma^2}{\epsilon^2n} = \beta
+    $$
+    onde $M_n = \frac{1}{n}\sum_{i=1}^n X_i$ é a média amostral e $\epsilon$ e $\beta$ são a margem de erro e a confiança desejadas. Resolvendo para $\epsilon$, temos:
+    $$
+    \epsilon = \sqrt{\frac{\sigma^2}{(1-\beta)n}} = \sqrt{\frac{0.5}{(1-0.95)64}} = \sqrt{\frac{0.5}{0.05\cdot64}} = \sqrt{\frac{0.5}{3.2}} = \sqrt{0.15625} \approx 0.395
+    $$
 
+    Porém, 
+    $$ 
+    P[|M_n - \mu| \geq \epsilon] = P[M_n \in [\mu - \epsilon, \mu + \epsilon]] = P[M_n \in [0.605, 1.395]]
+    $$
+
+    Assim, temos 95\% de confiança de que o máximo da média de sanduíches que os convidados irão comer é $1.395$. Multiplicando isso pelo número de convidados, temos:
+
+    $$
+    \text{Número de sanduíches} \geq 1.395 \cdot 64 \approx 89.28
+    $$
+
+    Portanto, devemos preparar \underline{90 sanduíches} para ter 95\% de confiança de que não vai faltar sanduíches para os convidados.
 \end{tcolorbox}
 
 \section*{Questão 4: Graus improváveis}
@@ -238,10 +247,37 @@ Considere o modelo de grafo aleatório de Erdős-Rényi (também conhecido por $
 \begin{enumerate}
     \item Determine a distribuição do grau do vértice 1 (em função de $n$ e $p$).
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        O vértice 1 pode ou não ter aresta ligada de um só outro a 1 vértice, com probabilidade $p$. Modelando isso temos uma variável aleatória $Y \sim Bernoulli(p)$.
+        
+        O grau do vértice é dado pela soma dessas v.a. de Bernoulli $X = \sum_{i=1}^{n-1} Y_i$, que, por definição, é uma v.a. Binomial com parâmetros $n-1$ e $p$, ou seja, $X \sim Binomial(n-1, p)$.
+        Assim, temos:
+        $$
+        P(X = k) = \binom{n-1}{k} p^k (1-p)^{(n-1)-k}
+        $$
+        onde $k = 0, 1, \dots, n-1$.
+        
 
     \end{tcolorbox}
     \item Determine o valor $\gamma$ (em função de $n$ e $p$) tal que com alta probabilidade ($1 - 1/n$) o grau observado no vértice 1 é menor ou igual a $\gamma$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        $$P[X \leq \gamma] = 1 - P[X > \gamma] \geq 1 - \frac{1}{n}$$
+        $$P[X > \gamma] \leq \frac{1}{n}$$
+
+        Aplicando a desigualdade de Chernoff, temos:
+        $$P[X \geq (1+\delta)\mu] \leq e^{-\frac{\delta^2\mu}{3}}$$
+
+        Fazendo $\delta = \frac{\lambda}{\mu}$, temos:
+        $$P[X \geq \mu + \lambda] \leq e^{-\frac{\lambda^2}{3\mu}}$$
+
+        Para uma v.a $X \sim Binomial(n-1, p)$, $\mu = E[X] = (n-1)p$. Com isso, temos:
+        $$P[X \geq \mu + \lambda] \leq e^{-\frac{\lambda^2}{3(n-1)p}}=\frac{1}{n}$$
+
+        Resolvendo para $\lambda$, temos:
+        $$\lambda = \sqrt{3(n-1)p\ln(n)}$$
+
+        Assim, temos:
+        $$\gamma = \mu + \lambda = \underline{(n-1)p + \sqrt{3(n-1)p\ln(n)} \quad \vline}$$
+
 
     \end{tcolorbox}
 \end{enumerate}
@@ -277,6 +313,7 @@ Seja $X_i$ uma sequência i.i.d. de v.a. contínuas uniformes em $[0, 1]$. Seja 
             \end{lstlisting}
         \end{itemize}
     \end{tcolorbox}
+    \newpage
     \item Escreva e implemente um algoritmo de Monte Carlo para estimar o valor esperado de $V$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
         \begin{itemize}
@@ -306,31 +343,38 @@ Seja $X_i$ uma sequência i.i.d. de v.a. contínuas uniformes em $[0, 1]$. Seja 
             \end{lstlisting}
         \end{itemize}
     \end{tcolorbox}
+    \newpage
     \item Trace um gráfico do valor estimado em função do número de amostras. Para qual valor seu estimador está convergindo?
     \begin{tcolorbox}[colframe=black, title=Resposta:]
         Código para gerar o gráfico:
         \begin{lstlisting}[language=Python]
-    def grafico_E(n_max):
+        def grafico_E(n_max):
     
-        n_values = list(range(1, n_max + 1))
-        E_values = [estimador_E(n) for n in n_values]
-
-        plt.plot(n_values, E_values, label='E[V] a cada n')
-        label = f'Limite E[V] = {E_values[-1]}'
-        plt.axhline(y=E_values[-1], color='r', linestyle='--', label=label)
-        plt.title('Estimador de E[V] em função de n')
-        plt.xlabel('n')
-        plt.ylabel('E[V]')
-        plt.grid(True)
-        plt.legend()
-        plt.show()
+            n_values = list(range(1, n_max + 1))
+            E_values = []
+        
+            soma = 0
+            for n in n_values:
+                x = amostra_V()
+                soma += x
+                E_values.append(soma / n)
+        
+            plt.plot(n_values, E_values, label='E[V] a cada n')
+            label = f'E[V] = {E_values[-1]}'
+            plt.axhline(y=E_values[-1], color='r', linestyle='--', label=label)
+            plt.title('Estimador de E[V] em função de n')
+            plt.xlabel('n')
+            plt.ylabel('E[V]')
+            plt.grid(True)
+            plt.legend()
+            plt.show()
         \end{lstlisting}
-        Para $10^4$ amostras, o estimador converge para aproximadamente $E[V] \approx 2.7076$, como visto na figura abaixo.
+        Para $10^4$ amostras, o estimador converge para aproximadamente $E[V] \approx 2.718$, como visto na figura abaixo.
     \end{tcolorbox}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.8\textwidth]{q5_3.png}
+        \includegraphics[width=0.6\textwidth]{q5_3.png}
         \caption{Estimador de $E[V]$ em função de $n$}
         \label{fig:estimador_E}
     \end{figure}

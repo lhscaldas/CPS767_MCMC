@@ -20,10 +20,16 @@ def estimador_E(n):
 def grafico_E(n_max):
     
     n_values = list(range(1, n_max + 1))
-    E_values = [estimador_E(n) for n in n_values]
+    E_values = []
+
+    soma = 0
+    for n in n_values:
+        x = amostra_V()
+        soma += x
+        E_values.append(soma / n)
 
     plt.plot(n_values, E_values, label='E[V] a cada n')
-    label = f'Limite E[V] = {E_values[-1]}'
+    label = f'E[V] = {E_values[-1]}'
     plt.axhline(y=E_values[-1], color='r', linestyle='--', label=label)
     plt.title('Estimador de E[V] em função de n')
     plt.xlabel('n')
