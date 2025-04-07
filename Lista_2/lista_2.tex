@@ -431,15 +431,117 @@ Quantos domínios web existem dentro da UFRJ? Mais precisamente, quantos domíni
     \item Descreva a variável aleatória cujo valor esperado está relacionado com a medida de interesse. Relacione analiticamente o valor esperado com a medida de interesse.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
 
+        Seja $\Omega$ o conjunto de todas as palavras com até $k$ letras minúsculas (de $a$ a $z$). O número total de possíveis nomes é:
+
+        $$
+        |\Omega| = \sum_{i=1}^k 26^i
+        $$
+        
+        Queremos estimar quantos desses nomes realmente correspondem a domínios válidos da forma \texttt{www.[palavra].ufrj.br}.
+        
+        Para isso, definimos uma variável aleatória $X$ da seguinte forma: sorteamos uma palavra $\omega \in \Omega$ de forma uniforme. Se o domínio \texttt{www.$\omega$.ufrj.br} existe, definimos $X = |\Omega|$; caso contrário, definimos $X = 0$. Ou seja,
+        
+        $$
+        X = |\Omega| \cdot I_{\{\text{domínio existe}\}},
+        $$
+        
+        onde $I$ é a função indicadora: ela vale 1 se o domínio existe, e 0 caso contrário.
+        
+        Nesse modelo, a esperança de $X$ é:
+        
+        $$
+        \mathbb{E}[X] = |\Omega| \cdot p,
+        $$
+        
+        onde $p$ representa a probabilidade de que uma palavra sorteada aleatoriamente de $\Omega$ corresponda a um domínio que realmente existe. Como estamos sorteando de forma uniforme, essa probabilidade é igual à razão entre o número de domínios válidos ($D$) e o tamanho total de $\Omega$:
+        
+        $$
+        p = \frac{D}{|\Omega|}
+        $$
+        
+        Portanto:
+        
+        $$
+        \mathbb{E}[X] = D
+        $$
+        
+        Assim, o valor esperado de $X$ é igual ao número de domínios válidos $D$.
+
+
+
     \end{tcolorbox}
+    \newpage
     \item Implemente o método de Monte Carlo para gerar amostras e estimar a medida de interesse. Para determinar o valor de uma amostra, você deve consultar o domínio gerado para determinar se o mesmo existe (utilize uma biblioteca web para isto).
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        \begin{itemize}
+            \item Definição do estimador:
+        
+        Seja $M_n$ a média amostral de $X$ após $n$ amostras, dada por:
+        $$
+        M_n = \frac{1}{n} \sum_{i=1}^n X_i
+        $$
+
+        Pela Lei dos Grandes Números, temos que, para $n$ suficientemente grande, a média amostral converge para o valor esperado. Assim, o estimador de $D$ é dado por:
+        $$
+        D = \mathbb{E}[X] \approx M_n = \frac{1}{n} \sum_{i=1}^n X_i
+        $$
+
+        \item Código em Python:
+        \begin{lstlisting}[language=Python]
+# Gerador de palavra aleatória com 1 até k letras minúsculas
+def gerar_palavra_aleatoria(k):
+    tamanho = random.randint(1, k)
+    return ''.join(random.choices(string.ascii_lowercase, k=tamanho))
+
+# Verifica se o domínio existe consultando o DNS
+def dominio_existe(nome):
+    try:
+        socket.gethostbyname(f"www.{nome}.ufrj.br")
+        return True
+    except socket.gaierror:
+        return False
+
+# Estimativa Monte Carlo de domínios válidos
+def estimar_dominios_validos(k, n_amostras):
+    omega = sum([26**i for i in range(1, k+1)])
+    soma = 0
+    for i in range(n_amostras):
+        palavra = gerar_palavra_aleatoria(k) # Gera palavra aleatória de tamanho k
+        existe = dominio_existe(palavra) # Verifica se o domínio existe
+        x = omega if existe else 0
+        soma += x
+    return soma / n_amostras
+        \end{lstlisting}
+    \end{itemize}
 
     \end{tcolorbox}
     \item Assuma que $k = 4$. Seja $\hat{w}_n$ o valor do estimador do número de domínios após $n$ amostras. Trace um gráfico em escala semi-log (eixo-$x$ em escala log) de $\hat{w}_n$ em função de $n$ para $n = 1, \dots, 10^5$ (ou mais, se conseguir). O que você pode dizer sobre a convergência de $\hat{w}_n$?
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        Para traçar o gráfico, a função \texttt{estimador\_dominios\_validos} foi modificada para salvar em uma lista o valor de $\hat{w}_n$ a cada iteração. O gráfico foi gerado utilizando a biblioteca Matplotlib.
+        \begin{lstlisting}[language=Python]
+# Estimativa Monte Carlo de domínios válidos salvando E_n a cada n
+def estimar_dominios_validos_com_grafico(k, n_amostras):
+    omega = sum([26**i for i in range(1, k+1)])
+    soma = 0
+    E_n = []
+    for i in range(n_amostras):
+        palavra = gerar_palavra_aleatoria(k) # Gera palavra aleatória de tamanho k
+        existe = dominio_existe(palavra) # Verifica se o domínio existe
+        x = omega if existe else 0
+        soma += x
+        E_n.append(soma / (i + 1))
+    return E_n
+        \end{lstlisting}
+
+        O gráfico abaixo mostra a convergência do estimador $\hat{w}_n$ em função de $n$. A medida de interesse, o número de domínios válidos, converge para $\approx 3232$ à medida que o número de amostras aumenta. Isso indica que o estimador é consistente e converge para o valor esperado. 
 
     \end{tcolorbox}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{q7_3.png}
+        \caption{Estimador de $D$ em função de $n$}
+        \label{fig:estimador_D}
+    \end{figure}
 \end{enumerate}
 
 \section*{Questão 8: Rejection Sampling}
@@ -449,12 +551,90 @@ Considere o problema de gerar amostras de uma v.a. $X \sim \text{Binomial}(1000,
 \begin{enumerate}
     \item Descreva uma proposta simples de função de probabilidade para gerar amostras de $X$ usando Rejection Sampling. Calcule a eficiência dessa proposta.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-
-    \end{tcolorbox}
+        A v.a. $X$, com distribuição binomial com parâmetros $n = 1000$ e $p = 0.2$, possui média $\mu = np = 200$ e variância $\sigma^2 = np(1 - p) = 160$ (desvio padrão $\approx 12.65$). A distribuição tem forma aproximadamente simétrica, com a maior parte da massa concentrada no intervalo $\mu \pm 4\sigma \approx [150, 250]$.
+        
+        Seja $q(x)$ a função de probabilidade da distribuição-alvo (binomial) e $p(x)$ a função de densidade da distribuição proposta. Para aplicar Rejection Sampling, escolhemos uma distribuição uniforme discreta no intervalo $[150, 250]$:
+        
+        $$
+        p(x) = \begin{cases}
+        \frac{1}{101}, & x \in [150, 250] \\
+        0, & \text{caso contrário}
+        \end{cases}
+        $$
+        
+        Para garantir que $q(x) \leq c \cdot p(x)$ para todo $x$, tomamos $c$ como:
+        
+        $$
+        c = \max_{x \in [150, 250]} \frac{q(x)}{p(x)} = 101 \cdot \max_{x \in [150, 250]} q(x)
+        $$
+        
+        Como a binomial atinge seu valor máximo (moda) em $x = (n+1)p  \approx 200$, temos:
+        
+        $$
+        q(200) = \binom{1000}{200} (0.2)^{200} (0.8)^{800} \approx 0.028
+        $$
+        
+        Logo, a constante é:
+        
+        $$
+        c = 101 \cdot 0.028 \approx 2.828
+        $$
+        
+        A eficiência do método é o inverso da constante de rejeição:
+        
+        $$
+        \text{Eficiência} = \frac{1}{c} \approx \frac{1}{2.828} \approx 0.353
+        $$
+        
+        Ou seja, cerca de 35.3\% das amostras da proposta são aceitas. Isso indica que a escolha da proposta é razoavelmente eficiente.
+        \end{tcolorbox}
+    \newpage
     \item Lembrando que a distribuição Binomial tem a forma de sino, centrada em sua média, proponha outra função de probabilidade para gerar amostras de $X$ usando Rejection Sampling. Calcule a eficiência dessa proposta e compare com a eficiência acima. O que você pode concluir?
     \begin{tcolorbox}[colframe=black, title=Resposta:]
-
-    \end{tcolorbox}
+        A v.a. $X$, com distribuição binomial com parâmetros $n = 1000$ e $p = 0.2$, possui média $\mu = np = 200$ e variância $\sigma^2 = np(1 - p) = 160$ (desvio padrão $\approx 12.65$). A distribuição é aproximadamente simétrica e concentrada em torno da média.
+        
+        Seja $q(x)$ a função de probabilidade da distribuição-alvo (binomial) e $p(x)$ a função de densidade da distribuição proposta. Para aplicar Rejection Sampling, escolhemos como proposta a distribuição normal contínua $\mathcal{N}(200, 160)$, avaliada em pontos inteiros.
+        
+        A densidade da proposta é dada por:
+        
+        $$
+        p(x) = \frac{1}{\sqrt{2\pi \cdot 160}} \exp\left( -\frac{(x - 200)^2}{2 \cdot 160} \right)
+        $$
+        
+        Para garantir que $q(x) \leq c \cdot p(x)$ para todo $x$, tomamos $c$ como:
+        
+        $$
+        c = \max_x \left( \frac{q(x)}{p(x)} \right)
+        $$
+        
+        Como a binomial atinge seu valor máximo (moda) em $x = (n+1)p \approx 200$, temos:
+        
+        $$
+        q(200) = \binom{1000}{200} (0.2)^{200} (0.8)^{800} \approx 0.028
+        $$
+        
+        A densidade da proposta em $x = 200$ é:
+        
+        $$
+        p(200) = \frac{1}{\sqrt{2\pi \cdot 160}} \approx 0.0316
+        $$
+        
+        Logo, a constante é:
+        
+        $$
+        c = \frac{q(200)}{p(200)} \approx \frac{0.028}{0.0316} \approx 0.886
+        $$
+        
+        Entretanto, como a binomial tem caudas mais pesadas que a normal, usamos um valor seguro $c \approx 1.2$ para garantir $q(x) \leq c \cdot p(x)$ em toda a reta real.
+        
+        A eficiência do método é o inverso da constante de rejeição:
+        
+        $$
+        \text{Eficiência} = \frac{1}{c} \approx \frac{1}{1.2} \approx 0.833
+        $$
+        
+        Ou seja, cerca de 83.3\% das amostras da proposta são aceitas. Essa escolha de proposta é bastante eficiente.
+    \end{tcolorbox}            
 \end{enumerate}
 
 \section*{Questão 9: Integração de Monte Carlo e Importance Sampling}
