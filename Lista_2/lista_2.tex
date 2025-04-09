@@ -19,6 +19,7 @@
 \usepackage{amsfonts}
 \usepackage{hyperref}
 \usepackage{tcolorbox}
+\tcbset{before upper={\setlength{\parindent}{2em}}}
 \usepackage{longtable}
 \usepackage{enumitem}
 \newcommand\redout{\bgroup\markoverwith
@@ -653,6 +654,7 @@ print(f"Eficiência: {1/c*100:.2f}%")
     \label{fig:comparacao_distribuicoes}
 \end{figure}
 
+\newpage
 \section*{Questão 9: Integração de Monte Carlo e Importance Sampling}
 
 Considere a função $g(x) = e^{-x^2}$ e a integral de $g(x)$ no intervalo $[0, 1]$.
@@ -660,16 +662,162 @@ Considere a função $g(x) = e^{-x^2}$ e a integral de $g(x)$ no intervalo $[0, 
 \begin{enumerate}
     \item Implemente um método de Monte Carlo simples para estimar o valor da integral.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        \begin{itemize}
+            \item \textbf{Definição do estimador:}
+        Seja a integral de $g(x)$ definida por:
+         $$I = \int_0^1 g(x) dx$$
 
+        Seja $X$ uma v.a. uniforme em $[0, 1]$. O valor esperado de $g(X)$ é dado por:
+        $$
+        E[g(X)] = \int_0^1 f_X(x)g(x) dx = \int_0^1 \frac{1}{1-0}g(x) dx = I
+        $$
+        
+        Pelo método de Monte Carlo, temos, para $n \rightarrow \infty$ amostras:
+        $$
+        E[g(X)] \approx M_n = \frac{1}{n} \sum_{i=1}^n g(X_i)
+        $$
+        onde $M_n$ é a média amostral de $g(X)$ e $X_i$ é uma amostra de $X$. 
+        
+        Assim, para $n$ suficientemente grande, o estimador de $I$ é dado por:
+        $$
+        \hat{I}_n = \frac{1}{n} \sum_{i=1}^n g(X_i)
+        $$
+
+        \item \textbf{Código em Python:}
+        \begin{lstlisting}[language=Python]
+# Calculando a integral pelo Método de Monte Carlo
+def monte_carlo_integration(a, b, n):
+    soma=0
+    for i in range(n):
+        x = np.random.uniform(a, b)
+        y = g(x)
+        soma += y
+    return soma/n
+        \end{lstlisting}
+
+    O valor obtido para $n=10^3$ foi \underline{$\hat{I}_n = 0.759248$}. Para avaliar esse resultado, a integral também foi calculada pela Regra de Simpson, com  $n=10^6$, que retornou o valor $I =  0.746824$. O erro relativo foi de aproximadamente $1.66\%$, o que demonstra que o método de Monte Carlo é eficaz para estimar a integral, mesmo com um número relativamente pequeno de amostras.
+
+    \end{itemize}
     \end{tcolorbox}
+    \newpage
     \item Intuitivamente, muitas amostras de $g(x)$ vão ter valores muito baixos. Dessa forma, utilize Importance Sampling para melhorar a qualidade do estimador do valor da integral. Em particular, utilize a função de densidade $h(x) = Ae^{-x}$ definida em $[0, 1]$ onde $A$ é o valor da constante de normalização. Mostre como gerar amostras de $h(x)$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
+        \begin{itemize}
 
+        \item \textbf{Definição do estimador com \textit{Importance Sampling}:}
+        
+        $$
+        E_h\left[\frac{g(X)}{h(X)}\right] = \int_0^1 \frac{g(x)}{h(x)} h(x) dx = \int_0^1 g(x) dx = I
+        $$
+
+        Aplicando Monte Carlo:
+        
+        $$
+        E_h\left[\frac{g(X)}{h(X)}\right] \approx M_n = \frac{1}{n} \sum_{i=1}^n \frac{g(X_i)}{h(X_i)}
+        $$
+
+        Logo, o estimador da integral $I$ é:
+
+        $$
+        \hat{I}_n = \frac{1}{n} \sum_{i=1}^n \frac{g(X_i)}{Ae^{-X_i}} = \underline{\frac{1}{nA} \sum_{i=1}^n g(X_i) e^{X_i} \quad \vline} 
+        $$
+
+
+        \item  \textbf{Determinação da constante de normalização:}
+        
+        Para determinar a constante de normalização $A$, precisamos garantir que a integral de $h(x)$ no intervalo $[0, 1]$ seja igual a 1, ou seja:
+        $$
+        \int_0^1 h(x) dx = \int_0^1 Ae^{-x} dx = A \left[-e^{-x}\right]_0^1 = A(1 - e^{-1}) = 1
+        $$
+        $$
+        A = \frac{1}{1 - e^{-1}} \approx  \underline{1.581977 \quad \vline}
+        $$
+
+        
+
+        \item \textbf{Gerando amostras a partir da transformada inversa:}
+        
+        A função de distribuição acumulada (CDF) de $h(x)$ é dada por:
+        $$
+        H(x) = \int_0^x h(t) dt = \int_0^x Ae^{-t} dt = -A\left[e^{-t}\right]_0^x = A(1 - e^{-x})
+        $$
+        Igualando a CDF a uma variável aleatória uniforme $U \sim \text{Unif}(0, 1)$:
+        $$
+        U = A(1 - e^{-x}) \Rightarrow 1 - e^{-x} = \frac{U}{A} \Rightarrow e^{-x} = 1 - \frac{U}{A} \Rightarrow -x = \ln\left(1 - \frac{U}{A}\right)
+        $$
+        $$
+        x = -\ln\left(1 - \frac{U}{A}\right) = -\ln\left(\frac{A - U}{A}\right) = \ln\left(\frac{A}{A - U}\right) =  \underline{\ln(A) -\ln(A - U) \quad \vline}
+        $$
+
+        \end{itemize}
     \end{tcolorbox}
+       
+    \begin{tcolorbox}[colframe=black, title=Resposta (continuação):]
+        
+
+        \begin{itemize}
+        \item \textbf{Código em Python:}
+            
+        \begin{lstlisting}[language=Python]
+def is_integration(a, b, n):
+    A = 1/(1 - np.exp(-1))
+    soma=0
+    for i in range(n):
+        U = np.random.uniform(a, b)
+        x = np.log(A)-np.log(A-U)
+        soma += g(x) * np.exp(x)
+    return soma/(n*A)
+        \end{lstlisting}
+
+        O valor obtido para $n=10^3$ foi \underline{$\hat{I}_n = 0.744836$}. Para avaliar esse resultado, a integral também foi calculada pela Regra de Simpson, com  $n=10^6$, que retornou o valor $I =  0.746824$. O erro relativo foi de aproximadamente $0.27\%$, o que demonstra que o método de Monte Carlo com Importance Sampling também é eficaz para estimar a integral, mesmo com um número relativamente pequeno de amostras.
+        \end{itemize}
+    \end{tcolorbox}
+
     \item Compare os dois métodos. Trace um gráfico do erro relativo de cada um dos estimadores em função do número de amostras. Ou seja, $|\hat{I}_n - I|/I$ onde $I$ é o valor exato da integral e $\hat{I}_n$ é o valor do estimador com $n$ amostras, para $n = 10^1, 10^2, \dots, 10^6$.
     \begin{tcolorbox}[colframe=black, title=Resposta:]
 
+        \textbf{Código em Python:}
+
+        A função abaixo foi implementada para calcular o erro relativo de cada um dos estimadores a cada iteração:
+        \begin{lstlisting}[language=Python]
+def plot_function(n, I):
+    A = 1/(1 - np.exp(-1))
+    soma_mc=0
+    soma_is=0
+    erro_mc=[]
+    erro_is=[]
+    for i in range(n):
+        # Gerando um número aleatório U entre 0 e 1 
+        U = np.random.uniform(0, 1)
+        # Calculando a integral pelo método de Monte Carlo
+        x_mc = U
+        soma_mc += g(x_mc)
+        I_mc = soma_mc/(i+1)
+        erro_mc.append(abs(I-I_mc)/I)
+        # Calculando a integral pelo método de Monte Carlo com importance sampling
+        x_is = np.log(A)-np.log(A-U)
+        soma_is += g(x_is) * np.exp(x_is)
+        I_is = soma_is/((i+1)*A)
+        erro_is.append(abs(I-I_is)/I)
+        \end{lstlisting}
+
     \end{tcolorbox}
+
+    \begin{tcolorbox}[colframe=black, title=Resposta (continuação):]
+        No gráfico abaixo, é possível obseervar que o método de Monte Carlo com Importance Sampling converge bem mais rápido do que o método de Monte Carlo simples, evidenciando a maior eficiência do método.
+    \end{tcolorbox}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{q9.png}
+        \caption{Erro relativo dos estimadores em função de $n$}
+        \label{fig:erro_estimadores}
+    \end{figure}
+
+
+
+
+
 \end{enumerate}
 
 
