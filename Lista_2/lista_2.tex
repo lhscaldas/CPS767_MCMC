@@ -577,16 +577,16 @@ Considere o problema de gerar amostras de uma v.a. $X \sim \text{Binomial}(1000,
         Logo, a constante é:
         
         $$
-        c = 101 \cdot 0.028 \approx 2.828
+        c = 101 \cdot 0.028 \approx \underline{2.828 \quad \vline}
         $$
         
         A eficiência do método é o inverso da constante de rejeição:
         
         $$
-        \text{Eficiência} = \frac{1}{c} \approx \frac{1}{2.828} \approx 0.353
+        \text{Eficiência} = \frac{1}{c} \approx \frac{1}{2.828} \approx \underline{0.353 \quad \vline}
         $$
         
-        Ou seja, cerca de 35.3\% das amostras da proposta são aceitas. Isso indica que a escolha da proposta é razoavelmente eficiente.
+        Ou seja, cerca de \underline{35.3\% das amostras da proposta são aceitas}. Isso indica que a escolha da proposta não é muito eficiente.
         \end{tcolorbox}
     \newpage
     \item Lembrando que a distribuição Binomial tem a forma de sino, centrada em sua média, proponha outra função de probabilidade para gerar amostras de $X$ usando Rejection Sampling. Calcule a eficiência dessa proposta e compare com a eficiência acima. O que você pode concluir?
@@ -607,35 +607,51 @@ Considere o problema de gerar amostras de uma v.a. $X \sim \text{Binomial}(1000,
         c = \max_x \left( \frac{q(x)}{p(x)} \right)
         $$
         
-        Como a binomial atinge seu valor máximo (moda) em $x = (n+1)p \approx 200$, temos:
-        
-        $$
-        q(200) = \binom{1000}{200} (0.2)^{200} (0.8)^{800} \approx 0.028
-        $$
-        
-        A densidade da proposta em $x = 200$ é:
-        
-        $$
-        p(200) = \frac{1}{\sqrt{2\pi \cdot 160}} \approx 0.0316
-        $$
-        
-        Logo, a constante é:
-        
-        $$
-        c = \frac{q(200)}{p(200)} \approx \frac{0.028}{0.0316} \approx 0.886
-        $$
-        
-        Entretanto, como a binomial tem caudas mais pesadas que a normal, usamos um valor seguro $c \approx 1.2$ para garantir $q(x) \leq c \cdot p(x)$ em toda a reta real.
-        
-        A eficiência do método é o inverso da constante de rejeição:
-        
-        $$
-        \text{Eficiência} = \frac{1}{c} \approx \frac{1}{1.2} \approx 0.833
-        $$
-        
-        Ou seja, cerca de 83.3\% das amostras da proposta são aceitas. Essa escolha de proposta é bastante eficiente.
+        Para calcular $c$, precisamos encontrar o valor máximo de $\frac{q(x)}{p(x)}$ no intervalo de interesse, que não nescessariamente ocorre na média das duas distribuições, uma vez que o formato das caudas das distribuições são diferentes. Para isso, foi feito um código em Python que calcula o valor máximo de $\frac{q(x)}{p(x)}$ em um dado intervalo:
+        \begin{lstlisting}[language=Python]
+# Parâmetros
+n = 1000
+p = 0.2
+mu = n * p
+sigma = np.sqrt(n * p * (1 - p))
+
+# Intervalo de interesse
+x = np.arange(150, 250)  # Valores inteiros de 150 a 250
+
+# Distribuição Binomial (discreta)
+q = binom.pmf(x, n, p)
+
+# Distribuição Gaussiana (contínua, discretizada nos mesmos pontos)
+p_vals = norm.pdf(x, mu, sigma)
+
+# Encontrar a constante c (máximo da razão q/p)
+ratio = q / p_vals
+c_index = np.argmax(ratio)
+c = ratio[c_index]
+print(f"Constante c encontrada: {c}")
+print(f"Ponto de máximo da razão: x = {x[c_index]}")
+print(f"Eficiência: {1/c*100:.2f}%")
+        \end{lstlisting}
     \end{tcolorbox}            
 \end{enumerate}
+
+\begin{tcolorbox}[colframe=black, title=Resposta (continuação):]
+    Para título de comparação entre este item e o anterior, foi escolhido o mesmo intervalo, $[150, 250]$ (aproximadamente 4 desvios padrão em torno da média)
+        O valor máximo da razão $\frac{q(x)}{p(x)}$ encontrado neste intervalo foi em $x = 249$, com valor \underline{$c \approx 1.3879$}. Assim, a eficiência do método é: 
+        $$
+        \text{Eficiência} = \frac{1}{c} \approx \frac{1}{1.3879} \approx \underline{0.7205 \quad \vline}
+        $$
+        Ou seja, cerca de \underline{72.05\% das amostras da proposta são aceitas}. Isso indica que a escolha da proposta é mais eficiente do que a proposta anterior, que tinha eficiência de 35.3\%. Portanto, \underline{a distribuição normal é uma escolha melhor para gerar amostras da binomial} nesse caso.
+
+        Na figura abaixo é possível visualizar a comparação entre as duas distribuições.
+\end{tcolorbox}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{q8.png}
+    \caption{Comparação entre as distribuições Binomial e Normal}
+    \label{fig:comparacao_distribuicoes}
+\end{figure}
 
 \section*{Questão 9: Integração de Monte Carlo e Importance Sampling}
 
