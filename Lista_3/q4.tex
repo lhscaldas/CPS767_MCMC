@@ -1,0 +1,8 @@
+\section*{Questão 4: Voltando à origem}
+Considere uma cadeia de Markov cujo espaço de estados é um láttice de duas dimensões sobre os números naturais, ou seja, $S = \{(i, j) \mid i \geq 1, j \geq 1\}$. Cada estado pode transicionar para um de seus vizinhos no láttice. Entretanto, se afastar da origem (se movimentar para o norte ou para o leste) tem probabilidade $p/2$, e se aproximar da origem tem probabilidade $(1-p)/2$, onde $p$ é um parâmetro do modelo (nas bordas, utilize self-loops). Assuma que $p \in \{0.25, 0.35, 0.45\}$.
+
+\begin{enumerate}
+    \item Construa um simulador para essa cadeia de Markov.
+    \item Utilize o simulador para estimar a distribuição estacionária da origem (estado $(1,1)$), ou seja $\pi_{1,1}$, para cada valor de $p$. Dica: utilize os tempos de retorno!
+    \item Seja $d(t)$ o valor esperado da distância (de Manhattan) entre $X_t$ (o estado no tempo $t$) e a origem. Utilize o simulador para estimar $d(t)$ para $t \in \{10, 100, 1000\}$, para cada valor de $p$. O que você pode concluir?
+\end{enumerate}

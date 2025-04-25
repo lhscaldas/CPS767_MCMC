@@ -1,0 +1,10 @@
+\section*{Questão 2: Convergência de passeios aleatórios}
+Considere um passeio aleatório preguiçoso (com $p = 1/2$) caminhando sobre um grafo com $n$ vértices. Estamos interessados em entender a convergência da distribuição $\pi(t)$ em diferentes grafos. Assuma que o passeio sempre inicia sua caminhada no vértice $1$, ou seja, $\pi_1(0) = 1$. Considere os seguintes grafos: grafo em anel ($n = 125$), árvore binária cheia ($n = 127$), grafo em reticulado (grid) com duas dimensões ($n = 121$).
+
+\begin{enumerate}
+    \item Para cada grafo, construa a matriz de transição de probabilidade (ou seja, determine $P_{ij}$ para todo vértice $i, j$ do grafo). Atenção com a numeração dos vértices!
+    \item Determine analiticamente a distribuição estacionária para cada grafo (ou seja, determine $\pi_i$ para cada vértice $i$ do grafo).
+    \item Para cada grafo, calcule numericamente a variação total entre $\pi(t)$ e a distribuição estacionária, para $t = 0, 1, \dots$. Trace um gráfico onde cada curva corresponde a um grafo (preferencialmente em escala $\log$-$\log$, com $t \in [1, 10^3]$).
+    \item O que você pode concluir sobre a convergência em função da estrutura do grafo?
+\end{enumerate}
+

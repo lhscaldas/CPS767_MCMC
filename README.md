@@ -25,3 +25,6 @@ Revisão de probabilidade.
 
 * [2ª Lista de Exercícios:](Lista_2)
 Desigualdades probabilísticas, estimativas de erro, geração de amostras e algoritmos baseados em Monte Carlo.
+
+* [3ª Lista de Exercícios:](Lista_3)
+Cadeias de Markov e passeios aleatórios em grafos.

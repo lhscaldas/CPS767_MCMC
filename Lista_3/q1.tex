@@ -1,0 +1,8 @@
+\section*{Questão 1: Passeios aleatórios enviesados}
+Considere um grafo não direcionado $G = (V,E)$ com peso nas arestas, tal que $w_{ij} > 0$ para toda aresta $(i, j) \in E$. Considere um andarilho aleatório que caminha por este grafo em tempo discreto, mas cujos passos são enviesados pelos pesos das arestas. Em particular, a probabilidade do andarilho ir do vértice $i$ para o vértice $j$ é dada por $w_{ij}/W_i$, onde $W_i = \sum_j w_{ij}$ (soma dos pesos das arestas incidentes ao vértice $i \in V$). Temos assim um passeio aleatório enviesado linearmente pelos pesos das arestas.
+
+\begin{enumerate}
+    \item Mostre que este passeio aleatório induz uma cadeia de Markov calculando a matriz de transição de probabilidade.
+    \item Determine a distribuição estacionária desta cadeia de Markov (dica: use o método da inspeção).
+    \item Determine se esta cadeia de Markov é reversível no tempo.
+\end{enumerate}
