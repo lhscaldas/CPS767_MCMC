@@ -22,6 +22,7 @@
 \tcbset{before upper={\setlength{\parindent}{2em}}}
 \usepackage{longtable}
 \usepackage{enumitem}
+
 \newcommand\redout{\bgroup\markoverwith
 {\textcolor{red}{\rule[0.5ex]{2pt}{0.8pt}}}\ULon}
 \renewcommand{\lstlistingname}{Código}% Listing -> Algorithm
@@ -36,6 +37,27 @@
 
 \usepackage{adjustbox}
 
+\usepackage{mdframed}
+\newmdenv[
+    backgroundcolor=gray!15,       % fundo cinza claro
+    linecolor=gray!60,             % borda cinza mais escura
+    linewidth=1pt,
+    roundcorner=5pt,
+    skipabove=10pt,
+    skipbelow=10pt,
+    innertopmargin=1em,
+    innerbottommargin=1em,
+    innerleftmargin=1em,
+    innerrightmargin=1em,
+    splittopskip=\topskip,
+    firstextra=\setlength{\parindent}{2em}, 
+]{respostabox@inner}
+
+\newenvironment{resposta}
+    {\begin{respostabox@inner}
+    \setlength{\parindent}{2em}~
+    }
+  {\end{respostabox@inner}}
 
 % Configuração para destacar a sintaxe do Python
 \lstset{ 

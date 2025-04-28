@@ -3,6 +3,58 @@ Considere um grafo não direcionado $G = (V,E)$ com peso nas arestas, tal que $w
 
 \begin{enumerate}
     \item Mostre que este passeio aleatório induz uma cadeia de Markov calculando a matriz de transição de probabilidade.
+    \begin{resposta}
+        
+    Conforme o enunciado, temos que a probabilidade de transição do estado $i$ para o estado $j$ é dada por:
+    $$ P_{ij} = \frac{w_{ij}}{W_i}, $$
+    onde $W_i = \sum_{j} w_{ij}$ é a soma dos pesos das arestas incidentes ao vértice $i$ e $w_{ij}>0$ é o peso da aresta que liga os vértices $i$ e $j$.
+
+    Como $w_{ij} > 0$ para todas as arestas $(i,j) \in E$ e $W_i > 0$, temos que $P_{ij} \geq 0$, sendo estritamente positivo sempre que houver uma aresta entre $i$ e $j$.
+
+    
+    Além disso,
+
+    $$ \sum_{j} P_{ij} = \sum_{j} \frac{w_{ij}}{W_i} = \frac{1}{W_i} \sum_{j} w_{ij} = \frac{W_i}{W_i} = 1 $$
+
+    Assim, temos que a soma das probabilidades de transição do estado $i$ para todos os outros estados $j$ é igual a 1, o que caracteriza uma matriz de transição de probabilidade. 
+    
+    Portanto, \underline{o passeio aleatório enviesado induz uma cadeia de Markov}.
+        
+    \end{resposta}
     \item Determine a distribuição estacionária desta cadeia de Markov (dica: use o método da inspeção).
+    \begin{resposta}
+        Uma distribuição estacionária $\pi$ é uma distribuição de probabilidade que satisfaz a seguinte equação:
+        $$ \pi P = \pi $$
+
+        Para cada estado $i$ da distribuição estacionária, temos que:
+        $$ \pi_i = \sum_{j} \pi_j P_{ji} $$
+
+        Usando o resultado do item anterior, temos que:
+        $$ \pi_i = \sum_{j} \pi_j \frac{w_{ji}}{W_j} $$
+
+        Supondo que a distribuição estacionária é proporcional à soma do peso das arestas incidentes ao vértice $j$, ou seja, $\pi_j = Z W_j$, onde $Z>0$ é uma constante, temos que:
+        $$ \pi_i = \sum_{j} (Z W_j) \frac{w_{ji}}{W_j} = Z \sum_{j} w_{ji}$$
+
+        Como o grafo é não direcionado, temos que $w_{ij} = w_{ji}$, ou seja:
+        $$ \pi_i = Z \sum_{j} w_{ji} = Z \sum_{j} w_{ij} = Z W_i $$
+
+        Porém, sabemos que $\sum_{k} \pi_k = 1$, ou seja:
+        $$ \sum_{k} \pi_k = \sum_{k} Z W_k = 1 \quad \Rightarrow \quad Z = \frac{1}{\sum_{k} W_k}$$
+    
+        Portanto, a distribuição estacionária é dada por:
+        $$ \boxed{\pi_i = \frac{W_i}{\sum_{k} W_k}} $$
+
+
+    \end{resposta}
     \item Determine se esta cadeia de Markov é reversível no tempo.
+    \begin{resposta}
+        Uma Cadeia de Markov é dita reversível no tempo se, e somente se, satizfaz a equação de fluxo de massa de probabilidade:
+        $$ \pi_i P_{ij} = \pi_j P_{ji} $$
+
+        Aplicando a distribuição estacionária que encontramos no item anterior, temos que:
+        $$ \pi_i P_{ij} = \frac{W_i}{\sum_{k} W_k} \cdot \frac{w_{ij}}{W_i} = \frac{w_{ij}}{\sum_{k} W_k}  \quad \text{e} \quad \pi_j P_{ji} = \frac{W_j}{\sum_{k} W_k} \cdot \frac{w_{ji}}{W_j} = \frac{w_{ji}}{\sum_{k} W_k}$$
+        Como $w_{ij} = w_{ji}$, temos que:
+        $$ \boxed{\pi_i P_{ij} = \pi_j P_{ji}} $$
+        Portanto, \underline{a cadeia de Markov é reversível} no tempo.
+    \end{resposta}
 \end{enumerate}
