@@ -1,0 +1,45 @@
+Anel(n=125):
+P_{ij} = \begin{cases}
+                1/2 & \text{se } i = j \\
+                1/4 & \text{se } [i \neq j] \land [(i,j) \in E] \\
+                0 & \text{caso contrário}
+            \end{cases}
+$$\pi_i = \begin{cases}         
+                \frac{2}{2 \cdot 126}=\frac{1}{126} & \text{se } i \text{ é raiz }  (i=1)\\
+                \frac{3}{2 \cdot 126}=\frac{3}{252} & \text{se } i \text{ é nó interno } (i \in \{2,\dots,63\}) \\
+                \frac{1}{2 \cdot 126}=\frac{1}{252} & \text{se } i \text{ é folha } (i \in \{64,\dots,127\}) \\
+            \end{cases}$$
+
+Arvore(n=127):
+P_{ij} = \begin{cases}
+                1/2 & \text{se } i = j \\
+                1/4 & \text{se } [i \neq j] \land [(i,j) \in E] \land [i=1] \quad \text{(raiz)} \\
+                1/6 & \text{se } [i \neq j] \land [(i,j) \in E] \land [i \in \{2,\dots,63\}] \quad \text{(nós internos)} \\
+                1/2 & \text{se } [i \neq j] \land [(i,j) \in E] \land [i \in \{64,\dots,127\}] \quad \text{(folhas)} \\
+                0 & \text{caso contrário}
+            \end{cases}
+$$\pi_i = \begin{cases}         
+                \frac{2}{2 \cdot 126}=\frac{1}{126} & \text{se } i \text{ é raiz }  (i=1)\\
+                \frac{3}{2 \cdot 126}=\frac{3}{252} & \text{se } i \text{ é nó interno } (i \in \{2,\dots,63\}) \\
+                \frac{1}{2 \cdot 126}=\frac{1}{252} & \text{se } i \text{ é folha } (i \in \{64,\dots,127\}) \\
+            \end{cases}$$
+
+Grid(n=121):
+P_{ij} = \begin{cases}
+                1/2 & \text{se } i = j \\
+                1/4 & \text{se } i \neq j \text{, } (i,j) \in E \text{ e }i \text{ é canto} \\
+                1/6 & \text{se } i \neq j \text{, } (i,j) \in E \text{ e }i \text{ é borda} \\
+                1/8 & \text{se } i \neq j \text{, } (i,j) \in E \text{ e }i \text{ é nó interno} \\
+                0 & \text{caso contrário}
+            \end{cases}
+$$\pi_i = \begin{cases}         
+                \frac{2}{2 \cdot 220} = \frac{1}{220} & \text{se } i \in \{1, 11, 111, 121\} \quad \text{(cantos)} \\
+                \frac{3}{2 \cdot 220} = \frac{3}{440} & \text{se } 
+                    \begin{cases}
+                        & i \in \{2,\dots,10\} \quad \text{(borda de cima)} \\
+                        & i \in \{112,\dots,120\} \quad \text{(borda de baixo)} \\
+                        & i \in \{12, 23, 34, 45, 56, 67, 78, 89, 100\} \quad \text{(borda da esquerda)} \\
+                        & i \in \{22, 33, 44, 55, 66, 77, 88, 99, 110\} \quad \text{(borda da direita)}
+                    \end{cases} \\
+                    \frac{4}{2 \cdot 220} = \frac{1}{110} & \text{caso contrário (nós internos)}
+            \end{cases}$$
