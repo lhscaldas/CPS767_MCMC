@@ -5,13 +5,181 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
     \item Construa a cadeia de Markov deste processo mostrando a matriz de transição de probabilidade em função de $p$.
     \begin{resposta}
 
+        \begin{tikzpicture}[->, >=stealth, node distance=2.2cm,
+            every state/.style={circle, draw, minimum size=1.2cm}]
+            % States
+            \node[state] (1) {1};
+            \node[state] (2) [right=of 1] {2};
+            \node[state] (3) [right=of 2] {3};
+            \node (dots) [right=of 3] {\(\cdots\)};
+            \node[state] (10) [right=of dots] {10};
+
+            % Forward transitions
+            \draw (1) -- node[above] {\(p\)} (2);
+            \draw (2) -- node[above] {\(p\)} (3);
+            \draw (3) -- node[above] {\(p\)} (dots);
+            \draw (dots) -- node[above] {\(p\)} (10);
+
+            % Return transitions
+            \draw[bend left=30] (2) to node[below] {\(1 - p\)} (1);
+            \draw[bend left=35] (3) to node[below] {\(1 - p\)} (1);
+            \draw[bend left=40] (dots) to node[below] {\(1 - p\)} (1);
+            \draw[bend left=45] (10) to node[below] {\(1 - p\)} (1);
+
+            % Self-loops
+            \draw (1) edge[loop above] node {\(1 - p\)} (1);
+            \draw (10) edge[loop above] node {\(p\)} (10);
+
+        \end{tikzpicture}
+
+        $$
+        P_{ij} = \begin{cases}
+            1-p & \text{se } j = 1 \\
+            p & \text{se } (j = i + 1) \lor (i=j=10)\\
+            0 & \text{caso contrário}
+        \end{cases}
+        $$
+
     \end{resposta}
     \item Determine numericamente o vão espectral da cadeia de Markov para cada valor de $p$.
     \begin{resposta}
 
+        O vão espectral é dado por:
+
+        $$\delta = 1 - |\lambda_2| $$
+        
+            onde $\lambda_2$ é o segundo maior autovalor (em módulo) da matriz de transição $P$.
+
+        \newpage
+        \begin{itemize}        
+            \item \textbf{Para $p = 0{,}25$:}
+            \begin{itemize}
+                \item Matriz de transição (parcial):
+                $$
+                \begin{bmatrix}
+                0.75 & 0.25 & 0    & \cdots & 0 \\
+                0.75 & 0    & 0.25 &        & 0 \\
+                \vdots &     &     & \ddots & \vdots \\
+                0.75 & 0    & 0    & \cdots & 0.25
+                \end{bmatrix}
+                $$
+                \item Maiores autovalores em módulo:
+                $$ |\lambda_1| = 1.0, \quad |\lambda_2| \approx 1.7125 \times 10^{-4} $$
+                \item Vão espectral:
+                $$ \boxed{\delta = 0.9998287} $$
+            \end{itemize}
+        
+            \item \textbf{Para $p = 0{,}5$:}
+            \begin{itemize}
+                \item Matriz de transição (parcial):
+                $$
+                \begin{bmatrix}
+                0.5 & 0.5 & 0    & \cdots & 0 \\
+                0.5 & 0   & 0.5  &        & 0 \\
+                \vdots &     &     & \ddots & \vdots \\
+                0.5 & 0   & 0    & \cdots & 0.5
+                \end{bmatrix}
+                $$
+                \item Maiores autovalores em módulo:
+                $$ |\lambda_1| = 1.0, \quad |\lambda_2| \approx 3.4251 \times 10^{-4} $$
+                \item Vão espectral:
+                $$ \boxed{\delta = 0.9996575} $$
+            \end{itemize}
+        
+            \item \textbf{Para $p = 0{,}75$:}
+            \begin{itemize}
+                \item Matriz de transição (parcial):
+                $$
+                \begin{bmatrix}
+                0.25 & 0.75 & 0    & \cdots & 0 \\
+                0.25 & 0    & 0.75 &        & 0 \\
+                \vdots &     &     & \ddots & \vdots \\
+                0.25 & 0    & 0    & \cdots & 0.75
+                \end{bmatrix}
+                $$
+                \item Maiores autovalores em módulo:
+                $$ |\lambda_1| = 1.0, \quad |\lambda_2| \approx 4.3546 \times 10^{-6} $$
+                \item Vão espectral:
+                $$ \boxed{\delta = 0.9999956} $$
+            \end{itemize}
+        \end{itemize}
+        
+
+
     \end{resposta}
     \item Determine numericamente a distribuição estacionária para cada valor de $p$, e indique o estado de menor probabilidade.
     \begin{resposta}
+        O estado estacionário $\pi$ de uma cadeia de Markov é um vetor de probabilidade tal que:
+
+        $$ \pi P = \pi $$
+
+        Ou seja, ele é um autovetor à esquerda da matriz de transição $P$ associado ao autovalor $\lambda = 1$. 
+        A distribuição estacionária pode ser obtida computando os autovalores e autovetores de $P^\top$, selecionando aquele correspondente a $\lambda = 1$ e normalizando-o para que $\sum_i \pi_i = 1$.
+
+        \begin{itemize}
+            \item \textbf{Para $p = 0{,}25$:}
+            \begin{itemize}
+                \item Distribuição estacionária:
+                $$
+                \pi = 
+                \begin{bmatrix}
+                0.75 \\
+                0.1875 \\
+                0.046875 \\
+                0.01171875 \\
+                0.00292969 \\
+                0.00073242 \\
+                0.00018311 \\
+                0.00004578 \\
+                0.00001144 \\
+                0.00000381
+                \end{bmatrix}
+                $$
+            \end{itemize}
+
+            \item \textbf{Para $p = 0{,}5$:}
+            \begin{itemize}
+                \item Distribuição estacionária:
+                $$
+                \pi = 
+                \begin{bmatrix}
+                0.5 \\
+                0.25 \\
+                0.125 \\
+                0.0625 \\
+                0.03125 \\
+                0.015625 \\
+                0.0078125 \\
+                0.00390625 \\
+                0.00195312 \\
+                0.00195312
+                \end{bmatrix}
+                $$
+            \end{itemize}
+
+            \newpage
+            \item \textbf{Para $p = 0{,}75$:}
+            \begin{itemize}
+                \item Distribuição estacionária:
+                $$
+                \pi = 
+                \begin{bmatrix}
+                0.25 \\
+                0.1875 \\
+                0.140625 \\
+                0.10546875 \\
+                0.07910156 \\
+                0.05932617 \\
+                0.04449463 \\
+                0.03337097 \\
+                0.02502823 \\
+                0.07508469
+                \end{bmatrix}
+                $$
+            \end{itemize}
+        \end{itemize}
+
+
 
     \end{resposta}
     \item Utilizando os dados acima, determine um limitante inferior e superior para o tempo de mistura quando $\epsilon = 10^{-6}$ para cada valor de $p$.
