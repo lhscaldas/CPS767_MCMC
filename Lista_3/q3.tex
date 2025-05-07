@@ -43,10 +43,10 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
         Matriz de transição (parcial):
                 $$
                 \begin{bmatrix}
-                p & 1-p & 0    & \cdots & 0 \\
-                p & 0    & 1-p &        & 0 \\
+                    (1-p) & p & 0    & \cdots & 0 \\
+                    (1-p) & 0    & p &        & 0 \\
                 \vdots &     &     & \ddots & \vdots \\
-                p & 0    & 0    & \cdots & 1-p
+                (1-p) & 0    & 0    & \cdots & p
                 \end{bmatrix}
                 $$
 
@@ -65,52 +65,52 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
             \item \textbf{Para $p = 0{,}25$:}
             \begin{itemize}
                 \item Matriz de transição (parcial):
-                $$
+                $
                 \begin{bmatrix}
                 0.75 & 0.25 & 0    & \cdots & 0 \\
                 0.75 & 0    & 0.25 &        & 0 \\
                 \vdots &     &     & \ddots & \vdots \\
                 0.75 & 0    & 0    & \cdots & 0.25
                 \end{bmatrix}
-                $$
+                $
                 \item Maiores autovalores em módulo:
-                $$ |\lambda_1| = 1.0, \quad |\lambda_2| \approx 1.7125 \times 10^{-4} $$
+                $ |\lambda_1| = 1.0, \quad |\lambda_2| \approx 1.7125 \times 10^{-4} $
                 \item Vão espectral:
-                $$ \boxed{\delta = 0.9998287} $$
+                $ \boxed{\delta = 0.9998287} $
             \end{itemize}
         
             \item \textbf{Para $p = 0{,}5$:}
             \begin{itemize}
                 \item Matriz de transição (parcial):
-                $$
+                $
                 \begin{bmatrix}
                 0.5 & 0.5 & 0    & \cdots & 0 \\
                 0.5 & 0   & 0.5  &        & 0 \\
                 \vdots &     &     & \ddots & \vdots \\
                 0.5 & 0   & 0    & \cdots & 0.5
                 \end{bmatrix}
-                $$
+                $
                 \item Maiores autovalores em módulo:
-                $$ |\lambda_1| = 1.0, \quad |\lambda_2| \approx 3.4251 \times 10^{-4} $$
+                $ |\lambda_1| = 1.0, \quad |\lambda_2| \approx 3.4251 \times 10^{-4} $
                 \item Vão espectral:
-                $$ \boxed{\delta = 0.9996575} $$
+                $ \boxed{\delta = 0.9996575} $
             \end{itemize}
         
             \item \textbf{Para $p = 0{,}75$:}
             \begin{itemize}
                 \item Matriz de transição (parcial):
-                $$
+                $
                 \begin{bmatrix}
                 0.25 & 0.75 & 0    & \cdots & 0 \\
                 0.25 & 0    & 0.75 &        & 0 \\
                 \vdots &     &     & \ddots & \vdots \\
                 0.25 & 0    & 0    & \cdots & 0.75
                 \end{bmatrix}
-                $$
+                $
                 \item Maiores autovalores em módulo:
-                $$ |\lambda_1| = 1.0, \quad |\lambda_2| \approx 4.3546 \times 10^{-6} $$
+                $ |\lambda_1| = 1.0, \quad |\lambda_2| \approx 4.3546 \times 10^{-6} $
                 \item Vão espectral:
-                $$ \boxed{\delta = 0.9999956} $$
+                $ \boxed{\delta = 0.9999956} $
             \end{itemize}
         \end{itemize}
         
@@ -126,11 +126,12 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
         Ou seja, ele é um autovetor à esquerda da matriz de transição $P$ associado ao autovalor $\lambda = 1$. 
         A distribuição estacionária pode ser obtida utilizando novamente um código Python com a biblioteca NumPy para computar os autovalores e autovetores de $P^\top$, selecionando aquele correspondente a $\lambda = 1$ e normalizando-o para que $\sum_i \pi_i = 1$.
 
+        \newpage
         \begin{itemize}
             \item \textbf{Para $p = 0{,}25$:}
             \begin{itemize}
                 \item Distribuição estacionária:
-                $$
+                $
                 \pi = 
                 \begin{bmatrix}
                 0.75 \\
@@ -144,15 +145,15 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 0.00001144 \\
                 \boxed{0.00000381}
                 \end{bmatrix}
-                $$
-                \item Estado de menor probabilidade: 10, com probabilidade $\pi_o = 0.00000381$.
+                $
+                \item Estado de menor probabilidade: \textbf{10}, com probabilidade $\boxed{\pi_o = 0.00000381}$.
             \end{itemize}
 
             \newpage
             \item \textbf{Para $p = 0{,}5$:}
             \begin{itemize}
                 \item Distribuição estacionária:
-                $$
+                $
                 \pi = 
                 \begin{bmatrix}
                 0.5 \\
@@ -166,15 +167,15 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 \boxed{0.00195312} \\
                 \boxed{0.00195312}
                 \end{bmatrix}
-                $$
-                \item Estado de menor probabilidade: 9 e 10, com probabilidade $\pi_o = 0.00195312$.
+                $
+                \item Estado de menor probabilidade: \textbf{9} e \textbf{10}, com probabilidade $\boxed{\pi_o = 0.00195312}$.
             \end{itemize}
 
             \newpage
             \item \textbf{Para $p = 0{,}75$:}
             \begin{itemize}
                 \item Distribuição estacionária:
-                $$
+                $
                 \pi = 
                 \begin{bmatrix}
                 0.25 \\
@@ -188,14 +189,14 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 \boxed{0.02502823} \\
                 0.07508469
                 \end{bmatrix}
-                $$
-                \item Estado de menor probabilidade: 9, com probabilidade $\pi_o = 0.02502823$.
+                $
+                \item Estado de menor probabilidade: \textbf{9}, com probabilidade $\boxed{\pi_o = 0.02502823}$.
             \end{itemize}
         \end{itemize}
 
-
-
     \end{resposta}
+
+    \newpage
     \item Utilizando os dados acima, determine um limitante inferior e superior para o tempo de mistura quando $\epsilon = 10^{-6}$ para cada valor de $p$.
     \begin{resposta}
         O tempo de mistura $\tau_\epsilon$ representa, de forma aproximada, o número de passos necessários para que a distribuição da cadeia de Markov esteja a uma distância total menor que $\epsilon$ da distribuição estacionária, independentemente do estado inicial.
@@ -209,34 +210,38 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
         \begin{itemize}
             \item \textbf{Para $p = 0{,}25$:}
             \begin{itemize}
+                \item $\delta = 0.9998287$ e $\pi_o = 0.00000381$.
                 \item Limite inferior estimado:
-                $$ \tau_\epsilon \geq 0.0022476286040300246 $$
+                $ \boxed{\tau_\epsilon \geq 0.0022476286040300246} $
                 \item Limite superior estimado:
-                $$ \tau_\epsilon \leq 26.296663189659515 $$
+                $ \boxed{\tau_\epsilon \leq 26.296663189659515} $
             \end{itemize}
         
             \item \textbf{Para $p = 0{,}5$:}
             \begin{itemize}
+                \item $\delta = 0.9996575$ e $\pi_o = 0.00195312$.
                 \item Limite inferior estimado:
-                $$ \tau_\epsilon \geq 0.004496027298161922 $$
+                $ \boxed{\tau_\epsilon \geq 0.004496027298161922} $
                 \item Limite superior estimado:
-                $$ \tau_\epsilon \leq 20.060706093968722 $$
+                $ \boxed{\tau_\epsilon \leq 20.060706093968722} $
             \end{itemize}
         
             \item \textbf{Para $p = 0{,}75$:}
             \begin{itemize}
+                \item $\delta = 0.9999956$ e $\pi_o = 0.02502823$.
                 \item Limite inferior estimado:
-                $$ \tau_\epsilon \geq 5.7142421447070306 \times 10^{-5} $$
+                $ \boxed{\tau_\epsilon \geq 5.7142421447070306 \times 10^{-5}} $
                 \item Limite superior estimado:
-                $$ \tau_\epsilon \leq 17.50333771810467 $$
+                $ \boxed{\tau_\epsilon \leq 17.50333771810467} $
             \end{itemize}
         \end{itemize}
     \end{resposta}
 
     \item O que você pode concluir sobre a influência de $p$ no tempo de mistura?
     \begin{resposta}
-        À medida que o valor de $p$ aumenta, o tempo de mistura da cadeia de Markov tende a diminuir. Isso ocorre porque valores maiores de $p$ favorecem a progressão pelos estados, permitindo que o processo alcance diferentes regiões do espaço de estados mais rapidamente antes de retornar ao início. Como consequência, a distribuição de probabilidade se aproxima da distribuição estacionária com maior eficiência. Por outro lado, quando $p$ é pequeno, a cadeia retorna com mais frequência ao estado inicial, o que limita a exploração dos demais estados e torna a convergência para o equilíbrio mais lenta.
+        O aumento de $p$ tende a reduzir o tempo de mistura, pois favorece o avanço entre os estados e acelera a aproximação da distribuição estacionária. Já valores menores de $p$ provocam retornos frequentes ao estado inicial, atrasando a convergência.
 
+        Os limites do tempo de mistura refletem esse efeito de formas distintas. O superior diminui com $p$, pois depende inversamente do vão espectral e da menor entrada da distribuição estacionária, ambos crescentes. O inferior, porém, pode crescer inicialmente e depois cair, já que envolve o termo $\left( \frac{1}{\delta} - 1 \right)$, que varia de forma não linear com $p$.
     \end{resposta}
 \end{enumerate}
 
