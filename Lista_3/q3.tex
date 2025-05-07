@@ -40,17 +40,27 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
         \end{cases}
         $$
 
+        Matriz de transição (parcial):
+                $$
+                \begin{bmatrix}
+                p & 1-p & 0    & \cdots & 0 \\
+                p & 0    & 1-p &        & 0 \\
+                \vdots &     &     & \ddots & \vdots \\
+                p & 0    & 0    & \cdots & 1-p
+                \end{bmatrix}
+                $$
+
     \end{resposta}
     \item Determine numericamente o vão espectral da cadeia de Markov para cada valor de $p$.
     \begin{resposta}
 
         O vão espectral é dado por:
-
         $$\delta = 1 - |\lambda_2| $$
         
             onde $\lambda_2$ é o segundo maior autovalor (em módulo) da matriz de transição $P$.
 
-        \newpage
+        Utilizando um código em Python, com a biblioteca NumPy, podemos calcular os autovalores da matriz de transição $P$ para cada valor de $p$. O código pode ser visto no repositório do Github cujo link encontra-se no fim deste relatório.
+
         \begin{itemize}        
             \item \textbf{Para $p = 0{,}25$:}
             \begin{itemize}
@@ -114,7 +124,7 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
         $$ \pi P = \pi $$
 
         Ou seja, ele é um autovetor à esquerda da matriz de transição $P$ associado ao autovalor $\lambda = 1$. 
-        A distribuição estacionária pode ser obtida computando os autovalores e autovetores de $P^\top$, selecionando aquele correspondente a $\lambda = 1$ e normalizando-o para que $\sum_i \pi_i = 1$.
+        A distribuição estacionária pode ser obtida utilizando novamente um código Python com a biblioteca NumPy para computar os autovalores e autovetores de $P^\top$, selecionando aquele correspondente a $\lambda = 1$ e normalizando-o para que $\sum_i \pi_i = 1$.
 
         \begin{itemize}
             \item \textbf{Para $p = 0{,}25$:}
@@ -132,11 +142,13 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 0.00018311 \\
                 0.00004578 \\
                 0.00001144 \\
-                0.00000381
+                \boxed{0.00000381}
                 \end{bmatrix}
                 $$
+                \item Estado de menor probabilidade: 10, com probabilidade $\pi_o = 0.00000381$.
             \end{itemize}
 
+            \newpage
             \item \textbf{Para $p = 0{,}5$:}
             \begin{itemize}
                 \item Distribuição estacionária:
@@ -151,10 +163,11 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 0.015625 \\
                 0.0078125 \\
                 0.00390625 \\
-                0.00195312 \\
-                0.00195312
+                \boxed{0.00195312} \\
+                \boxed{0.00195312}
                 \end{bmatrix}
                 $$
+                \item Estado de menor probabilidade: 9 e 10, com probabilidade $\pi_o = 0.00195312$.
             \end{itemize}
 
             \newpage
@@ -172,10 +185,11 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 0.05932617 \\
                 0.04449463 \\
                 0.03337097 \\
-                0.02502823 \\
+                \boxed{0.02502823} \\
                 0.07508469
                 \end{bmatrix}
                 $$
+                \item Estado de menor probabilidade: 9, com probabilidade $\pi_o = 0.02502823$.
             \end{itemize}
         \end{itemize}
 
@@ -184,10 +198,44 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
     \end{resposta}
     \item Utilizando os dados acima, determine um limitante inferior e superior para o tempo de mistura quando $\epsilon = 10^{-6}$ para cada valor de $p$.
     \begin{resposta}
-
+        O tempo de mistura $\tau_\epsilon$ representa, de forma aproximada, o número de passos necessários para que a distribuição da cadeia de Markov esteja a uma distância total menor que $\epsilon$ da distribuição estacionária, independentemente do estado inicial.
+        
+        Ele pode ser estimado por:
+        
+        $$ \left( \frac{1}{\delta} - 1 \right) \log \frac{1}{2\epsilon} \leq \tau_\epsilon \leq \frac{1}{\delta} \log \frac{1}{\pi_o \epsilon}, $$
+        
+        onde $\delta$ é o vão espectral da matriz de transição, e $\pi_o = \min_i \pi_i$ é a menor entrada da distribuição estacionária.
+        
+        \begin{itemize}
+            \item \textbf{Para $p = 0{,}25$:}
+            \begin{itemize}
+                \item Limite inferior estimado:
+                $$ \tau_\epsilon \geq 0.0022476286040300246 $$
+                \item Limite superior estimado:
+                $$ \tau_\epsilon \leq 26.296663189659515 $$
+            \end{itemize}
+        
+            \item \textbf{Para $p = 0{,}5$:}
+            \begin{itemize}
+                \item Limite inferior estimado:
+                $$ \tau_\epsilon \geq 0.004496027298161922 $$
+                \item Limite superior estimado:
+                $$ \tau_\epsilon \leq 20.060706093968722 $$
+            \end{itemize}
+        
+            \item \textbf{Para $p = 0{,}75$:}
+            \begin{itemize}
+                \item Limite inferior estimado:
+                $$ \tau_\epsilon \geq 5.7142421447070306 \times 10^{-5} $$
+                \item Limite superior estimado:
+                $$ \tau_\epsilon \leq 17.50333771810467 $$
+            \end{itemize}
+        \end{itemize}
     \end{resposta}
+
     \item O que você pode concluir sobre a influência de $p$ no tempo de mistura?
     \begin{resposta}
+        À medida que o valor de $p$ aumenta, o tempo de mistura da cadeia de Markov tende a diminuir. Isso ocorre porque valores maiores de $p$ favorecem a progressão pelos estados, permitindo que o processo alcance diferentes regiões do espaço de estados mais rapidamente antes de retornar ao início. Como consequência, a distribuição de probabilidade se aproxima da distribuição estacionária com maior eficiência. Por outro lado, quando $p$ é pequeno, a cadeia retorna com mais frequência ao estado inicial, o que limita a exploração dos demais estados e torna a convergência para o equilíbrio mais lenta.
 
     \end{resposta}
 \end{enumerate}

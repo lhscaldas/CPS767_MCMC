@@ -31,6 +31,7 @@ def item_2():
         print(f"p = {p}:")
         print("Matriz de transição:")
         print(P)
+        print("Verificação de estocasticidade:", is_stochastic(P))
         print("Módulo dos autovalores:", eigvals)
         print("Vão espectral:", gap)
 
@@ -42,6 +43,16 @@ def stationary_distribution(P):
 
     return pi
 
+# Verificar se a distribuição pi é estacionária
+def is_stationary(P, pi):
+    # Verifica se P @ pi = pi
+    pi_next = pi @ P
+    error = np.abs(pi_next - pi)
+    max_err = np.max(error)
+    if max_err > 1e-10:
+        return max_err
+    return True
+
 def item_3():
     for p in [0.25, 0.5, 0.75]:
         P = transition_matrix(10, p)
@@ -49,7 +60,25 @@ def item_3():
         print(f"p = {p}:")
         print("Distribuição estacionária:")
         print(pi)
+        # print("Verificação de estacionariedade:")
+        # print(is_stationary(P, pi))
 
+# Calcular os limites inferior e superior do tempo de mistura
+def mixing_time_bounds(P, epsilon=1e-6):
+    _, delta = spectral_gap(P)
+    pi = stationary_distribution(P)
+    pi_o = np.min(pi)
+    L_inf = (1/delta - 1) * np.log(1/(2*epsilon))  # limite inferior
+    L_sup = (1/delta) * np.log(1/(pi_o*epsilon))  # limite superior
+    return L_inf, L_sup
+
+def item_4():
+    for p in [0.25, 0.5, 0.75]:
+        P = transition_matrix(10, p)
+        L_inf, L_sup = mixing_time_bounds(P)
+        print(f"p = {p}:")
+        print("Limite inferior do tempo de mistura:", L_inf)
+        print("Limite superior do tempo de mistura:", L_sup)
 
 if __name__ == "__main__":
-    item_3()
+    item_4()
