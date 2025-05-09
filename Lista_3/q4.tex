@@ -148,13 +148,13 @@ Considere uma cadeia de Markov cujo espaço de estados é um láttice de duas di
         Com isso, podemos estimar a distribuição estacionária $\pi_{1,1}$ apenas simulando a cadeia de Markov por um número de passos suficientemente grande, contando quantas vezes o estado $(1,1)$ foi visitado e dividindo pelo número total de passos do caminho amostral. Assim, para $10^7$ passos, temos:
         \begin{itemize}
             \item Para $p = 0{,}25$, a estimativa de $\pi_{(1,1)}$ foi:
-            $ \pi_{(1,1)} \approx 0{,}4447 $
+            $ \boxed{\pi_{(1,1)} \approx 0{,}4447} $
             
             \item Para $p = 0{,}35$, a estimativa de $\pi_{(1,1)}$ foi:
-            $ \pi_{(1,1)} \approx 0{,}2137 $
+            $ \boxed{\pi_{(1,1)} \approx 0{,}2137} $
 
             \item Para $p = 0{,}45$, a estimativa de $\pi_{(1,1)}$ foi:
-            $ \pi_{(1,1)} \approx 0{,}0328 $
+            $ \boxed{\pi_{(1,1)} \approx 0{,}0328} $
         \end{itemize}
 
     \end{resposta}
@@ -170,11 +170,14 @@ Considere uma cadeia de Markov cujo espaço de estados é um láttice de duas di
             \hline
             $p$ & $d(10)$ & $d(100)$ & $d(1000)$ \\
             \hline
-            0.25 & 2.7 & 3.1 & 3.0 \\
-            0.35 & 3.53 & 4.57 & 4.0 \\
-            0.45 & 4.5 & 8.97 & 11.4 \\
+            0.25 & 2.70 & 3.10 & 3.00 \\
+            0.35 & 3.53 & 4.57 & 4.00 \\
+            0.45 & 4.50 & 8.97 & 11.40 \\
             \hline
         \end{tabular}
+
+        \small
+        OBS: os valores são decimais por ser uma média de 30 simulações.
 \end{center}
 
     Podemos concluir que, quanto maior o valor de $p$, mais os estados tendem a se afastar da origem ao longo do tempo. Isso ocorre porque a probabilidade de se mover para o norte ou para o leste aumenta com $p$, favorecendo direções que se afastam da origem, enquanto a probabilidade de se mover para o sul ou para o oeste, que aproximam o processo da origem, diminui.
