@@ -21,18 +21,19 @@ def transition_matrix(n, p):
 
 def spectral_gap(P):
     eigvals = np.linalg.eigvals(P)
-    eigvals = np.sort(np.abs(eigvals))[::-1]  # ordenar em valor absoluto decrescente
+    eigvals = np.flip(np.sort(np.abs(eigvals)))  # ordenar em valor absoluto decrescente
     return eigvals, 1 - eigvals[1]  # gap = 1 - |lambda_2|
+    # return eigvals, eigvals[0] - eigvals[1]  # gap = 1 - |lambda_2|
 
 def item_2():
     for p in [0.25, 0.5, 0.75]:
         P = transition_matrix(10, p)
         eigvals, gap = spectral_gap(P)
         print(f"p = {p}:")
-        print("Matriz de transição:")
-        print(P)
-        print("Verificação de estocasticidade:", is_stochastic(P))
-        print("Módulo dos autovalores:", eigvals)
+        # print("Matriz de transição:")
+        # print(P)
+        # print("Verificação de estocasticidade:", is_stochastic(P))
+        # print("Módulo dos autovalores:", eigvals)
         print("Vão espectral:", gap)
 
 def stationary_distribution(P):
@@ -81,4 +82,4 @@ def item_4():
         print("Limite superior do tempo de mistura:", L_sup)
 
 if __name__ == "__main__":
-    item_4()
+    item_2()

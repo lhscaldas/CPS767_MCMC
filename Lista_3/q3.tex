@@ -46,6 +46,7 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                     (1-p) & p & 0    & \cdots & 0 \\
                     (1-p) & 0    & p &        & 0 \\
                 \vdots &     &     & \ddots & \vdots \\
+                (1-p) & 0    & 0    & \cdots & p\\
                 (1-p) & 0    & 0    & \cdots & p
                 \end{bmatrix}
                 $$
@@ -70,6 +71,7 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 0.75 & 0.25 & 0    & \cdots & 0 \\
                 0.75 & 0    & 0.25 &        & 0 \\
                 \vdots &     &     & \ddots & \vdots \\
+                0.75 & 0    & 0    & \cdots & 0.25 \\
                 0.75 & 0    & 0    & \cdots & 0.25
                 \end{bmatrix}
                 $
@@ -87,6 +89,7 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 0.5 & 0.5 & 0    & \cdots & 0 \\
                 0.5 & 0   & 0.5  &        & 0 \\
                 \vdots &     &     & \ddots & \vdots \\
+                0.5 & 0   & 0    & \cdots & 0.5 \\
                 0.5 & 0   & 0    & \cdots & 0.5
                 \end{bmatrix}
                 $
@@ -104,6 +107,7 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 0.25 & 0.75 & 0    & \cdots & 0 \\
                 0.25 & 0    & 0.75 &        & 0 \\
                 \vdots &     &     & \ddots & \vdots \\
+                0.25 & 0    & 0    & \cdots & 0.75 \\
                 0.25 & 0    & 0    & \cdots & 0.75
                 \end{bmatrix}
                 $
@@ -126,7 +130,6 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
         Ou seja, ele é um autovetor à esquerda da matriz de transição $P$ associado ao autovalor $\lambda = 1$. 
         A distribuição estacionária pode ser obtida utilizando novamente um código Python com a biblioteca NumPy para computar os autovalores e autovetores de $P^\top$, selecionando aquele correspondente a $\lambda = 1$ e normalizando-o para que $\sum_i \pi_i = 1$.
 
-        \newpage
         \begin{itemize}
             \item \textbf{Para $p = 0{,}25$:}
             \begin{itemize}
@@ -149,7 +152,6 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 \item Estado de menor probabilidade: \textbf{10}, com probabilidade $\boxed{\pi_o = 0.00000381}$.
             \end{itemize}
 
-            \newpage
             \item \textbf{Para $p = 0{,}5$:}
             \begin{itemize}
                 \item Distribuição estacionária:
@@ -171,7 +173,6 @@ Considere um processo estocástico que inicia no estado $1$ e a cada instante de
                 \item Estado de menor probabilidade: \textbf{9} e \textbf{10}, com probabilidade $\boxed{\pi_o = 0.00195312}$.
             \end{itemize}
 
-            \newpage
             \item \textbf{Para $p = 0{,}75$:}
             \begin{itemize}
                 \item Distribuição estacionária:

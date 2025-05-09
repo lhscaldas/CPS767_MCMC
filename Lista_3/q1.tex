@@ -54,7 +54,7 @@ Considere um grafo não direcionado $G = (V,E)$ com peso nas arestas, tal que $w
         Aplicando a distribuição estacionária que encontramos no item anterior, temos que:
         $$ \pi_i P_{ij} = \frac{W_i}{\sum_{k} W_k} \cdot \frac{w_{ij}}{W_i} = \frac{w_{ij}}{\sum_{k} W_k}  \quad \text{e} \quad \pi_j P_{ji} = \frac{W_j}{\sum_{k} W_k} \cdot \frac{w_{ji}}{W_j} = \frac{w_{ji}}{\sum_{k} W_k}$$
         Como $w_{ij} = w_{ji}$, temos que:
-        $$ \boxed{\pi_i P_{ij} = \pi_j P_{ji}} $$
+        $$ \frac{w_{ij}}{\sum_{k} W_k} = \frac{w_{ji}}{\sum_{k} W_k} \quad \Rightarrow \quad \boxed{\pi_i P_{ij} = \pi_j P_{ji}} $$
         Portanto, \underline{a cadeia de Markov é reversível} no tempo.
     \end{resposta}
 \end{enumerate}
