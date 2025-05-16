@@ -1,0 +1,28 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9.7 }
+
+\bibitem{marlow_2007}
+\abntrefinfo{Marlow, Kilby e Mercer}{MARLOW; KILBY; MERCER}{2007}
+{MARLOW, D.; KILBY, P.; MERCER, G. The travelling salesman problem in maritime
+  surveillance: Techniques, algorithms and analysis.
+\emph{Defence Science and Technology Organisation (DSTO), Australia}, 2007.
+Dispon{\'\i}vel em: $<$https://www.researchgate.net/publication/27256909$>$.}
+
+\bibitem{kosmas_2012}
+\abntrefinfo{Kosmas e Vlachos}{KOSMAS; VLACHOS}{2012}
+{KOSMAS, O.; VLACHOS, D. Simulated annealing for optimal ship routing.
+\emph{Computers \& Operations Research}, Elsevier, v.~39, n.~3, p. 576--581,
+  2012.}
+
+\bibitem{penicka_2017}
+\abntrefinfo{Penicka et al.}{PENICKA et al.}{2017}
+{PENICKA, R. et al. Reactive dubins traveling salesman problem for replanning
+  of information gathering by uavs. In:  IEEE. \emph{2017 IEEE/RSJ
+  International Conference on Intelligent Robots and Systems (IROS)}. [S.l.],
+  2017. p. 1433--1440.}
+
+\end{thebibliography}
