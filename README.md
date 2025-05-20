@@ -28,3 +28,6 @@ Desigualdades probabilísticas, estimativas de erro, geração de amostras e alg
 
 * [3ª Lista de Exercícios:](Lista_3)
 Cadeias de Markov e passeios aleatórios em grafos.
+
+* [Projeto](Projeto/proposta)
+Projeto final da disciplina.
