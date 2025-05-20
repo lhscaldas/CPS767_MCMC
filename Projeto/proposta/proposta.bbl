@@ -5,6 +5,14 @@
 \providecommand{\abntbstabout}[1]{}
 \abntbstabout{v-1.9.7 }
 
+\bibitem{andrade_2021}
+\abntrefinfo{Andrade, Rocha e Franco}{ANDRADE; ROCHA; FRANCO}{2021}
+{ANDRADE, I. d.~O.; ROCHA, A. J. R.~d.; FRANCO, L. G.~A. \emph{Blue Amazon
+  Management System (SisGAAz): Sovereignty, Surveillance and Defense of the
+  Brazilian Jurisdictional Waters}.
+Brasília, 2021. Dispon{\'\i}vel em:
+  $<$https://www.ipea.gov.br/portal/images/stories/PDFs/TDs/ingles/dp\_261\_sisgaaz.pdf$>$.}
+
 \bibitem{marlow_2007}
 \abntrefinfo{Marlow, Kilby e Mercer}{MARLOW; KILBY; MERCER}{2007}
 {MARLOW, D.; KILBY, P.; MERCER, G. The travelling salesman problem in maritime
