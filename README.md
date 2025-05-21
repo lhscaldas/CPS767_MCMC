@@ -29,5 +29,8 @@ Desigualdades probabilísticas, estimativas de erro, geração de amostras e alg
 * [3ª Lista de Exercícios:](Lista_3)
 Cadeias de Markov e passeios aleatórios em grafos.
 
+* [4ª Lista de Exercícios:](Lista_4)
+Métodos MCMC para amostragem e otimização.
+
 * [Projeto](Projeto/proposta)
 Projeto final da disciplina.

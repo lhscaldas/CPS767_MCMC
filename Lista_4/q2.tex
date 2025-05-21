@@ -1,0 +1,26 @@
+\section*{Questão 2: Amostras de Modelos de Mistura}
+
+Considere a seguinte função de probabilidade:
+\[
+p(x) = \alpha p_B(x; n, p_1) + (1 - \alpha)p_B(x; n, p_2),
+\]
+onde $p_B(x; n, p)$ é a probabilidade associada ao valor $x$ da binomial com parâmetros $n$ e $p$, e $\alpha \in [0,1]$ é um peso. Trata-se de um modelo de mistura de duas binomiais com diferentes valores de $p$, com pesos dados por $\alpha$ e $1 - \alpha$. Considere duas variáveis aleatórias $X$ e $K$, representando o valor de $X \in [0, n]$ e a binomial utilizada $K \in \{1, 2\}$. Queremos gerar amostras de acordo com $p(x)$.
+
+\begin{itemize}
+  \item Determine as distribuições de probabilidade condicionais $P(X|K)$ e $P(K|X)$. Dica: utilize a regra de Bayes no segundo caso.
+  \begin{resposta}
+  \end{resposta}
+  \item Determine a distribuição de probabilidade conjunta $P(X, K)$.
+  \begin{resposta}
+  \end{resposta}
+  \item Utilize a técnica de Gibbs Sampling para gerar amostras de $X$. Mostre como construir a cadeia de Markov e determine a transição entre os estados.
+  \begin{resposta}
+  \end{resposta}
+  \item Para $n = 2$, $p_1 = 0{,}1$, $p_2 = 0{,}8$, $\alpha = 0{,}3$, desenhe a cadeia de Markov com todas as transições.
+  \begin{resposta}
+  \end{resposta}
+  \item Descreva como utilizar a cadeia de Markov para gerar amostras.
+  \begin{resposta}
+  \end{resposta}
+\end{itemize}
+
