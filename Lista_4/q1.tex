@@ -5,15 +5,138 @@ Considere uma sequência de dígitos binários (0s e 1s) de comprimento $s$. Uma
 \begin{itemize}
   \item Considerando $s = 4$, determine todas as sequências válidas e calcule $\mu_4$.
   \begin{resposta}
-    As sequências válidas de comprimento 4 são: 0000, 0001, 0010, 0100, 1000, 0101, 1010. Portanto, temos um total de 7 sequências válidas. O número total de 1s nessas sequências é: $0 + 1 + 1 + 1 + 1 + 2 + 2 = 8$. Assim, $\mu_4 = \frac{8}{7} \approx 1{,}14$.
+    As sequências válidas de comprimento 4 são: 0000, 0001, 0010, 0100, 1000, 0101, 1010, 1001. Portanto, temos um total de 8 sequências válidas. O valor esperado de 1s nessas sequências é dado por: 
+    
+    $$ \mu_4 = \frac{1}{8} \times 0 + \frac{4}{8} \times 1 + \frac{3}{8} \times 2 = \frac{10}{8} $$
+    
+    Assim, 
+    $$\boxed{\mu_4 = \frac{10}{8} \approx 1.25}$$
   \end{resposta}
   \item Construa uma cadeia de Markov sobre o conjunto de sequências válidas, deixando claro como funcionam as transições de estado. Argumente que a cadeia é irredutível.
   \begin{resposta}
+    A cadeia de Markov pode ser construída considerando os estados como as sequências válidas (ou seja, aquelas de comprimento $s = 4$ que não possuem dígitos 1 adjacentes). As transições entre estados ocorrem ao flipar um único dígito da sequência, desde que o resultado continue sendo uma sequência válida.
+
+    Por exemplo, a sequência 0010 pode transitar para 0000 (flipando o terceiro dígito) ou para 1010 (flipando o primeiro dígito), pois ambas são válidas. Por outro lado, flipar o segundo dígito resultaria em 0110, que não é válida (pois possui 1s adjacentes), portanto essa transição não é permitida.
+
+    A probabilidade de transição do estado $i$ para $j$ é dada por:
+    $$ P_{ij} = \begin{cases}
+      \frac{1}{d_i} & \text{se } j \text{ é obtido de } i \text{ por flip válido de um dígito} \\
+      0 & \text{caso contrário}
+    \end{cases} $$
+    onde $d_i$ é o número total de transições válidas a partir do estado $i$.
+
+    A cadeia é irredutível porque, para qualquer par de estados válidos, é possível transformar um no outro através de uma sequência finita de flips de dígitos (desde que se respeite a restrição de não criar 1s adjacentes). Como todas as sequências válidas estão conectadas por essas transições, a cadeia é conexa e, portanto, irredutível.
   \end{resposta}
+  \newpage
   \item Desenhe a cadeia de Markov para o caso de $s = 4$, mostrando todas as transições.
   \begin{resposta}
+    \begin{center}
+    \begin{tikzpicture}[->, >=Stealth, node distance=2cm,
+        every state/.style={circle, draw, minimum size=1.5cm},
+        shorten >=1pt]
+
+        % Estados
+        \node[state] (0000) at (0, 0) {0000};
+        \node[state] (0001) at (-3, -2) {0001};
+        \node[state] (0010) at (3, 2) {0010};
+        \node[state] (0100) at (3, -2) {0100};
+        \node[state] (1000) at (-3, 2) {1000};
+        \node[state] (0101) at (0, -4) {0101};
+        \node[state] (1010) at (0, 4) {1010};
+        \node[state] (1001) at (-6, 0) {1001};
+
+        % Transições a partir de 0000
+        \draw[bend left=10] (0000) to node[below] {\(0.25\)} (1000);
+        \draw[bend left=10] (0000) to node[above] {\(0.25\)} (0010);
+        \draw[bend left=10] (0000) to node[above] {\(0.25\)} (0100);
+        \draw[bend left=10] (0000) to node[below] {\(0.25\)} (0001);
+
+        % Transições a partir de 1000
+        \draw[bend left=10] (1000) to node[above] {\(0.33\)} (0000);
+        \draw[bend left=10] (1000) to node[above] {\(0.33\)} (1010);
+        \draw[bend left=10] (1000) to node[below] {\(0.33\)} (1001);
+
+        % Transições a partir de 0010
+        \draw[bend left=10] (0010) to node[below] {\(0.50\)} (0000);
+        \draw[bend left=10] (0010) to node[below] {\(0.50\)} (1010);
+
+        % Transições a partir de 0100
+        \draw[bend left=10] (0100) to node[below] {\(0.50\)} (0000);
+        \draw[bend left=10] (0100) to node[below] {\(0.50\)} (0101);
+
+        % Transições a partir de 0001
+        \draw[bend left=10] (0001) to node[above] {\(0.33\)} (0000);
+        \draw[bend left=10] (0001) to node[above] {\(0.33\)} (0101);
+        \draw[bend left=10] (0001) to node[below] {\(0.33\)} (1001);
+
+        % Transições a partir de 0101
+        \draw[bend left=10] (0101) to node[below] {\(0.50\)} (0001);
+        \draw[bend left=10] (0101) to node[above] {\(0.50\)} (0100);
+
+        % Transições a partir de 1010
+        \draw[bend left=10] (1010) to node[above] {\(0.50\)} (0010);
+        \draw[bend left=10] (1010) to node[below] {\(0.50\)} (1000);
+
+        % Transições a partir de 1001
+        \draw[bend left=10] (1001) to node[above] {\(0.50\)} (0001);
+        \draw[bend left=10] (1001) to node[above] {\(0.50\)} (1000);
+
+    \end{tikzpicture}
+    \end{center}
   \end{resposta}
   \item Mostre como aplicar Metropolis-Hastings para resolver o problema de estimar $\mu_s$. Deixe claro as probabilidades de aceite e o funcionamento do estimador.
   \begin{resposta}
+   Partindo da cadeia de Markov construída anteriormente, podemos aplicar o algoritmo de Metropolis-Hastings para modificar suas probabilidades de transição, de modo que a nova cadeia tenha como distribuição estacionária a distribuição uniforme sobre o conjunto de sequências válidas.
+    A nova matriz de probabilidade de transição $P'$ é dada por:
+     $$ P'_{ij} = \begin{cases}
+      P_{ij}a(i,j) & \text{se } j \text{ é obtido de } i \text{ por flip válido de um dígito} \\
+      1-\sum_{k:k \neq i}P_{ik}a(i,k) & \text{se } i=j \\
+      0 & \text{caso contrário}
+    \end{cases} $$
+    onde $a(i,j)$ é a probabilidade de aceitar a transição de $i$ para $j$. Essa probabilidade pode ser encontrada pela equação da condição de reversibilidade:
+    $$ \pi_iP_{ij}a(i,j) = \pi_jP_{ji}a(j,i) $$
+    
+    Como temos uma equação é duas incógnitas($a(i,j)$ e $a(j,i)$), precisamos arbitrar um valor para uma delas. Arbitrando $a(i,j) = 1$ se $\pi_i P_{ij} \leq \pi_j P_{ji}$ e, consequentemente, $a(i,j) = \frac{\pi_j P_{ji}}{\pi_i P_{ij}}$ se $\pi_i P_{ij} > \pi_j P_{ji}$, temos que:
+
+    $$ a(i,j) =  \min\{1, \frac{\pi_j P_{ji}}{\pi_i P_{ij}}\} $$
+
+    Como a distribuição estacionária é uniforme ($\pi_i = \pi_j$) podemos simplificar a equação para:
+    $$ a(i,j) =  \min\{1, \frac{P_{ji}}{P_{ij}}\} = \min\{1, \frac{\frac{1}{d_j}}{\frac{1}{d_i}}\} = \min\{1, \frac{d_i}{d_j}\} $$
+
+    A nova matriz de probabilidade de transição $P'$ fica:
+    $$ P'_{ij} = \begin{cases}
+      \frac{1}{d_i}\min\{1, \frac{d_i}{d_j}\} & \text{se } j \text{ é obtido de } i \text{ por flip válido de um dígito} \\
+      1-\sum_{k:k \neq i}P_{ik}a(i,k) & \text{se } i=j \\
+      0 & \text{caso contrário}
+    \end{cases} $$
+
+    Assim, podemos amostrar de forma uniforme as sequências válidas seguindo o seguinte procedimento:
+    \begin{enumerate}
+      \item Descobrir os $d_i$ vizinhos do estado atual $i$;
+      \item Escolher de forma uniforme um vizinho $j$ e contar os seus $d_j$ vizinhos;
+      \item Gerar um número aleatório $u$ entre 0 e 1;
+      \item Aceitar a transição se $u < a(i,j) = \min\{1, \frac{d_i}{d_j}\}$. Caso contrário, repetir estado $i$;
+      \item Repetir o processo a partir do novo estado.
+    \end{enumerate}
+
+    Após gerar um número suficiente de amostras, o teorema de ergodicidade garante que a média das amostras converge para o valor esperado $\mu_s$. Assim, podemos estimar $\mu_s$ como:
+    $$ \hat{\mu}_s = \frac{1}{N} \sum_{i=1}^{N} X_i $$
+    onde $X_i$ é o número de 1s na amostra $i$ e $N$ é o número total de amostras geradas.
+
+    Implementando o procedimento acima em Python (link para o código no final do relatório), obtemos os seguintes resultados para $N=10^5$ e diferentes valores de $s$:
+
+    \begin{center}
+    \begin{tabular}{|c|c|c|}
+      \hline
+      $s$ & n° estados & $\hat{\mu}_s$ \\
+      \hline
+      4 & 8 & 1.2479 \\
+      8 & 55 & 2.3695 \\
+      12 & 377 & 3.4821 \\
+      16 & 2584 & 4.5997 \\
+      \hline
+    \end{tabular}
+    \end{center}
+
   \end{resposta}
 \end{itemize}

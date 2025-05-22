@@ -9,18 +9,159 @@ onde $p_B(x; n, p)$ é a probabilidade associada ao valor $x$ da binomial com pa
 \begin{itemize}
   \item Determine as distribuições de probabilidade condicionais $P(X|K)$ e $P(K|X)$. Dica: utilize a regra de Bayes no segundo caso.
   \begin{resposta}
+    A distribuição de $X$ dado $K$ é simplesmente uma binomial com parâmetro $p_k$, para $k \in \{1, 2\}$:
+    $$ P (X=x|K=k) = p_B(x; n, p_k)$$
+    $$\boxed{P (X=x|K=k) = \binom{n}{x} p_k^x (1 - p_k)^{n - x}} $$
+    
+    A distribuição de $K$ dado $X$ é obtida pela regra de Bayes:
+    $$ P (K=k|X=x) = \frac{P (X=x|K=k) \cdot P(K=k)}{p(x)} $$
+
+    Como $P(K = 1) = \alpha$ e $P(K = 2) = 1 - \alpha$, temos:
+    $$ \boxed{P (K=k|X=x) = \frac{p_B(x; n, p_k) \cdot p(K=k)}{\alpha p_B(x; n, p_1) + (1 - \alpha)p_B(x; n, p_2)}} $$
   \end{resposta}
   \item Determine a distribuição de probabilidade conjunta $P(X, K)$.
   \begin{resposta}
+    A distribuição conjunta é dada pela regra do produto:
+    $$ P(X=x, K=k) = P(X=x|K=k) \cdot P(K=k) $$
+
+    Como $ P (X=x|K=k) = p_B(x; n, p_k)$,  $P(K = 1) = \alpha$, $P(K = 2) = 1 - \alpha$, temos:
+    $$ \boxed{P(X=x, K=k) =p_B(x; n, p_k)  \cdot P(K=k)} $$
   \end{resposta}
   \item Utilize a técnica de Gibbs Sampling para gerar amostras de $X$. Mostre como construir a cadeia de Markov e determine a transição entre os estados.
-  \begin{resposta}
-  \end{resposta}
+\begin{resposta}
+  Cada estado da cadeia de Markov é representado por um par $V = (X, K)$, onde $X \in [0, n]$ é o valor da variável aleatória e $K \in \{1, 2\}$ indica qual das duas binomiais foi utilizada.
+
+  As transições entre os estados ocorrem por meio da atualização de uma única variável por vez, mantendo a outra fixa:
+
+  \begin{itemize}
+    \item Para transições em que apenas $X$ é atualizado (com $K$ fixo), a probabilidade de transição para o novo estado $(X', K)$ é dada por:
+    $$
+    P_{(X, K), (X', K)} = \frac{1}{2} \cdot p_B(X'; n, p_K)
+    $$
+
+    \item Para transições em que apenas $K$ é atualizado (com $X$ fixo), a probabilidade de transição para o novo estado $(X, K')$ é dada por:
+    $$
+    P_{(X, K), (X, K')} = \frac{1}{2} \cdot \frac{p_B(X; n, p_{K'}) \cdot P(K')}{\alpha \cdot p_B(X; n, p_1) + (1 - \alpha) \cdot p_B(X; n, p_2)}
+    $$
+    onde $P(K' = 1) = \alpha$ e $P(K' = 2) = 1 - \alpha$.
+  \end{itemize}
+
+  Dessa forma, a cadeia se move no espaço de pares $(X, K)$, com transições definidas pelas distribuições condicionais do modelo de mistura. A estrutura garante que a cadeia seja reversível e tenha como distribuição estacionária a distribuição conjunta $P(X, K)$.
+\end{resposta}
+
+  \newpage
   \item Para $n = 2$, $p_1 = 0{,}1$, $p_2 = 0{,}8$, $\alpha = 0{,}3$, desenhe a cadeia de Markov com todas as transições.
   \begin{resposta}
+
+  \begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|c|c|}
+  \hline
+  Probabilidade & Valor & Valor/2 \\
+  \hline
+  $P(X=0 \mid K=1)$ & $0.8100$ & $0.4050$ \\
+  $P(X=1 \mid K=1)$ & $0.1800$ & $0.0900$ \\
+  $P(X=2 \mid K=1)$ & $0.0100$ & $0.0050$ \\
+  $P(X=0 \mid K=2)$ & $0.0400$ & $0.0200$ \\
+  $P(X=1 \mid K=2)$ & $0.3200$ & $0.1600$ \\
+  $P(X=2 \mid K=2)$ & $0.6400$ & $0.3200$ \\
+  \hline
+  $P(K=1 \mid X=0)$ & $0.8967$ & $0.4484$ \\
+  $P(K=2 \mid X=0)$ & $0.1033$ & $0.0517$ \\
+  $P(K=1 \mid X=1)$ & $0.1942$ & $0.0971$ \\
+  $P(K=2 \mid X=1)$ & $0.8058$ & $0.4029$ \\
+  $P(K=1 \mid X=2)$ & $0.0067$ & $0.0034$ \\
+  $P(K=2 \mid X=2)$ & $0.9933$ & $0.4967$ \\
+  \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{tikzpicture}[->, >=Stealth, node distance=3cm,
+    every state/.style={circle, draw, minimum size=1.6cm},
+    shorten >=1pt]
+
+  % Estados (dispostos em grade 3x2)
+  \node[state] (X0K1) at (0, 0) {$(0,1)$};
+  \node[state] (X1K1) at (3, 0) {$(1,1)$};
+  \node[state] (X2K1) at (6, 0) {$(2,1)$};
+
+  \node[state] (X0K2) at (0, -4) {$(0,2)$};
+  \node[state] (X1K2) at (3, -4) {$(1,2)$};
+  \node[state] (X2K2) at (6, -4) {$(2,2)$};
+
+  % Transições X | K=1 (p=0.1)
+  \draw[bend left=10] (X0K1) to node[above] {\scriptsize $0.0900$} (X1K1);
+  \draw[bend left=30] (X0K1) to node[above] {\scriptsize $0.0050$} (X2K1);
+  \draw[bend left=10] (X1K1) to node[below] {\scriptsize $0.4050$} (X0K1);
+  \draw[bend left=10] (X1K1) to node[above] {\scriptsize $0.0050$} (X2K1);
+  \draw[bend left=10] (X2K1) to node[below] {\scriptsize $0.0900$} (X1K1);
+  \draw[bend left=30] (X2K1) to node[below] {\scriptsize $0.4050$} (X0K1);
+
+  % Transições X | K=2 (p=0.8)
+  \draw[bend left=10] (X0K2) to node[above] {\scriptsize $0.1600$} (X1K2);
+  \draw[bend left=30] (X0K2) to node[above] {\scriptsize $0.3200$} (X2K2);
+  \draw[bend left=10] (X1K2) to node[below] {\scriptsize $0.0200$} (X0K2);
+  \draw[bend left=10] (X1K2) to node[above] {\scriptsize $0.3200$} (X2K2);
+  \draw[bend left=10] (X2K2) to node[below] {\scriptsize $0.1600$} (X1K2);
+  \draw[bend left=30] (X2K2) to node[below] {\scriptsize $0.0200$} (X0K2);
+
+  % Transições K | X fixo
+  \draw[bend left=10] (X0K1) to node[right] {\scriptsize $0.0517$} (X0K2);
+  \draw[bend left=10] (X0K2) to node[left] {\scriptsize $0.4484$} (X0K1);
+
+  \draw[bend left=20] (X1K1) to node[right] {\scriptsize $0.4029$} (X1K2);
+  \draw[bend left=20] (X1K2) to node[left] {\scriptsize $0.0971$} (X1K1);
+
+  \draw[bend left=10] (X2K1) to node[right] {\scriptsize $0.4967$} (X2K2);
+  \draw[bend left=10] (X2K2) to node[left] {\scriptsize $0.0034$} (X2K1);
+
+  % Self-loops
+  \draw[loop above] (X0K1) to node[above] {\scriptsize $0.8534$} (X0K1);
+  \draw[->] (X1K1) to [out=120, in=60, looseness=5] node[above] {\scriptsize $0.1871$} (X1K1);
+  \draw[loop above] (X2K1) to node[above] {\scriptsize $0.0084$} (X2K1);
+  \draw[loop below] (X0K2) to node[below] {\scriptsize $0.0717$} (X0K2);
+  \draw[->] (X1K2) to [out=-120, in=-60, looseness=5] node[below] {\scriptsize $0.5629$} (X1K2);
+  \draw[loop below] (X2K2) to node[below] {\scriptsize $0.8167$} (X2K2);
+
+
+\end{tikzpicture}
+\end{center}
+OBS: os valores das probabilidades dos selfloops são a soma das probabilidades de transição mantendo $X$ fixo e mantendo $K$ fixo, ou seja, $P(X=x|K=k) + P(K=k|X=x)$.
+
   \end{resposta}
   \item Descreva como utilizar a cadeia de Markov para gerar amostras.
   \begin{resposta}
+
+    \begin{enumerate}
+  \item Inicializar a cadeia em um estado arbitrário $(X, K)$, por exemplo $(0, 1)$.
+  
+  \item Escolher aleatoriamente qual variável será atualizada:
+  \begin{itemize}
+    \item Com probabilidade $\frac{1}{2}$, atualizar $X$;
+    \item Com probabilidade $\frac{1}{2}$, atualizar $K$.
+  \end{itemize}
+
+  \item Atualizar a variável escolhida:
+  \begin{itemize}
+    \item Se for $X$, sorteie $X'$ da distribuição binomial $P(X \mid K)$ com parâmetro $p_K$;
+    \item Se for $K$, sorteie $K'$ da distribuição $P(K \mid X)$, calculada pela regra de Bayes.
+  \end{itemize}
+  A variável não escolhida permanece inalterada.
+
+  \item Atualizar o estado da cadeia para o novo par $(X', K')$.
+
+  \item Repitir o processo. Após $\tau_{\epsilon}$ passos (tempo de mistura), o valor de $X$ pode ser considerado uma amostra da distribuição desejada.
+
+  \item Repitir os passos acima para obter quantas amostras forem necessárias, aguardando sempre pelo menos $\tau_{\epsilon}$ passos entre duas amostras consecutivas.
+\end{enumerate}
+
+O tempo de mistura $\tau_{\epsilon}$ pode ser limitado superiormente por:
+$$ \tau_{\epsilon} \leq \frac{\log{1/(\pi_o \epsilon)}}{\delta}$$
+onde $\pi_o$ é a probabilidade do estado menos provável na distribuição estacionária da cadeia de Markov, $\epsilon$ é a tolerância desejada e $\delta$ é o vão espectral, definido por:
+$$ \delta = 1 - |\lambda_2|$$
+onde $\lambda_2$ é o segundo maior autovalor da matriz de transição da cadeia de Markov.
   \end{resposta}
 \end{itemize}
 
