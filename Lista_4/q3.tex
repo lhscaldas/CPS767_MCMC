@@ -1,11 +1,32 @@
 \section*{Questão 3: Amostrando triângulos}
 
-Considere um grafo conexo qualquer. Desejamos gerar amostras de triângulos deste grafo (cliques de tamanho 3), tal que todo triângulo tenha igual probabilidade de ser amostrado — ou seja, uma distribuição uniforme sobre o conjunto de triângulos do grafo.
+Considere um grafo conexo qualquer. Desejamos gerar amostras de triângulos deste grafo (cliques de tamanho 3), tal que todo triângulo tenha igual probabilidade de ser amostrado -- ou seja, uma distribuição uniforme sobre o conjunto de triângulos do grafo.
 
 \begin{itemize}
   \item Mostre como gerar amostras de forma direta, utilizando a distribuição uniforme. Dica: pense em amostragem por rejeição. Determine a eficiência desse método.
-  \begin{resposta}
-  \end{resposta}
+\begin{resposta}
+  O procedimento de amostragem por rejeição consiste em gerar amostras de um espaço amostral maior e, em seguida, rejeitar aquelas que não atendem a um critério específico. Neste caso, o espaço amostral maior é o conjunto de todas as combinações possíveis de 3 vértices do grafo. Para cada combinação, verificamos se os 3 vértices formam um triângulo (ou seja, se estão todos conectados entre si). Se formarem um triângulo, aceitamos a amostra; caso contrário, rejeitamos.
+
+  O procedimento pode ser descrito da seguinte forma:
+  \begin{enumerate}
+    \item Escolher três vértices distintos $V_1, V_2, V_3 \in V$ uniformemente ao acaso.
+    
+    \item Verificar se o conjunto $\{V_1, V_2, V_3\}$ forma um triângulo, ou seja, se as três arestas $(V_1, V_2)$, $(V_2, V_3)$ e $(V_1, V_3)$ pertencem ao conjunto de arestas $E$.
+
+    \item Se os vértices formam um triângulo, aceitar a amostra e registrar o triângulo $\{V_1, V_2, V_3\}$.
+
+    \item Caso contrário, rejeitar e voltar ao passo 1.
+
+    \item Repetir o processo até obter o número desejado de amostras.
+  \end{enumerate}
+
+  A eficiência do método é dada por:
+  $$
+  e = \frac{T}{\binom{|V|}{3}}
+  $$
+  onde $T$ é o número de triângulos no grafo, $|V|$ é a quantidade de vértices e $\binom{|V|}{3}$ representa o número total de trios possíveis de vértices. Assim, a eficiência do método depende da densidade do grafo e do número de triângulos presentes: se o grafo for esparso, a eficiência será baixa; se o grafo for denso, a eficiência será maior.
+\end{resposta}
+
   \item Mostre como gerar amostras utilizando Metropolis-Hastings. Determine os estados da cadeia de Markov, as transições da cadeia base (que deve ser irredutível) e a probabilidade de aceitação na cadeia modificada pelo método Metropolis-Hastings.
   \begin{resposta}
   \end{resposta}

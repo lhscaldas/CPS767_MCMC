@@ -2,4 +2,18 @@
 
 Você encontrou uma mensagem cifrada com o código de substituição (neste código, cada letra é mapeada em outra letra de forma bijetiva). Você deseja encontrar a chave do código para ler a mensagem. Repare que a chave é um mapeamento $\sigma$ entre as letras, por exemplo $\sigma(a) = x$, $\sigma(b) = h$, $\sigma(c) = e$, etc. Considere uma função $f : \Omega \rightarrow [0,1]$ que avalia a capacidade de uma pessoa entender a mensagem cifrada dado um mapeamento $\sigma \in \Omega$. Repare que $f(\sigma) = 1$ significa que é possível entender por completo a mensagem decifrada com o mapeamento $\sigma$, e $f(\sigma) = 0$ se o mapeamento não revela nenhuma informação sobre a mensagem. Mostre como a técnica de Simulated Annealing pode ser utilizada para ler a mensagem cifrada. Mostre todos os passos necessários para aplicar a técnica neste problema (não é necessário implementar).
 \begin{resposta}
+    O mapeamento $\sigma$ pode ser representado como uma permutação das letras do alfabeto. No exemplo do enunciado, se temos $\sigma(a) = x$, $\sigma(b) = h$, $\sigma(c) = e$. Se o alfabeto é $\{a, b, c, \ldots\}$, podemos representar $\sigma=\{x, h, e, \ldots\}$.
+
+    Seja $f : \Omega \rightarrow [0,1]$ a função que avalia a capacidade de entender a mensagem cifrada com o mapeamento $\sigma$. Esta função pode ser implementada como a saída de um modelo de linguagem, que atribui uma pontuação à legibilidade da mensagem decifrada. Por exemplo, se a mensagem decifrada com o mapeamento $\sigma$ é gramaticalmente correta e faz sentido, $f(\sigma)$ será próximo de 1; caso contrário, será próximo de 0.
+
+    O algoritmo de Simulated Annealing pode ser aplicado criando-se uma Cadeia de Markov base na qual cada estado será uma permutação do alfabeto, ou seja, um mapeamento $\sigma$ que associa cada letra a outra letra. Considerando o alfabeto com 26 letras, o espaço de estados $\Omega$ terá $26!$ permutações possíveis.
+
+    As transições entre os estados da cadeia base podem ser feitas invertendo partes da permutaçãndo, escolhendo índices aleatórios $i$ e $j$ em $\{1, 2, \ldots, 26\}$, com $i<j$ e invertendo a ordem das letras entre esses índices. A probabilidade de transição independe da permutação atual, pois é uma escolha sem repetição entre $\{1, 2, \ldots, 26\}$, ou seja, $n(n-1)/2=325$ possibilidades uniformes de transição, com $n=26$. Como todos os estados têm o mesmo grau de saída e as mesmas probabilidades de transição, a cadeia é simétrica.
+
+    A distribuição estacionária da cadeia deve ser definida pela distribuição de Boltzmann, que é dada por:
+    $$ \pi() = \frac{e^{\frac{-f(\sigma)}{T}}}{Z} $$
+    onde $T$ é um parâmetro, chamado de temperatura, e $Z=\sum_{\sigma \in \Omega} e^{\frac{-f(\sigma)}{T}}$ é a constante de normalização, que garante que a soma das probabilidades seja 1.
+
+    Utilizando agora o algoritmo de Metropolis-Hastings para modificar a cadeia base, podemos definir a probabilidade de transição entre dois estados $\sigma$ e $\sigma'$ como:
+    $$ P(\sigma \rightarrow \sigma') = \frac{1}{325}\min\left(1, e^{\frac{f(\sigma)-f(\sigma')}{T}}\right) $$
 \end{resposta}
