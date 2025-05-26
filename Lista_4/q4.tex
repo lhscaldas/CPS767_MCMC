@@ -8,12 +8,31 @@ Você encontrou uma mensagem cifrada com o código de substituição (neste cód
 
     O algoritmo de Simulated Annealing pode ser aplicado criando-se uma Cadeia de Markov base na qual cada estado será uma permutação do alfabeto, ou seja, um mapeamento $\sigma$ que associa cada letra a outra letra. Considerando o alfabeto com 26 letras, o espaço de estados $\Omega$ terá $26!$ permutações possíveis.
 
-    As transições entre os estados da cadeia base podem ser feitas invertendo partes da permutaçãndo, escolhendo índices aleatórios $i$ e $j$ em $\{1, 2, \ldots, 26\}$, com $i<j$ e invertendo a ordem das letras entre esses índices. A probabilidade de transição independe da permutação atual, pois é uma escolha sem repetição entre $\{1, 2, \ldots, 26\}$, ou seja, $n(n-1)/2=325$ possibilidades uniformes de transição, com $n=26$. Como todos os estados têm o mesmo grau de saída e as mesmas probabilidades de transição, a cadeia é simétrica.
+    As transições entre os estados da cadeia base podem ser feitas invertendo partes da permutação, escolhendo índices aleatórios $i$ e $j$ em $\{1, 2, \ldots, 26\}$, com $i<j$ e invertendo a ordem das letras entre esses índices. A inversão de letras entre $i$ e $j$ permite alterar várias posições da permutação ao mesmo tempo, o que ajuda a escapar de máximos locais. A probabilidade de transição independe da permutação atual, pois é uma escolha sem repetição entre $\{1, 2, \ldots, 26\}$, ou seja, $n(n-1)/2=325$ possibilidades uniformes de transição, com $n=26$. Como todos os estados têm o mesmo grau de saída e as mesmas probabilidades de transição, a cadeia é simétrica.
 
     A distribuição estacionária da cadeia deve ser definida pela distribuição de Boltzmann, que é dada por:
-    $$ \pi() = \frac{e^{\frac{-f(\sigma)}{T}}}{Z} $$
-    onde $T$ é um parâmetro, chamado de temperatura, e $Z=\sum_{\sigma \in \Omega} e^{\frac{-f(\sigma)}{T}}$ é a constante de normalização, que garante que a soma das probabilidades seja 1.
+    $$ \pi_\sigma = \frac{e^{\frac{f(\sigma)}{T}}}{Z} $$
+    onde $T$ é um parâmetro, chamado de temperatura, e $Z=\sum_{\sigma \in \Omega} e^{\frac{f(\sigma)}{T}}$ é a constante de normalização, que garante que a soma das probabilidades seja 1.
 
     Utilizando agora o algoritmo de Metropolis-Hastings para modificar a cadeia base, podemos definir a probabilidade de transição entre dois estados $\sigma$ e $\sigma'$ como:
-    $$ P(\sigma \rightarrow \sigma') = \frac{1}{325}\min\left(1, e^{\frac{f(\sigma)-f(\sigma')}{T}}\right) $$
+    $$ P(\sigma \rightarrow \sigma') = \frac{1}{325}\min\left(1, e^{\frac{f(\sigma')-f(\sigma)}{T}}\right) $$
+    onde o termo $\frac{1}{325}$ é a probabilidade de transição uniforme entre os estados, e o termo \\ $\min\left(1, e^{\frac{f(\sigma')-f(\sigma)}{T}}\right)$ é a probabilidade de aceitação da transição.
+
+    Para definir a agenda de resfriamento (\textit{annealing}), devemos testar diferentes estratégias e escolher a que melhor se adapta ao problema. Uma boa estratégia para começar é definir apenas um passo para cada temperatura $(N_t=1)$ e reduzir a temperatura de forma logarítmica, com $T_t = a / \log(t+b)$, onde $a$ e $b$ são parâmetros a serem ajustados, pois esta estratégia possui uma prova de convergência global se $a$ for alta o suficiente e $b$ for constante.
+
+    O algoritmo de Simulated Annealing para decifrar a mensagem cifrada pode ser descrito da seguinte forma:
+    \begin{enumerate}
+        \item Inicializar a temperatura $T_0$ e escolher uma permutação inicial $\sigma_0$ aleatória.
+        \item Calcular $f(\sigma_0)$.
+        \item Para cada iteração $t$:
+            \begin{enumerate}
+                \item Escolher $i$ e $j$ aleatórios em $\{1, 2, \ldots, 26\}$ com $i<j$.
+                \item Gerar uma nova permutação $\sigma'$ invertendo as letras entre os índices $i$ e $j$ em $\sigma_t$.
+                \item Calcular $f(\sigma')$.
+                \item Se $f(\sigma') > f(\sigma_t)$, aceitar a transição com probabilidade 1. Caso o contrário, aceitar a transição com probabilidade $e^{\frac{f(\sigma')-f(\sigma_t)}{T_t}}$.
+                \item Se aceitar, atualizar $\sigma_{t+1} = \sigma'$; caso contrário, manter $\sigma_{t+1} = \sigma_t$.
+                \item Atualizar a temperatura $T_{t+1} = a / \log(t+b)$.
+            \end{enumerate}
+        \item Repetir $(a)-(f)$ até que a temperatura atinja um valor mínimo ou até que um outro critério de parada seja atingido (por exemplo, um número máximo de iterações ou um valor de $f(\sigma_t)$ próximo o suficiente de 1).
+    \end{enumerate}
 \end{resposta}
