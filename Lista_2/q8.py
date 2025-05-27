@@ -9,7 +9,7 @@ mu = n * p
 sigma = np.sqrt(n * p * (1 - p))
 
 # Intervalo de interesse
-x = np.arange(0, 1000)  # Valores inteiros de 150 a 250
+x = np.arange(150, 250)  # Valores inteiros de 150 a 250
 
 # Distribuição Binomial (discreta)
 q = binom.pmf(x, n, p)

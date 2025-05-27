@@ -9,11 +9,11 @@ Considere um grafo conexo qualquer. Desejamos gerar amostras de triângulos dest
 
   O procedimento pode ser descrito da seguinte forma:
   \begin{enumerate}
-    \item Escolher três vértices distintos $V_1, V_2, V_3 \in V$ uniformemente ao acaso.
+    \item Escolher três vértices distintos $u, v, w \in V$ uniformemente ao acaso.
     
-    \item Verificar se o conjunto $\{V_1, V_2, V_3\}$ forma um triângulo, ou seja, se as três arestas $(V_1, V_2)$, $(V_2, V_3)$ e $(V_1, V_3)$ pertencem ao conjunto de arestas $E$.
+    \item Verificar se o conjunto $\{u, v, w\}$ forma um triângulo, ou seja, se as três arestas $(u, v)$, $(v, w)$ e $(u, w)$ pertencem ao conjunto de arestas $E$.
 
-    \item Se os vértices formam um triângulo, aceitar a amostra e registrar o triângulo $\{V_1, V_2, V_3\}$.
+    \item Se os vértices formam um triângulo, aceitar a amostra e registrar o triângulo $\{u, v, w\}$.
 
     \item Caso contrário, rejeitar e voltar ao passo 1.
 
@@ -29,9 +29,43 @@ Considere um grafo conexo qualquer. Desejamos gerar amostras de triângulos dest
 
   \item Mostre como gerar amostras utilizando Metropolis-Hastings. Determine os estados da cadeia de Markov, as transições da cadeia base (que deve ser irredutível) e a probabilidade de aceitação na cadeia modificada pelo método Metropolis-Hastings.
   \begin{resposta}
+    Podemos criar uma Cadeia de Markov na qual os estados são caminhos de tamanho 3, ou seja, conjuntos de 3 vértices $\{u, v, w\}$, onde, pelo menos $uv$ e $vw$ são arestas do grafo.
+
+    A regra de transição da cadeia base pode ser definida como a remoção de um dos vértices da ponta ($u$ ou $w$) e a adição de um novo vértice que esteja conectado ao vértice da outra ponta. Assim, um estado $\{u, v, w\}$ pode transicionar para $\{v, w, x\}$ se escolhermos remover $u$ e escolher $x$ tal que é vizinho de $w$, ou pode transicionar para $\{x, u, v\}$, se escolhermos remover $w$ e escolher $x$ tal que é vizinho de $u$.
+    A cadeia é irredutível porque, a partir de qualquer caminho de comprimento 3, podemos alcançar qualquer outro caminho de comprimento 3 removendo um vértice de uma ponta e adicionando outro conectado na outra ponta.
+    
+    A probabilidade de transição entre dois estados é dada por:
+    $$ P_{s \rightarrow s'} = \frac{1}{d-1} $$
+    onde $d$ é o grau do vértice da ponta contrária a que foi removida ($u$ ou $w$) do estado atual menos 1 (pois não podemos escolher o vértice $v$ que já está no meio do caminho de comprimento 2 e irá para uma das pontas no próximo estado).
+
+    A probabilidade de transição na cadeia modificada pelo método Metropolis-Hastings é dada por:
+    $$ P'_{s \rightarrow s'} = \frac{1}{d-1} \min\left(1, \frac{d-1}{d'} \right) $$
+    onde $d'$ é o grau do novo vértice que será adicionado ao caminho no estado $s'$.
+
+    É fácil ver que nem todos os estados da Cadeia de Markov são necessariamente triângulos, mas todos os triângulos são alcançados a partir de algum estado da cadeia. Então podemos condicionar o processo de amostragem para que apenas triângulos sejam aceitos. Como a Cadeia de Markov modificada possui distribuição estacionária uniforme, a distribuição dessa amostragem condicional também será uniforme.
+
+    O procedimento de amostragem pode ser descrito da seguinte forma:
+    \begin{enumerate}
+      \item Escolher um caminho de comprimento 2 inicial $s=\{u, v, w\}$ uniformemente ao acaso.
+      \item Executar o procedimento abaixo:
+      \begin{enumerate}
+        \item Escolher com probabilidade $\frac{1}{2}$ remover o primero vértice ($u$) ou o terceiro vértice ($w$).
+        \item Escolher com probabilidade uniforme $\frac{1}{d-1}$ um novo vértice $x$ que seja vizinho do vértice da outra ponta (ou seja, $u$ se $w$ foi removido ou $w$ se $u$ foi removido).
+        \item Gerar um número aleatório $r$ uniformemente no intervalo $[0, 1]$.
+        \item Se $r <  \min\left(1, \frac{d-1}{d'} \right)$, aceitar a amostra e registrar $s'$, senão, repetir o estado anterior fazendo $s'=s$.
+      \end{enumerate}
+      \item Repetir os passos $a - d$ por $\tau_\epsilon$ iterações, onde $\tau_\epsilon$ é o tempo de mistura da Cadeia de Markov.
+      \item Verificar se o último estado $s'$ é um triângulo, ou seja, se as arestas $(u', v')$, $(v', w')$ e $(u', w')$ pertencem ao conjunto de arestas $E$. Caso sim, aceitar a amostra e registrar o triângulo $s'$, caso o contrário, continuar repetindo os passos $a - d$ até obter um triângulo.
+      \item Repetir os passos $2 - 4$ até obter o número desejado de amostras de triângulos.
+    \end{enumerate}
+
   \end{resposta}
   \item Intuitivamente, discuta quando a abordagem via Metropolis-Hastings é mais eficiente (do ponto de vista computacional) do que a abordagem via amostragem por rejeição.
   \begin{resposta}
-  \end{resposta}
+    A abordagem via Metropolis-Hastings tende a ser mais eficiente que a amostragem por rejeição quando o grafo é esparso, ou seja, quando o número de triângulos \(T\) é pequeno em relação ao número total de combinações de 3 vértices \(\binom{|V|}{3}\). Nesse cenário, a amostragem por rejeição desperdiça muitas tentativas, pois a chance de um trio aleatório de vértices formar um triângulo é muito baixa. Como resultado, o número de rejeições cresce rapidamente, tornando o método ineficiente em tempo de execução.
+
+    Por outro lado, a abordagem via Metropolis-Hastings opera sobre caminhos de comprimento 2, ou seja, trios de vértices onde duas das três conexões já existem por construção. Isso significa que, em cada iteração, a cadeia considera apenas trios parcialmente conectados, nos quais falta apenas uma aresta para formar um triângulo. Assim, a chance de o trio atual ser um triângulo é muito maior do que na amostragem por rejeição, que escolhe vértices completamente ao acaso. Dessa forma, mesmo rejeitando trios que não formam triângulos, o processo explora mais eficientemente o espaço de triângulos do grafo.
+\end{resposta}
+
 \end{itemize}
 
