@@ -15,14 +15,17 @@ Você encontrou uma mensagem cifrada com o código de substituição (neste cód
     onde $T$ é um parâmetro, chamado de temperatura, e $Z=\sum_{\sigma \in \Omega} e^{\frac{f(\sigma)}{T}}$ é a constante de normalização, que garante que a soma das probabilidades seja 1.
 
     Utilizando agora o algoritmo de Metropolis-Hastings para modificar a cadeia base, podemos definir a probabilidade de transição entre dois estados $\sigma$ e $\sigma'$ como:
-    $$ P(\sigma \rightarrow \sigma') = \frac{1}{325}\min\left(1, e^{\frac{f(\sigma')-f(\sigma)}{T}}\right) $$
+    $$ P'(\sigma, \sigma') = 
+    P(\sigma, \sigma') \min\left(1, \frac{\pi_\sigma' P_(\sigma', \sigma)}{\pi_\sigma P_(\sigma, \sigma')}\right) =  
+    \frac{1}{325} \min\left(1, \frac{\frac{e^{\frac{f(\sigma')}{T}}}{Z} \frac{1}{325}}{\frac{e^{\frac{f(\sigma)}{T}}}{Z} \frac{1}{325}}\right)= 
+    \frac{1}{325}\min\left(1, e^{\frac{f(\sigma')-f(\sigma)}{T}}\right) $$
     onde o termo $\frac{1}{325}$ é a probabilidade de transição uniforme entre os estados, e o termo \\ $\min\left(1, e^{\frac{f(\sigma')-f(\sigma)}{T}}\right)$ é a probabilidade de aceitação da transição.
 
     Para definir a agenda de resfriamento (\textit{annealing}), devemos testar diferentes estratégias e escolher a que melhor se adapta ao problema. Uma boa estratégia para começar é definir apenas um passo para cada temperatura $(N_t=1)$ e reduzir a temperatura de forma logarítmica, com $T_t = a / \log(t+b)$, onde $a$ e $b$ são parâmetros a serem ajustados, pois esta estratégia possui uma prova de convergência global se $a$ for alta o suficiente e $b$ for constante.
 
     O algoritmo de Simulated Annealing para decifrar a mensagem cifrada pode ser descrito da seguinte forma:
     \begin{enumerate}
-        \item Inicializar a temperatura $T_0$ e escolher uma permutação inicial $\sigma_0$ aleatória.
+        \item Inicializar a temperatura $T_0$, escolher uma permutação inicial $\sigma_0$ aleatória, fazer $\sigma_* = \sigma_0$.
         \item Calcular $f(\sigma_0)$.
         \item Para cada iteração $t$:
             \begin{enumerate}
@@ -31,8 +34,10 @@ Você encontrou uma mensagem cifrada com o código de substituição (neste cód
                 \item Calcular $f(\sigma')$.
                 \item Se $f(\sigma') > f(\sigma_t)$, aceitar a transição com probabilidade 1. Caso o contrário, aceitar a transição com probabilidade $e^{\frac{f(\sigma')-f(\sigma_t)}{T_t}}$.
                 \item Se aceitar, atualizar $\sigma_{t+1} = \sigma'$; caso contrário, manter $\sigma_{t+1} = \sigma_t$.
+                \item Se $f(\sigma_{t+1}) > f(\sigma_*)$, atualizar $\sigma_* = \sigma_{t+1}$.
                 \item Atualizar a temperatura $T_{t+1} = a / \log(t+b)$.
             \end{enumerate}
-        \item Repetir $(a)-(f)$ até que a temperatura atinja um valor mínimo ou até que um outro critério de parada seja atingido (por exemplo, um número máximo de iterações ou um valor de $f(\sigma_t)$ próximo o suficiente de 1).
+        \item Repetir $(a)-(g)$ até que a temperatura atinja um valor mínimo ou até que um outro critério de parada seja atingido (por exemplo, um número máximo de iterações ou um valor de $f(\sigma_*)$ próximo o suficiente de 1).
+        \item Retornar $\sigma_*$ como a melhor permutação encontrada, que melhor decifra a mensagem cifrada.
     \end{enumerate}
 \end{resposta}

@@ -36,12 +36,12 @@ onde $p_B(x; n, p)$ é a probabilidade associada ao valor $x$ da binomial com pa
   \begin{itemize}
     \item Para transições em que apenas $X$ é atualizado (com $K$ fixo), a probabilidade de transição para o novo estado $(X', K)$ é dada por:
     $$
-    P_{(X, K), (X', K)} = \frac{1}{2} \cdot p_B(X'; n, p_K)
+    P_{(X, K), (X', K)} = \frac{1}{2} P[X'|K] = \frac{1}{2} \cdot p_B(X'; n, p_K)
     $$
 
     \item Para transições em que apenas $K$ é atualizado (com $X$ fixo), a probabilidade de transição para o novo estado $(X, K')$ é dada por:
     $$
-    P_{(X, K), (X, K')} = \frac{1}{2} \cdot \frac{p_B(X; n, p_{K'}) \cdot P(K')}{\alpha \cdot p_B(X; n, p_1) + (1 - \alpha) \cdot p_B(X; n, p_2)}
+    P_{(X, K), (X, K')} = \frac{1}{2} P[K'|X] = \frac{1}{2} \cdot \frac{p_B(X; n, p_{K'}) \cdot P(K')}{\alpha \cdot p_B(X; n, p_1) + (1 - \alpha) \cdot p_B(X; n, p_2)}
     $$
     onde $P(K' = 1) = \alpha$ e $P(K' = 2) = 1 - \alpha$.
   \end{itemize}
