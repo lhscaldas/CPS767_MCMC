@@ -36,7 +36,7 @@ class AmbienteMaritimo:
             self._plotar_referencia(vant)
             self._plotar_trajeto(vant)
             self._plotar_vant(vant, ax)
-            self._plotar_estatisticas(ax)
+            self._plotar_estatisticas(ax, vant)
 
         ax.set_xlim(0, self.largura)
         ax.set_ylim(0, self.altura)
@@ -67,7 +67,7 @@ class AmbienteMaritimo:
             self._plotar_referencia(vant)
             self._plotar_trajeto(vant)
             self._plotar_vant(vant, ax)
-            self._plotar_estatisticas(plt.gca())
+            self._plotar_estatisticas(plt.gca(), vant)
             
 
             ax.set_xlim(0, self.largura)
@@ -136,7 +136,8 @@ class AmbienteMaritimo:
         ax.add_patch(triangle)
 
 
-    def _plotar_estatisticas(self, ax):
+    def _plotar_estatisticas(self, ax, vant=None):
+        # Estatísticas dos navios
         total = len(self.navios)
         detectados = sum(n.estado in ["detectado", "inspecionado"] for n in self.navios)
         inspecionados = sum(n.estado == "inspecionado" for n in self.navios)
@@ -146,6 +147,14 @@ class AmbienteMaritimo:
             f"Detectados: {detectados}\n"
             f"Inspecionados: {inspecionados}"
         )
+
+        # Adicionar comprimento do trajeto, se VANT for fornecido
+        if vant is not None and len(vant.trajeto) >= 2:
+            total_milhas = sum(
+                np.hypot(x2 - x1, y2 - y1)
+                for (x1, y1), (x2, y2) in zip(vant.trajeto[:-1], vant.trajeto[1:])
+            )
+            texto += f"\nDistância percorrida: {total_milhas:.1f} MN"
 
         ax.text(1.045, 0.75, texto, transform=ax.transAxes,
                 ha='left', va='top', fontsize=10,

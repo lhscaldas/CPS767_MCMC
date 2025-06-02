@@ -1,7 +1,7 @@
 import numpy as np
 
 class VANT:
-    def __init__(self, x=0.0, y=0.0, velocidade=60.0, autonomia=900.0,
+    def __init__(self, x=0.0, y=0.0, velocidade=60.0, autonomia=1400.0,
                  alcance_radar=100.0, alcance_camera=20.0):
         self.x = x
         self.y = y
