@@ -24,25 +24,24 @@ class VANT:
         - espacamento: espaço vertical entre as linhas (em y)
         - num_linhas: número total de linhas
         """
-        self.waypoints = [inicial]
+        self.referencia = [inicial]
         x, y = inicial
-        atual_x = x
         atual_y = y
         direita = True
 
         for i in range(num_linhas):
             if direita:
-                self.waypoints.append((final, atual_y))
+                self.referencia.append((final, atual_y))
             else:
-                self.waypoints.append((x, atual_y))
+                self.referencia.append((x, atual_y))
             
             if i < num_linhas - 1:
                 atual_y += espacamento
-                self.waypoints.append((final if direita else x, atual_y))
+                self.referencia.append((final if direita else x, atual_y))
             
             direita = not direita
 
-        self.referencia = self.waypoints.copy()
+        self.waypoints = self.referencia.copy()
 
     def step(self):
         if not self.waypoints:

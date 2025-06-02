@@ -2,6 +2,8 @@ import numpy as np
 from dataclasses import dataclass
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from matplotlib.patches import RegularPolygon
+
 
 @dataclass
 class Navio:
@@ -10,7 +12,7 @@ class Navio:
     estado: str = "nao_detectado"  # 'nao_detectado', 'detectado', 'inspecionado'
 
 class AmbienteMaritimo:
-    def __init__(self, largura=250.0, altura=200.0, num_navios=20):
+    def __init__(self, largura=350.0, altura=400.0, num_navios=20):
         self.largura = largura
         self.altura = altura
         self.num_navios = num_navios
@@ -33,7 +35,7 @@ class AmbienteMaritimo:
         if vant is not None:
             self._plotar_referencia(vant)
             self._plotar_trajeto(vant)
-            self._plotar_vant(vant)
+            self._plotar_vant(vant, ax)
             self._plotar_estatisticas(ax)
 
         ax.set_xlim(0, self.largura)
@@ -64,7 +66,7 @@ class AmbienteMaritimo:
             self._plotar_navios()
             self._plotar_referencia(vant)
             self._plotar_trajeto(vant)
-            self._plotar_vant(vant)
+            self._plotar_vant(vant, ax)
             self._plotar_estatisticas(plt.gca())
             
 
@@ -113,8 +115,26 @@ class AmbienteMaritimo:
             traj = np.array(vant.trajeto)
             plt.plot(traj[:, 0], traj[:, 1], '-b', label="Trajeto real")
 
-    def _plotar_vant(self, vant):
-        plt.scatter(vant.x, vant.y, c="blue", marker=">", label="VANT")
+    def _plotar_vant(self, vant, ax):
+        # Coordenada atual
+        x, y = vant.x, vant.y
+
+        # Se houver pelo menos 2 pontos na trajetória, calcula o ângulo
+        if len(vant.trajeto) >= 2:
+            x_prev, y_prev = vant.trajeto[-2]
+            dx = x - x_prev
+            dy = y - y_prev
+            angle_rad = np.arctan2(dy, dx)
+            angle_deg = np.degrees(angle_rad)
+        else:
+            angle_deg = 0  # padrão: apontando para o norte
+
+        # Criar triângulo rotacionado representando o VANT
+        triangle = RegularPolygon((x, y), numVertices=3, radius=5,
+                                orientation=np.radians(angle_deg - 90),
+                                color='blue', ec='black')
+        ax.add_patch(triangle)
+
 
     def _plotar_estatisticas(self, ax):
         total = len(self.navios)
