@@ -28,28 +28,79 @@ class AmbienteMaritimo:
             for _ in range(self.num_navios)
         ]
 
-    def plotar_cenario(self, vant=None):
+    # def plotar_cenario(self, vant=None, max_steps=30):
+    #     if vant is not None:
+    #         for _ in range(max_steps):
+    #             vant.step()
+
+    #     fig, ax = plt.subplots(figsize=(8, 6))
+
+    #     self._plotar_navios()
+    #     if vant is not None:
+    #         self._plotar_referencia(vant)
+    #         self._plotar_trajeto(vant)
+    #         self._plotar_vant(vant, ax)
+    #         self._plotar_estatisticas(ax, vant)
+
+    #     ax.set_xlim(0, self.largura)
+    #     ax.set_ylim(0, self.altura)
+    #     ax.set_title("Cenário Marítimo - Estados dos Navios")
+    #     ax.set_xlabel("MN (Largura)")
+    #     ax.set_ylabel("MN (Altura)")
+    #     leg = ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1))
+    #     frame = leg.get_frame()
+    #     frame.set_edgecolor("black")
+    #     ax.grid(True)
+    #     fig.tight_layout()
+    #     plt.show()
+
+
+    # def animar_cenario(self, vant, filename="output.gif", max_steps=100):
+    #     fig, ax = plt.subplots(figsize=(8, 6))
+    #     fig.subplots_adjust(right=0.75)
+
+    #     def update(frame):
+    #         ax.clear()
+
+    #         # Atualiza posição do VANT
+    #         if frame < max_steps:
+    #             vant.step()
+
+    #         # Plotar cenário com modularização
+    #         self._plotar_navios()
+    #         self._plotar_referencia(vant)
+    #         self._plotar_trajeto(vant)
+    #         self._plotar_vant(vant, ax)
+    #         self._plotar_estatisticas(plt.gca(), vant)
+            
+
+    #         ax.set_xlim(0, self.largura)
+    #         ax.set_ylim(0, self.altura)
+    #         ax.set_title(f"Cenário Marítimo - Step {frame}")
+    #         ax.set_xlabel("MN (Largura)")
+    #         ax.set_ylabel("MN (Altura)")
+    #         leg = ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1))
+    #         frame = leg.get_frame()
+    #         frame.set_edgecolor("black")
+    #         ax.grid(True)
+
+    #         return []
+
+    #     ani = animation.FuncAnimation(fig, update, frames=max_steps, repeat=False)
+    #     ani.save(filename, writer='pillow', fps=5)
+    #     plt.close(fig)
+
+    def plotar_cenario(self, vant=None, max_steps=30):
+        if vant is not None:
+            for _ in range(max_steps):
+                vant.step()
+
         fig, ax = plt.subplots(figsize=(8, 6))
 
-        self._plotar_navios()
-        if vant is not None:
-            self._plotar_referencia(vant)
-            self._plotar_trajeto(vant)
-            self._plotar_vant(vant, ax)
-            self._plotar_estatisticas(ax, vant)
-
-        ax.set_xlim(0, self.largura)
-        ax.set_ylim(0, self.altura)
-        ax.set_title("Cenário Marítimo - Estados dos Navios")
-        ax.set_xlabel("MN (Largura)")
-        ax.set_ylabel("MN (Altura)")
-        leg = ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1))
-        frame = leg.get_frame()
-        frame.set_edgecolor("black")
-        ax.grid(True)
+        self._plotar_elementos_cenario(ax, vant)
+        self._configurar_eixos(ax, vant)
         fig.tight_layout()
         plt.show()
-
 
     def animar_cenario(self, vant, filename="output.gif", max_steps=100):
         fig, ax = plt.subplots(figsize=(8, 6))
@@ -57,35 +108,43 @@ class AmbienteMaritimo:
 
         def update(frame):
             ax.clear()
-
-            # Atualiza posição do VANT
             if frame < max_steps:
                 vant.step()
 
-            # Plotar cenário com modularização
-            self._plotar_navios()
-            self._plotar_referencia(vant)
-            self._plotar_trajeto(vant)
-            self._plotar_vant(vant, ax)
-            self._plotar_estatisticas(plt.gca(), vant)
-            
-
-            ax.set_xlim(0, self.largura)
-            ax.set_ylim(0, self.altura)
-            ax.set_title(f"Cenário Marítimo - Step {frame}")
-            ax.set_xlabel("MN (Largura)")
-            ax.set_ylabel("MN (Altura)")
-            leg = ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1))
-            frame = leg.get_frame()
-            frame.set_edgecolor("black")
-            ax.grid(True)
-
+            self._plotar_elementos_cenario(ax, vant)
+            self._configurar_eixos(ax, vant, titulo=f"Cenário Marítimo - Step {frame}")
             return []
 
         ani = animation.FuncAnimation(fig, update, frames=max_steps, repeat=False)
         ani.save(filename, writer='pillow', fps=5)
         plt.close(fig)
 
+    def _plotar_elementos_cenario(self, ax, vant):
+        self._plotar_navios()
+        self._plotar_referencia(vant)
+        self._plotar_trajeto(vant)
+        self._plotar_vant(vant, ax)
+
+    def _configurar_eixos(self, ax, vant=None, titulo="Cenário Marítimo"):
+        ax.set_xlim(0, self.largura)
+        ax.set_ylim(0, self.altura)
+        ax.set_title(titulo)
+        ax.set_xlabel("MN (Largura)")
+        ax.set_ylabel("MN (Altura)")
+
+        # Legenda fora do gráfico com moldura personalizada
+        leg = ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1))
+        frame = leg.get_frame()
+        frame.set_edgecolor("black")
+        frame.set_facecolor("white")
+        frame.set_alpha(0.7)
+        frame.set_boxstyle("round")
+
+        # Estatísticas
+        if vant is not None:
+            self._plotar_estatisticas(ax, vant)
+
+        ax.grid(True)
 
     def _plotar_navios(self):
         cores = {

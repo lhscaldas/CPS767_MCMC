@@ -9,9 +9,7 @@ vant = VANT(x=0.0, y=0.0)
 vant.definir_linhas_paralelas(inicial=(50, 100), final=300, espacamento=100, num_linhas=3)
 
 # Simular o voo por alguns steps
-for _ in range(30):
-    vant.step()
-ambiente.plotar_cenario(vant=vant)
+# ambiente.plotar_cenario(vant=vant, max_steps=30)
 
 # Gerar animação da missão e salvar como GIF
-# ambiente.animar_cenario(vant, filename="patrulha.gif", max_steps=30)
+ambiente.animar_cenario(vant, filename="patrulha.gif", max_steps=30)
