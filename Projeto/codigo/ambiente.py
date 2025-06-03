@@ -45,6 +45,7 @@ class AmbienteMaritimo:
         vant.step()
         vant.verificar_navios_proximos(self)
 
+
     def plotar_cenario(self, vant=None, max_steps=30):
         if vant is not None:
             for _ in range(max_steps):

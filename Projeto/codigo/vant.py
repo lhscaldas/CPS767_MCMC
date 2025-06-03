@@ -16,6 +16,9 @@ class VANT:
         self.navios_inspecionados = []
         self.politica = politica
 
+        if self.politica not in ["passiva", "greed", "SA"]:
+            raise ValueError(f"Política inválida: {self.politica}")
+
     def definir_linhas_paralelas(self, inicial, final, espacamento, num_linhas=3):
         """
         Gera uma rota com linhas horizontais paralelas.
@@ -46,7 +49,21 @@ class VANT:
 
         self.waypoints = self.referencia.copy()
 
+    def greed(self):
+        pass
+
+    def simmulated_annealing(self):
+        pass
+
     def step(self):
+        # Atualização de rota conforme política
+        if self.politica == "passiva":
+            pass  # não recalcula
+        elif self.politica == "greed":
+            self.greed()
+        elif self.politica == "SA":
+            self.simmulated_annealing()
+        
         if not self.waypoints:
             return
 
