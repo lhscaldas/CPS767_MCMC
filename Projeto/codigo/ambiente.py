@@ -27,11 +27,26 @@ class AmbienteMaritimo:
             )
             for _ in range(self.num_navios)
         ]
+    
+    def obter_navios_em_raio(self, x, y, raio):
+        """
+        Retorna a lista de navios dentro de um raio específico da posição (x, y).
+        """
+        navios_proximos = []
+        for navio in self.navios:
+            distancia = np.hypot(navio.x - x, navio.y - y)
+            if distancia <= raio:
+                navios_proximos.append(navio)
+        return navios_proximos
+    
+    def simular(self, vant):
+        vant.step()
+        vant.verificar_navios_proximos(self)
 
     def plotar_cenario(self, vant=None, max_steps=30):
         if vant is not None:
             for _ in range(max_steps):
-                vant.step()
+                self.simular(vant)
 
         fig, ax = plt.subplots(figsize=(8, 6))
 
@@ -47,7 +62,7 @@ class AmbienteMaritimo:
         def update(frame):
             ax.clear()
             if frame < max_steps:
-                vant.step()
+                self.simular(vant)
 
             self._plotar_elementos_cenario(ax, vant)
             self._configurar_eixos(ax, vant, titulo=f"Cenário Marítimo - Step {frame}")
@@ -153,7 +168,7 @@ class AmbienteMaritimo:
             )
             texto += f"\nTrajetória: {total_milhas:.1f} MN"
 
-        ax.text(1.045, 0.75, texto, transform=ax.transAxes,
+        ax.text(1.045, 0.15, texto, transform=ax.transAxes,
                 ha='left', va='top', fontsize=10,
                 bbox=dict(boxstyle="round", facecolor="white", alpha=0.7))
 

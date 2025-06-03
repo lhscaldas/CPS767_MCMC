@@ -1,6 +1,5 @@
 from ambiente import AmbienteMaritimo
 from vant import VANT
-
 # Criar o ambiente marítimo e gerar navios
 ambiente = AmbienteMaritimo(largura=350, altura=400, num_navios=15)
 

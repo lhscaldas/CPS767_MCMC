@@ -2,20 +2,23 @@ import numpy as np
 
 class VANT:
     def __init__(self, x=0.0, y=0.0, velocidade=60.0, autonomia=1400.0,
-                 alcance_radar=100.0, alcance_camera=20.0):
+                 alcance_radar=50.0, alcance_camera=20.0, politica="passiva"):
         self.x = x
         self.y = y
+        self.trajeto = [(x, y)]
         self.velocidade = velocidade
         self.autonomia = autonomia
-        self.alcance_radar = alcance_radar
-        self.alcance_camera = alcance_camera
         self.waypoints = []
         self.referencia = []
-        self.trajeto = [(x, y)]
+        self.alcance_radar = alcance_radar
+        self.alcance_camera = alcance_camera
+        self.navios_detectados = []
+        self.navios_inspecionados = []
+        self.politica = politica
 
     def definir_linhas_paralelas(self, inicial, final, espacamento, num_linhas=3):
         """
-        Gera uma rota em zigue-zague com linhas horizontais paralelas.
+        Gera uma rota com linhas horizontais paralelas.
         Começa no ponto inicial e alterna o sentido a cada linha.
 
         Parâmetros:
@@ -60,3 +63,26 @@ class VANT:
             self.y += self.velocidade * dy / dist
 
         self.trajeto.append((self.x, self.y))
+
+    def verificar_navios_proximos(self, ambiente):
+        """
+        Atualiza os estados dos navios próximos com base nos sensores do VANT.
+        Também armazena localmente os navios detectados e inspecionados.
+        Retorna uma tupla: (novos_detectados, novos_inspecionados)
+        """
+        # Radar
+        navios_radar = ambiente.obter_navios_em_raio(self.x, self.y, self.alcance_radar)
+        for navio in navios_radar:
+            if navio.estado == "nao_detectado":
+                navio.estado = "detectado"
+                self.navios_detectados.append(navio)
+
+        # Câmera
+        navios_camera = ambiente.obter_navios_em_raio(self.x, self.y, self.alcance_camera)
+        for navio in navios_camera:
+            if navio.estado == "detectado":
+                navio.estado = "inspecionado"
+                self.navios_inspecionados.append(navio)
+                if navio in self.navios_detectados:
+                    self.navios_detectados.remove(navio)
+
