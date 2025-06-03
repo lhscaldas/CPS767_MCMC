@@ -45,6 +45,7 @@
 ---
 
 ### 🧪 Sprint 6 – Estatísticas e relatório final
+- [ ] Simulação sem imagem
 - [ ] Calcular desempenho: cobertura, eficiência, distância total
 - [ ] Comparar resultados entre políticas
 - [ ] Exportar relatório no terminal ou arquivo
