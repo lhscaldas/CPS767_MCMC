@@ -38,6 +38,7 @@
 ### 🧭 Sprint 5 – Implementação das políticas de navegação
 - [x] Adicionar atributo `politica` à classe `VANT`
 - [ ] Modularizar `step()` para despachar por política
+- [ ] Limitar step pela autonomia (função odômetro)
 - [ ] Política `passiva`: seguir apenas os waypoints (atual)
 - [ ] Política `greed`: desviar para inspecionar navios próximos (gananciosa)
 - [ ] Política `SA`: replanejar com Simulated Annealing a cada novo alvo
