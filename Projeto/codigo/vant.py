@@ -64,7 +64,7 @@ class VANT:
         elif self.politica == "SA":
             self.simmulated_annealing()
         
-        if not self.waypoints:
+        if not self.waypoints or self.odometro() >= self.autonomia:
             return
 
         destino = self.waypoints[0]
@@ -80,6 +80,18 @@ class VANT:
             self.y += self.velocidade * dy / dist
 
         self.trajeto.append((self.x, self.y))
+
+    def odometro(self):
+        """
+        Retorna a distância total percorrida pelo VANT, em milhas náuticas (MN).
+        """
+        if len(self.trajeto) < 2:
+            return 0.0
+
+        return sum(
+            np.hypot(x2 - x1, y2 - y1)
+            for (x1, y1), (x2, y2) in zip(self.trajeto[:-1], self.trajeto[1:])
+    )
 
     def verificar_navios_proximos(self, ambiente):
         """

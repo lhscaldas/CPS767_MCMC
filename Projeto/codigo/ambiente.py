@@ -164,17 +164,14 @@ class AmbienteMaritimo:
             f"Inspecionados: {inspecionados}"
         )
 
-        # Adicionar comprimento do trajeto, se VANT for fornecido
-        if vant is not None and len(vant.trajeto) >= 2:
-            total_milhas = sum(
-                np.hypot(x2 - x1, y2 - y1)
-                for (x1, y1), (x2, y2) in zip(vant.trajeto[:-1], vant.trajeto[1:])
-            )
+        # Usar odômetro do VANT, se fornecido
+        if vant is not None:
+            total_milhas = vant.odometro()
             texto += f"\nTrajetória: {total_milhas:.1f} MN"
 
-        ax.text(1.045, 0.15, texto, transform=ax.transAxes,
-                ha='left', va='top', fontsize=10,
-                bbox=dict(boxstyle="round", facecolor="white", alpha=0.7))
+            ax.text(1.045, 0.15, texto, transform=ax.transAxes,
+                    ha='left', va='top', fontsize=10,
+                    bbox=dict(boxstyle="round", facecolor="white", alpha=0.7))
         
     def _plotar_raios(self, vant, ax):
         # Círculo do radar
