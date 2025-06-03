@@ -2,7 +2,7 @@ import numpy as np
 
 class VANT:
     def __init__(self, x=0.0, y=0.0, velocidade=60.0, autonomia=1400.0,
-                 alcance_radar=50.0, alcance_camera=20.0, politica="passiva"):
+                 alcance_radar=100.0, alcance_camera=20.0, politica="passiva"):
         self.x = x
         self.y = y
         self.trajeto = [(x, y)]
@@ -80,7 +80,7 @@ class VANT:
         # Câmera
         navios_camera = ambiente.obter_navios_em_raio(self.x, self.y, self.alcance_camera)
         for navio in navios_camera:
-            if navio.estado == "detectado":
+            if navio.estado != "inspecionado":
                 navio.estado = "inspecionado"
                 self.navios_inspecionados.append(navio)
                 if navio in self.navios_detectados:

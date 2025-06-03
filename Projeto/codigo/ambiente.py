@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.patches import RegularPolygon
+import matplotlib.patches as patches
 
 
 @dataclass
@@ -20,6 +21,7 @@ class AmbienteMaritimo:
         self.gerar_navios()
 
     def gerar_navios(self):
+        np.random.seed(42)  # Para reprodutibilidade
         self.navios = [
             Navio(
                 x=np.random.uniform(0, self.largura),
@@ -65,6 +67,7 @@ class AmbienteMaritimo:
                 self.simular(vant)
 
             self._plotar_elementos_cenario(ax, vant)
+            self._plotar_raios(vant, ax)
             self._configurar_eixos(ax, vant, titulo=f"Cenário Marítimo - Step {frame}")
             return []
 
@@ -120,7 +123,7 @@ class AmbienteMaritimo:
     def _plotar_referencia(self, vant):
         if hasattr(vant, 'referencia') and vant.referencia:
             ref = np.array(vant.referencia)
-            plt.plot(ref[:, 0], ref[:, 1], '--k', label="Rota planejada")
+            plt.plot(ref[:, 0], ref[:, 1], '-sk', label="Rota planejada")
 
     def _plotar_trajeto(self, vant):
         if hasattr(vant, 'trajeto') and vant.trajeto:
@@ -171,5 +174,31 @@ class AmbienteMaritimo:
         ax.text(1.045, 0.15, texto, transform=ax.transAxes,
                 ha='left', va='top', fontsize=10,
                 bbox=dict(boxstyle="round", facecolor="white", alpha=0.7))
+        
+    def _plotar_raios(self, vant, ax):
+        # Círculo do radar
+        radar_circle = patches.Circle(
+            (vant.x, vant.y),
+            vant.alcance_radar,
+            edgecolor="orange",
+            facecolor="none",
+            linestyle="--",
+            linewidth=1,
+            label="Radar (100 MN)"
+        )
+        ax.add_patch(radar_circle)
+
+        # Círculo da câmera
+        camera_circle = patches.Circle(
+            (vant.x, vant.y),
+            vant.alcance_camera,
+            edgecolor="green",
+            facecolor="none",
+            linestyle=":",
+            linewidth=1,
+            label="Câmera (20 MN)"
+        )
+        ax.add_patch(camera_circle)
+
 
 

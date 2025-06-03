@@ -27,19 +27,20 @@
 ---
 
 ### 🧠 Sprint 4 – Lógica de detecção
-- [ ] Radar: identificar navios dentro de 100 MN
-- [ ] Câmera: inspecionar navios dentro de 20 MN
-- [ ] Atualizar estado dos navios no ambiente
-- [ ] Sincronizar estados entre `VANT` e `AmbienteMaritimo`
+- [x] Radar: identificar navios dentro de 100 MN
+- [x] Câmera: inspecionar navios dentro de 20 MN
+- [x] Atualizar estado dos navios no ambiente
+- [x] Sincronizar estados entre `VANT` e `AmbienteMaritimo`
+- [x] Plotar círculo referente ao radar e a câmera
 
 ---
 
 ### 🧭 Sprint 5 – Implementação das políticas de navegação
-- [ ] Adicionar atributo `politica` à classe `VANT`
+- [x] Adicionar atributo `politica` à classe `VANT`
+- [ ] Modularizar `step()` para despachar por política
 - [ ] Política `passiva`: seguir apenas os waypoints (atual)
 - [ ] Política `greed`: desviar para inspecionar navios próximos (gananciosa)
 - [ ] Política `SA`: replanejar com Simulated Annealing a cada novo alvo
-- [ ] Modularizar `step()` para despachar por política
 
 ---
 
