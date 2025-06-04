@@ -40,6 +40,7 @@
 - [x] Modularizar `step()` para despachar por política
 - [x] Limitar número de steps pela autonomia (função odômetro)
 - [x] Política `passiva`: seguir apenas os waypoints (atual)
+- [x] Mudar a lógica do step para considerar self.nodes()
 - [ ] Política `greed`: desviar para inspecionar navios próximos (gananciosa)
 - [ ] Política `SA`: replanejar com Simulated Annealing a cada novo alvo
 

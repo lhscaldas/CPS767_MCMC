@@ -8,8 +8,9 @@ class VANT:
         self.trajeto = [(x, y)]
         self.velocidade = velocidade
         self.autonomia = autonomia
-        self.waypoints = []
         self.referencia = []
+        self.waypoints = []
+        self.nodes = []
         self.alcance_radar = alcance_radar
         self.alcance_camera = alcance_camera
         self.navios_detectados = []
@@ -48,11 +49,12 @@ class VANT:
             direita = not direita
 
         self.waypoints = self.referencia.copy()
+        self.nodes = self.waypoints.copy()
 
     def greed(self):
         pass
 
-    def simmulated_annealing(self):
+    def simulated_annealing(self):
         pass
 
     def step(self):
@@ -62,19 +64,21 @@ class VANT:
         elif self.politica == "greed":
             self.greed()
         elif self.politica == "SA":
-            self.simmulated_annealing()
+            self.simulated_annealing()
         
-        if not self.waypoints or self.odometro() >= self.autonomia:
+        if not self.nodes or self.odometro() >= self.autonomia:
             return
 
-        destino = self.waypoints[0]
+        destino = self.nodes[0]
         dx = destino[0] - self.x
         dy = destino[1] - self.y
         dist = np.hypot(dx, dy)
 
         if dist < self.velocidade:
             self.x, self.y = destino
-            self.waypoints.pop(0)
+            self.nodes.pop(0)
+            if (self.x,self.y) in self.waypoints:
+                self.waypoints.pop(0)
         else:
             self.x += self.velocidade * dx / dist
             self.y += self.velocidade * dy / dist
