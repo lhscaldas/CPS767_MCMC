@@ -6,16 +6,19 @@ class VANT:
         self.x = x
         self.y = y
         self.trajeto = [(x, y)]
+        self.ultimo_wp= (x, y)
         self.velocidade = velocidade
         self.autonomia = autonomia
         self.referencia = []
-        self.waypoints = []
+        self.waypoints_restantes = []
         self.nodes = []
         self.alcance_radar = alcance_radar
         self.alcance_camera = alcance_camera
         self.navios_detectados = []
+        self.novo_detectado = False
         self.navios_inspecionados = []
         self.politica = politica
+        self.continuar_voo = True
 
         if self.politica not in ["passiva", "greed", "SA"]:
             raise ValueError(f"Política inválida: {self.politica}")
@@ -48,40 +51,71 @@ class VANT:
             
             direita = not direita
 
-        self.waypoints = self.referencia.copy()
-        self.nodes = self.waypoints.copy()
+        self.waypoints_restantes = self.referencia.copy()
+        self.nodes = self.waypoints_restantes.copy()
+
+    def distancia_navio_para_reta(self, pos_navio, wp1, wp2):
+        x0, y0 = pos_navio
+        x1, y1 = wp1
+        x2, y2 = wp2
+
+        numerador = abs((x2 - x1)*(y1 - y0) - (x1 - x0)*(y2 - y1))
+        denominador = np.hypot(x2 - x1, y2 - y1)
+
+        if denominador == 0:
+            # wp1 e wp2 coincidem — considera distância direta ao ponto
+            return np.hypot(x0 - x1, y0 - y1)
+
+        return numerador / denominador
+
+    def obter_pontos_politica(self):
+        """
+        Retorna os pontos relevantes para a política.
+        """
+        detectados = [(navio.x, navio.y) for navio in self.navios_detectados]
+        proximo_wp = self.waypoints_restantes[0]
+        ultimo_wp = self.ultimo_wp
+        pontos = [coord for coord in detectados if self.distancia_navio_para_reta(coord, ultimo_wp, proximo_wp) <= self.alcance_radar] # Filtrar navios próximos à reta
+        pontos.append(proximo_wp) # Adicionar o próximo waypoint
+        return pontos
 
     def greed(self):
-        pass
+        pontos = self.obter_pontos_politica()
+        pontos.sort(key=lambda coord: np.hypot(coord[0] - self.x, coord[1] - self.y)) # Ordenar por distância ao VANT
+        self.nodes = pontos + self.waypoints_restantes[1:] # Adicionar os outros waypoints restantes
 
     def simulated_annealing(self):
         pass
 
-    def step(self):
-        # Atualização de rota conforme política
-        if self.politica == "passiva":
-            pass  # não recalcula
-        elif self.politica == "greed":
-            self.greed()
-        elif self.politica == "SA":
-            self.simulated_annealing()
-        
+    def step(self, delta_t=10):
+        # Checar se continua o voo
         if not self.nodes or self.odometro() >= self.autonomia:
+            self.continuar_voo = False
             return
+
+        # Atualização de rota conforme política
+        if self.novo_detectado:
+            if self.politica == "greed":
+                self.greed()
+            elif self.politica == "SA":
+                self.simulated_annealing()
+            self.novo_detectado = False
 
         destino = self.nodes[0]
         dx = destino[0] - self.x
         dy = destino[1] - self.y
         dist = np.hypot(dx, dy)
 
-        if dist < self.velocidade:
+        deslocamento = self.velocidade * delta_t / 60 
+        if dist < deslocamento:
             self.x, self.y = destino
             self.nodes.pop(0)
-            if (self.x,self.y) in self.waypoints:
-                self.waypoints.pop(0)
+            if (self.x,self.y) in self.waypoints_restantes:
+                self.ultimo_wp = (self.x, self.y)
+                self.waypoints_restantes.pop(0)
         else:
-            self.x += self.velocidade * dx / dist
-            self.y += self.velocidade * dy / dist
+            self.x += deslocamento * dx / dist # deslocamento * cos(direção)
+            self.y += deslocamento * dy / dist # deslocamento * sin(direção)
 
         self.trajeto.append((self.x, self.y))
 
@@ -109,6 +143,7 @@ class VANT:
             if navio.estado == "nao_detectado":
                 navio.estado = "detectado"
                 self.navios_detectados.append(navio)
+                self.novo_detectado = True
 
         # Câmera
         navios_camera = ambiente.obter_navios_em_raio(self.x, self.y, self.alcance_camera)

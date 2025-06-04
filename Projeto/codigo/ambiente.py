@@ -42,13 +42,12 @@ class AmbienteMaritimo:
         return navios_proximos
     
     def simular(self, vant):
-        vant.step()
+        vant.step(delta_t=30) 
         vant.verificar_navios_proximos(self)
 
-
-    def plotar_cenario(self, vant=None, max_steps=30):
+    def plotar_cenario(self, vant=None):
         if vant is not None:
-            for _ in range(max_steps):
+            while vant.continuar_voo:
                 self.simular(vant)
 
         fig, ax = plt.subplots(figsize=(8, 6))
@@ -58,22 +57,40 @@ class AmbienteMaritimo:
         fig.tight_layout()
         plt.show()
 
-    def animar_cenario(self, vant, filename="output.gif", max_steps=100):
+    def animar_cenario(self, vant, filename="output.gif"):
         fig, ax = plt.subplots(figsize=(8, 6))
         fig.subplots_adjust(right=0.75)
 
         def update(frame):
             ax.clear()
-            if frame < max_steps:
+            if vant.continuar_voo:
                 self.simular(vant)
 
             self._plotar_elementos_cenario(ax, vant)
             self._plotar_raios(vant, ax)
             self._configurar_eixos(ax, vant, titulo=f"Cenário Marítimo - Step {frame}")
             return []
+        
+        def frame_counter():
+            frame = 0
+            while vant.continuar_voo:
+                yield frame
+                frame += 1
 
-        ani = animation.FuncAnimation(fig, update, frames=max_steps, repeat=False)
-        ani.save(filename, writer='pillow', fps=3)
+            # Após voo terminar, adiciona frames extras "parados"
+            for _ in range(20):
+                yield frame
+                frame += 1
+
+        ani = animation.FuncAnimation(
+            fig,
+            update,
+            frames=frame_counter,
+            repeat=False,
+            cache_frame_data=False
+        )
+
+        ani.save(filename, writer='pillow', fps=5)
         plt.close(fig)
 
     def _plotar_elementos_cenario(self, ax, vant):
