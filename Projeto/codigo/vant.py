@@ -73,17 +73,20 @@ class VANT:
         Retorna os pontos relevantes para a política.
         """
         detectados = [(navio.x, navio.y) for navio in self.navios_detectados]
-        proximo_wp = self.waypoints_restantes[0]
         ultimo_wp = self.ultimo_wp
+        proximo_wp = self.waypoints_restantes[0]
         pontos = [coord for coord in detectados if self.distancia_navio_para_reta(coord, ultimo_wp, proximo_wp) <= self.alcance_radar] # Filtrar navios próximos à reta
-        pontos.append(proximo_wp) # Adicionar o próximo waypoint
+        if len(self.waypoints_restantes)>1:
+            pontos.append(proximo_wp) # Adicionar o próximo waypoint
         return pontos
 
     def greed(self):
         pontos = self.obter_pontos_politica()
         pontos.sort(key=lambda coord: np.hypot(coord[0] - self.x, coord[1] - self.y)) # Ordenar por distância ao VANT
-        self.nodes = pontos + self.waypoints_restantes[1:] # Adicionar os outros waypoints restantes
-
+        if len(self.waypoints_restantes)>1:
+            self.nodes = pontos + self.waypoints_restantes[1:] # Adicionar os outros waypoints restantes
+        else:
+            self.nodes = pontos + self.waypoints_restantes
     def simulated_annealing(self):
         pass
 
@@ -94,12 +97,12 @@ class VANT:
             return
 
         # Atualização de rota conforme política
-        if self.novo_detectado:
-            if self.politica == "greed":
-                self.greed()
-            elif self.politica == "SA":
+        if self.politica == "greed":
+            self.greed()
+        elif self.politica == "SA":
+            if self.novo_detectado:
                 self.simulated_annealing()
-            self.novo_detectado = False
+                self.novo_detectado = False
 
         destino = self.nodes[0]
         dx = destino[0] - self.x
