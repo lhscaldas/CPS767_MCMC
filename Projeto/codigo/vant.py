@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 class VANT:
     def __init__(self, x=0.0, y=0.0, velocidade=60.0, autonomia=1400.0,
@@ -25,21 +26,14 @@ class VANT:
         if self.politica not in ["passiva", "greed", "SA"]:
             raise ValueError(f"Política inválida: {self.politica}")
 
-    def definir_linhas_paralelas(self, inicial, final, espacamento, num_linhas=3):
-        """
-        Gera uma rota com linhas horizontais paralelas.
-        Começa no ponto inicial e alterna o sentido a cada linha.
-
-        Parâmetros:
-        - inicial: (x, y) início da primeira linha
-        - final: valor de x final para cada linha
-        - espacamento: espaço vertical entre as linhas (em y)
-        - num_linhas: número total de linhas
-        """
+    def definir_linhas_paralelas(self, inicial, final, espacamento, num_linhas=3,
+                                 gap=50):
         self.referencia = [inicial]
         x, y = inicial
         atual_y = y
         direita = True
+        x = x + gap
+        final = final - gap
 
         for i in range(num_linhas):
             if direita:
@@ -53,10 +47,13 @@ class VANT:
             
             direita = not direita
 
+        x, y = self.referencia[-1]            # pega o ponto final
+        self.referencia[-1] = (x + gap, y)  # soma com o alcance do radar
+
         self.waypoints_restantes = self.referencia.copy()
         self.nodes = self.waypoints_restantes.copy()
 
-    def _navio_dentro_do_retangulo(self, pos_navio, wp1, wp2, alcance_radar, K=5.0):
+    def _navio_dentro_do_retangulo(self, pos_navio, wp1, wp2, alcance_radar, K=1.0):
         x0, y0 = pos_navio
         x1, y1 = wp1
         x2, y2 = wp2
@@ -86,8 +83,59 @@ class VANT:
         pontos.sort(key=lambda coord: np.hypot(coord[0] - self.x, coord[1] - self.y)) # Ordenar por distância ao VANT
         self.nodes = pontos + self.waypoints_restantes
 
+    def _custo_rota(self, rota):
+        custo = 0.0
+        for i in range(len(rota) - 1):
+            dx = rota[i+1][0] - rota[i][0]
+            dy = rota[i+1][1] - rota[i][1]
+            custo += np.hypot(dx, dy)
+        return custo
+
     def simulated_annealing(self):
-        pass
+        detectados = [(navio.x, navio.y) for navio in self.navios_detectados]
+        pontos = detectados + self.waypoints_restantes
+
+        if not pontos:
+            self.nodes = []
+            return
+
+        # Ponto inicial = posição atual do VANT
+        inicio = (self.x, self.y)
+
+        # Solução inicial (ordem aleatória dos pontos)
+        rota_atual = pontos[:]
+        random.shuffle(rota_atual)
+        custo_atual = self._custo_rota([inicio] + rota_atual)
+
+        melhor_rota = rota_atual[:]
+        melhor_custo = custo_atual
+
+        # Parâmetros do SA
+        T = 100.0  # temperatura inicial
+        T_min = 1e-3
+        alpha = 0.995
+        iter_por_T = 100
+
+        while T > T_min:
+            for _ in range(iter_por_T):
+                # Gerar vizinho trocando dois pontos da rota
+                i, j = random.sample(range(len(rota_atual)), 2)
+                nova_rota = rota_atual[:]
+                nova_rota[i], nova_rota[j] = nova_rota[j], nova_rota[i]
+
+                novo_custo = self._custo_rota([inicio] + nova_rota)
+
+                delta = novo_custo - custo_atual
+                if delta < 0 or np.exp(-delta / T) > random.random():
+                    rota_atual = nova_rota
+                    custo_atual = novo_custo
+                    if custo_atual < melhor_custo:
+                        melhor_rota = rota_atual[:]
+                        melhor_custo = custo_atual
+            T *= alpha
+
+        self.nodes = melhor_rota
+
 
     def step(self):
         # Checar se continua o voo
@@ -98,10 +146,9 @@ class VANT:
         # Atualização de rota conforme política
         if self.politica == "greed":
             self.greed()
-        elif self.politica == "SA":
-            if self.novo_detectado:
-                self.simulated_annealing()
-                self.novo_detectado = False
+        elif self.politica == "SA" and self.novo_detectado:
+            self.simulated_annealing()
+            self.novo_detectado = False
 
         destino = self.nodes[0]
         dx = destino[0] - self.x
