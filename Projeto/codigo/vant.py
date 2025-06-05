@@ -75,13 +75,19 @@ class VANT:
 
         return x_min <= x0 <= x_max and y_min <= y0 <= y_max
 
-    def greed(self):
+    def greed_melhorado(self):
         detectados = [(navio.x, navio.y) for navio in self.navios_detectados]
         ultimo_wp = self.ultimo_wp
         proximo_wp = self.waypoints_restantes[0]
         pontos = [coord for coord in detectados if self._navio_dentro_do_retangulo(coord, ultimo_wp, proximo_wp, self.alcance_radar)] # Filtrar navios próximos à reta
         pontos.sort(key=lambda coord: np.hypot(coord[0] - self.x, coord[1] - self.y)) # Ordenar por distância ao VANT
         self.nodes = pontos + self.waypoints_restantes
+
+    def greed(self):
+        detectados = [(navio.x, navio.y) for navio in self.navios_detectados]
+        pontos = detectados + self.waypoints_restantes
+        pontos.sort(key=lambda coord: np.hypot(coord[0] - self.x, coord[1] - self.y)) # Ordenar por distância ao VANT
+        self.nodes = pontos
 
     def _custo_rota(self, rota):
         custo = 0.0
