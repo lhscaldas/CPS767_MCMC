@@ -45,7 +45,7 @@ class AmbienteMaritimo:
         vant.step() 
         vant.verificar_navios_proximos(self)
 
-    def plotar_cenario(self, vant=None):
+    def plotar_cenario(self, vant=None, save=False):
         if vant is not None:
             while vant.continuar_voo:
                 self.simular(vant)
@@ -55,7 +55,11 @@ class AmbienteMaritimo:
         self._plotar_elementos_cenario(ax, vant)
         self._configurar_eixos(ax, vant)
         fig.tight_layout()
-        plt.show()
+        if save:
+            nome = vant.politica + ".png" if vant else "cenario_maritimo.png"
+            plt.savefig(nome, dpi=300)
+        else:
+            plt.show()
 
     def animar_cenario(self, vant, filename="output.gif"):
         fig, ax = plt.subplots(figsize=(8, 6))
@@ -78,7 +82,7 @@ class AmbienteMaritimo:
                 frame += 1
 
             # Após voo terminar, adiciona frames extras "parados"
-            for _ in range(20):
+            for _ in range(50):
                 yield frame
                 frame += 1
 
@@ -90,7 +94,7 @@ class AmbienteMaritimo:
             cache_frame_data=False
         )
 
-        ani.save(filename, writer='pillow', fps=5)
+        ani.save(filename, writer='pillow', fps=20)
         plt.close(fig)
 
     def _plotar_elementos_cenario(self, ax, vant):

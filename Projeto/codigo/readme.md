@@ -52,3 +52,4 @@
 - [ ] Comparar resultados entre políticas
 - [ ] Exportar relatório no terminal ou arquivo
 - [ ] Gerar visualização final da missão (GIF ou imagem)
+- [ ] Política `greed_melhorada`: corrigir bugs (opcional)

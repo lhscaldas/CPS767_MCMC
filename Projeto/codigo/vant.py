@@ -23,7 +23,7 @@ class VANT:
         self.continuar_voo = True
         self.delta_t = delta_t
 
-        if self.politica not in ["passiva", "greed", "SA"]:
+        if self.politica not in ["passiva", "greed", "greed_melhorada", "SA"]:
             raise ValueError(f"Política inválida: {self.politica}")
 
     def definir_linhas_paralelas(self, inicial, final, espacamento, num_linhas=3,
@@ -75,10 +75,10 @@ class VANT:
 
         return x_min <= x0 <= x_max and y_min <= y0 <= y_max
 
-    def greed_melhorado(self):
+    def greed_melhorada(self):
         detectados = [(navio.x, navio.y) for navio in self.navios_detectados]
         ultimo_wp = self.ultimo_wp
-        proximo_wp = self.waypoints_restantes[0]
+        proximo_wp = self.waypoints_restantes[0] if len(self.waypoints_restantes)>1 else ultimo_wp
         pontos = [coord for coord in detectados if self._navio_dentro_do_retangulo(coord, ultimo_wp, proximo_wp, self.alcance_radar)] # Filtrar navios próximos à reta
         pontos.sort(key=lambda coord: np.hypot(coord[0] - self.x, coord[1] - self.y)) # Ordenar por distância ao VANT
         self.nodes = pontos + self.waypoints_restantes
@@ -144,17 +144,19 @@ class VANT:
 
 
     def step(self):
-        # Checar se continua o voo
-        if not self.nodes or self.odometro() >= self.autonomia:
-            self.continuar_voo = False
-            return
-
         # Atualização de rota conforme política
         if self.politica == "greed":
             self.greed()
+        if self.politica == "greed_melhorada":
+            self.greed_melhorada()
         elif self.politica == "SA" and self.novo_detectado:
             self.simulated_annealing()
             self.novo_detectado = False
+
+        # Checar se continua o voo
+        if len(self.nodes) < 1 or self.odometro() >= self.autonomia:
+            self.continuar_voo = False
+            return
 
         destino = self.nodes[0]
         dx = destino[0] - self.x
@@ -167,7 +169,7 @@ class VANT:
             self.nodes.pop(0)
             if (self.x,self.y) in self.waypoints_restantes:
                 self.ultimo_wp = (self.x, self.y)
-                self.waypoints_restantes.pop(0)
+                self.waypoints_restantes.remove((self.x, self.y))
         else:
             self.x += deslocamento * dx / dist # deslocamento * cos(direção)
             self.y += deslocamento * dy / dist # deslocamento * sin(direção)
