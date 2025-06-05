@@ -199,7 +199,7 @@ class AmbienteMaritimo:
             facecolor="none",
             linestyle="--",
             linewidth=1,
-            label="Radar (100 MN)"
+            label=f"Radar ({vant.alcance_radar} MN)"
         )
         ax.add_patch(radar_circle)
 
@@ -211,7 +211,7 @@ class AmbienteMaritimo:
             facecolor="none",
             linestyle=":",
             linewidth=1,
-            label="Câmera (20 MN)"
+            label=f"Câmera ({vant.alcance_camera} MN)"
         )
         ax.add_patch(camera_circle)
 
