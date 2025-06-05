@@ -42,7 +42,7 @@ class AmbienteMaritimo:
         return navios_proximos
     
     def simular(self, vant):
-        vant.step(delta_t=30) 
+        vant.step() 
         vant.verificar_navios_proximos(self)
 
     def plotar_cenario(self, vant=None):

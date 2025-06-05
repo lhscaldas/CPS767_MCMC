@@ -2,7 +2,8 @@ import numpy as np
 
 class VANT:
     def __init__(self, x=0.0, y=0.0, velocidade=60.0, autonomia=1400.0,
-                 alcance_radar=100.0, alcance_camera=20.0, politica="passiva"):
+                 alcance_radar=100.0, alcance_camera=20.0, politica="passiva",
+                 delta_t=30):
         self.x = x
         self.y = y
         self.trajeto = [(x, y)]
@@ -19,6 +20,7 @@ class VANT:
         self.navios_inspecionados = []
         self.politica = politica
         self.continuar_voo = True
+        self.delta_t = delta_t
 
         if self.politica not in ["passiva", "greed", "SA"]:
             raise ValueError(f"Política inválida: {self.politica}")
@@ -54,43 +56,40 @@ class VANT:
         self.waypoints_restantes = self.referencia.copy()
         self.nodes = self.waypoints_restantes.copy()
 
-    def distancia_navio_para_reta(self, pos_navio, wp1, wp2):
+    def _navio_dentro_do_retangulo(self, pos_navio, wp1, wp2, alcance_radar, K=5.0):
         x0, y0 = pos_navio
         x1, y1 = wp1
         x2, y2 = wp2
 
-        numerador = abs((x2 - x1)*(y1 - y0) - (x1 - x0)*(y2 - y1))
-        denominador = np.hypot(x2 - x1, y2 - y1)
+        if y1 == y2:
+            # Segmento horizontal
+            x_min = min(x1, x2) - alcance_radar / K
+            x_max = max(x1, x2) + alcance_radar / K
+            y_min = y1 - alcance_radar
+            y_max = y1 + alcance_radar
+        elif x1 == x2:
+            # Segmento vertical
+            x_min = x1 - alcance_radar
+            x_max = x1 + alcance_radar
+            y_min = min(y1, y2) - alcance_radar / K
+            y_max = max(y1, y2) + alcance_radar / K
+        else:
+            raise ValueError("Segmento não é horizontal nem vertical.")
 
-        if denominador == 0:
-            # wp1 e wp2 coincidem — considera distância direta ao ponto
-            return np.hypot(x0 - x1, y0 - y1)
+        return x_min <= x0 <= x_max and y_min <= y0 <= y_max
 
-        return numerador / denominador
-
-    def obter_pontos_politica(self):
-        """
-        Retorna os pontos relevantes para a política.
-        """
+    def greed(self):
         detectados = [(navio.x, navio.y) for navio in self.navios_detectados]
         ultimo_wp = self.ultimo_wp
         proximo_wp = self.waypoints_restantes[0]
-        pontos = [coord for coord in detectados if self.distancia_navio_para_reta(coord, ultimo_wp, proximo_wp) <= self.alcance_radar] # Filtrar navios próximos à reta
-        if len(self.waypoints_restantes)>1:
-            pontos.append(proximo_wp) # Adicionar o próximo waypoint
-        return pontos
-
-    def greed(self):
-        pontos = self.obter_pontos_politica()
+        pontos = [coord for coord in detectados if self._navio_dentro_do_retangulo(coord, ultimo_wp, proximo_wp, self.alcance_radar)] # Filtrar navios próximos à reta
         pontos.sort(key=lambda coord: np.hypot(coord[0] - self.x, coord[1] - self.y)) # Ordenar por distância ao VANT
-        if len(self.waypoints_restantes)>1:
-            self.nodes = pontos + self.waypoints_restantes[1:] # Adicionar os outros waypoints restantes
-        else:
-            self.nodes = pontos + self.waypoints_restantes
+        self.nodes = pontos + self.waypoints_restantes
+
     def simulated_annealing(self):
         pass
 
-    def step(self, delta_t=10):
+    def step(self):
         # Checar se continua o voo
         if not self.nodes or self.odometro() >= self.autonomia:
             self.continuar_voo = False
@@ -109,7 +108,7 @@ class VANT:
         dy = destino[1] - self.y
         dist = np.hypot(dx, dy)
 
-        deslocamento = self.velocidade * delta_t / 60 
+        deslocamento = self.velocidade * self.delta_t / 60 
         if dist < deslocamento:
             self.x, self.y = destino
             self.nodes.pop(0)
