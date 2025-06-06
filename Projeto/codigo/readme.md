@@ -42,7 +42,7 @@
 - [x] Política `passiva`: seguir apenas os waypoints (atual)
 - [x] Mudar a lógica do step para considerar self.nodes()
 - [x] Política `greed`: desviar para inspecionar navios próximos (gananciosa)
-- [ ] Política `SA`: replanejar com Simulated Annealing a cada novo alvo
+- [x] Política `SA`: replanejar com Simulated Annealing a cada novo alvo
 
 ---
 

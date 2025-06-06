@@ -117,19 +117,20 @@ class VANT:
         melhor_custo = custo_atual
 
         # Parâmetros do SA
-        T = 100.0  # temperatura inicial
-        T_min = 1e-3
-        alpha = 0.995
-        iter_por_T = 100
+        T = 100.0
+        T_min = 1e-2
+        beta = 0.99
+        iter_por_T = 10
 
         while T > T_min:
             for _ in range(iter_por_T):
                 # Gerar vizinho trocando dois pontos da rota
-                i, j = random.sample(range(len(rota_atual)), 2)
-                nova_rota = rota_atual[:]
-                nova_rota[i], nova_rota[j] = nova_rota[j], nova_rota[i]
+                i = random.randint(0, len(rota_atual) - 2)
+                j = random.randint(i+1, len(rota_atual) - 1)
+                nova_rota = rota_atual[:i] + rota_atual[i:j+1][::-1] + rota_atual[j+1:]
 
                 novo_custo = self._custo_rota([inicio] + nova_rota)
+                # print(f"Temperatura = {T:.2f} - iteração {it}: custo atual = {novo_custo}, melhor custo = {melhor_custo}")
 
                 delta = novo_custo - custo_atual
                 if delta < 0 or np.exp(-delta / T) > random.random():
@@ -138,7 +139,7 @@ class VANT:
                     if custo_atual < melhor_custo:
                         melhor_rota = rota_atual[:]
                         melhor_custo = custo_atual
-            T *= alpha
+            T *= beta
 
         self.nodes = melhor_rota
 
