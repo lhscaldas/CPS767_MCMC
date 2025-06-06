@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.patches import RegularPolygon
 import matplotlib.patches as patches
+import time
 
 
 @dataclass
@@ -44,6 +45,32 @@ class AmbienteMaritimo:
     def simular(self, vant):
         vant.step() 
         vant.verificar_navios_proximos(self)
+
+    def executar_simulacao(self, vant):
+        inicio = time.time()
+        
+        while vant.continuar_voo:
+            self.simular(vant)
+        
+        fim = time.time()
+
+        total = len(self.navios)
+        inspecionados = sum(n.estado == "inspecionado" for n in self.navios)
+        detectados = sum(n.estado == "detectado" for n in self.navios)
+        nao_detectados = total - detectados - inspecionados
+        distancia = vant.odometro()
+        waypoints_visitados = len(vant.referencia) - len(vant.waypoints_restantes)
+
+        return {
+            "tempo_execucao": fim - inicio,
+            "navios": total,
+            "nao_detectados": nao_detectados,
+            "detectados": detectados,
+            "inspecionados": inspecionados,
+            "distancia_percorrida": distancia,
+            "waypoints_visitados": waypoints_visitados,
+            "politica": vant.politica if vant else "N/A"
+        }
 
     def plotar_cenario(self, vant=None, save=False):
         if vant is not None:

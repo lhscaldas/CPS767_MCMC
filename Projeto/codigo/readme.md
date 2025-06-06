@@ -47,9 +47,8 @@
 ---
 
 ### 🧪 Sprint 6 – Estatísticas e relatório final
-- [ ] Simulação sem imagem
-- [ ] Calcular desempenho: cobertura, eficiência, distância total
+- [x] Simulação sem imagem
+- [ ] Salvar todas as execuções em CSV por política e cenário
+- [ ] Calcular métricas desempenho: cobertura, eficiência, distância total
 - [ ] Comparar resultados entre políticas
-- [ ] Exportar relatório no terminal ou arquivo
 - [ ] Gerar visualização final da missão (GIF ou imagem)
-- [ ] Política `greed_melhorada`: corrigir bugs (opcional)
