@@ -94,7 +94,7 @@ class VANT:
         # iter_por_T = 100
 
         # Parâmetros do SA_2
-        T = 1.0
+        T = 10.0
         T_min = 1e-4
         beta = 0.9
         iter_por_T = 100
@@ -118,12 +118,13 @@ class VANT:
         self.nodes = melhor_rota
         
     def step(self):
+        # if self.novo_detectado > 0:
         # Atualização de rota conforme política
         if self.politica == "greed":
             self.greed()
-        elif self.politica == "SA" and self.novo_detectado > 1:
+        elif self.politica == "SA":
             self.simulated_annealing()
-            self.novo_detectado = 0
+        # self.novo_detectado = 0
 
         if len(self.nodes) < 1:
             self.continuar_voo = False

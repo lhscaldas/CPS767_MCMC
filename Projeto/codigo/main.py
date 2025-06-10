@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     num = 50
     # simulacao_estatica(num_navios=num, politica="passiva", seed=1)
-    # simulacao_estatica(num_navios=num, politica="greed", seed=1)
+    simulacao_estatica(num_navios=num, politica="greed", seed=1)
     simulacao_estatica(num_navios=num, politica="SA", seed=1)
 
     # simulacao_animada(num_navios=50, politica="greed", seed=1)
