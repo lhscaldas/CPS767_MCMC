@@ -1,0 +1,8 @@
+\section{Metodologia}
+A metodologia proposta consiste na varredura da área marítima por um VANT que percorre linhas paralelas, com waypoints pré-definidos. O VANT está equipado com sensores de detecção, incluindo um radar com alcance $R_{\text{radar}}$ e uma câmera de identificação visual com alcance $R_{\text{câmera}}$, ambos tratados como parâmetros configuráveis. Durante o voo, sempre que o radar detecta um novo navio, sua posição é considerada um \textit{vértice candidato} no grafo de inspeção.
+
+Contudo, para evitar grandes desvios do padrão de varredura, esse ponto só é efetivamente adicionado se a distância perpendicular entre o navio e a linha paralela atualmente seguida pelo VANT for inferior a uma distância configurável $d$. Essa restrição evita que o VANT se afaste excessivamente do percurso principal para inspecionar alvos muito distantes lateralmente.
+
+À medida que novos vértices são inseridos, o problema de roteamento é resolvido incrementalmente por meio do algoritmo de \textit{Simulated Annealing}, uma metaheurística eficaz para encontrar boas soluções aproximadas em instâncias complexas do Problema do Caixeiro Viajante. O objetivo é minimizar a distância total percorrida, respeitando a autonomia máxima do VANT e maximizando o número de alvos inspecionados de acordo com os critérios definidos.
+
+Como simplificação, assume-se que os navios estão estáticos durante a missão, dada a superioridade da velocidade do VANT em relação às embarcações. Essa modelagem permite representar o problema como um TSP com inserção condicional de vértices durante a missão.

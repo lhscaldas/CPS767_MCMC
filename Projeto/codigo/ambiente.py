@@ -14,15 +14,16 @@ class Navio:
     estado: str = "nao_detectado"  # 'nao_detectado', 'detectado', 'inspecionado'
 
 class AmbienteMaritimo:
-    def __init__(self, largura=350.0, altura=400.0, num_navios=20):
+    def __init__(self, largura=350.0, altura=400.0, num_navios=20, seed=42):
         self.largura = largura
         self.altura = altura
         self.num_navios = num_navios
+        self.seed = seed
         self.navios = []
         self.gerar_navios()
 
     def gerar_navios(self):
-        np.random.seed(42)  # Para reprodutibilidade
+        np.random.seed(self.seed)  # Para reprodutibilidade
         self.navios = [
             Navio(
                 x=np.random.uniform(0, self.largura),

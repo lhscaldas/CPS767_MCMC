@@ -1,0 +1,15 @@
+\section{Introdução}
+
+O Brasil possui uma extensa costa de 8{,}7 mil quilômetros, com 68 portos e uma faixa litorânea que concentra mais da metade da população e do PIB do país. Além disso, o país possui aproximadamente 4{,}5 milhões de quilômetros quadrados de águas jurisdicionais, onde se encontram recursos estratégicos como 95\% do petróleo e 83\% do gás natural nacionais, e por onde transitam cerca de 95\% do comércio exterior \cite{andrade_2021}.
+Nesse contexto, a crescente adoção de Veículos Aéreos Não Tripulados (VANTs) em operações de vigilância marítima exige métodos mais robustos de planejamento de rotas, especialmente em cenários com alvos parcialmente conhecidos e detecção sensorial sujeita a limitações práticas. Trabalhos anteriores mostram que a vigilância baseada em varredura aérea pode ser modelada como uma variação do Problema do Caixeiro Viajante (TSP), incorporando restrições operacionais como autonomia limitada, sensores com alcances distintos e alvos móveis ou parcialmente observáveis \cite{marlow_2007}.
+Técnicas de otimização como o \textit{Simulated Annealing} têm se mostrado eficazes em problemas de roteamento com grande espaço de busca e múltiplos mínimos locais, sendo uma escolha promissora para o replanejamento progressivo de trajetos em ambientes com inserção dinâmica de alvos \cite{kosmas_2012}.
+Mais recentemente, abordagens com replanejamento dinâmico em tempo real vêm sendo propostas para garantir a cobertura de alvos não detectados ou mal inspecionados, especialmente em aplicações com VANTs e sensores embarcados \cite{penicka_2017}. Motivado por esses avanços, este trabalho propõe uma formulação adaptada do TSP para missões de patrulha marítima com inserção condicional de novos alvos, levando em conta restrições de distância lateral, autonomia do VANT e alcance heterogêneo de sensores.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{fig/vant.png}
+    \caption{Patrulha naval realizada por aeronave.}
+
+    \small
+    \textbf{Fonte:} Marlow et al 2007 \cite{marlow_2007}.
+ \end{figure}

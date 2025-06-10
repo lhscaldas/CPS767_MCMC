@@ -1,0 +1,28 @@
+\begin{thebibliography}{}
+
+\bibitem[Andrade et~al. 2021]{andrade_2021}
+Andrade, I. d.~O., Rocha, A. J. R.~d., and Franco, L. G.~A. (2021).
+\newblock Blue amazon management system (sisgaaz): Sovereignty, surveillance
+  and defense of the brazilian jurisdictional waters.
+\newblock Discussion Paper 261, Institute for Applied Economic Research (Ipea),
+  Brasília.
+
+\bibitem[Kosmas and Vlachos 2012]{kosmas_2012}
+Kosmas, O. and Vlachos, D. (2012).
+\newblock Simulated annealing for optimal ship routing.
+\newblock {\em Computers \& Operations Research}, 39(3):576--581.
+
+\bibitem[Marlow et~al. 2007]{marlow_2007}
+Marlow, D., Kilby, P., and Mercer, G. (2007).
+\newblock The travelling salesman problem in maritime surveillance: Techniques,
+  algorithms and analysis.
+\newblock {\em Defence Science and Technology Organisation (DSTO), Australia}.
+
+\bibitem[Penicka et~al. 2017]{penicka_2017}
+Penicka, R., Saska, M., Reymann, C., and Lacroix, S. (2017).
+\newblock Reactive dubins traveling salesman problem for replanning of
+  information gathering by uavs.
+\newblock In {\em 2017 IEEE/RSJ International Conference on Intelligent Robots
+  and Systems (IROS)}, pages 1433--1440. IEEE.
+
+\end{thebibliography}

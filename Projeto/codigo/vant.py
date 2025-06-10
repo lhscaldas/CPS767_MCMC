@@ -1,5 +1,6 @@
 import numpy as np
 import random
+from scipy.spatial import KDTree
 
 class VANT:
     def __init__(self, x=0.0, y=0.0, velocidade=60.0, autonomia=1400.0,
@@ -17,7 +18,7 @@ class VANT:
         self.alcance_radar = alcance_radar
         self.alcance_camera = alcance_camera
         self.navios_detectados = []
-        self.novo_detectado = False
+        self.novo_detectado = 0
         self.navios_inspecionados = []
         self.politica = politica
         self.continuar_voo = True
@@ -60,20 +61,15 @@ class VANT:
         self.nodes = pontos
 
     def _custo_rota(self, rota):
-        custo = 0.0
-        for i in range(len(rota) - 1):
-            dx = rota[i+1][0] - rota[i][0]
-            dy = rota[i+1][1] - rota[i][1]
-            custo += np.hypot(dx, dy)
-        return custo
+        return sum(
+            np.hypot(rota[i+1][0] - rota[i][0], rota[i+1][1] - rota[i][1])
+            for i in range(len(rota) - 1)
+        )
+
 
     def simulated_annealing(self):
         detectados = [(navio.x, navio.y) for navio in self.navios_detectados]
         pontos = detectados + self.waypoints_restantes
-
-        if not pontos:
-            self.nodes = []
-            return
 
         # Ponto inicial = posição atual do VANT
         inicio = (self.x, self.y)
@@ -81,49 +77,49 @@ class VANT:
         # Solução inicial (ordem aleatória dos pontos)
         rota_atual = pontos[:]
         random.shuffle(rota_atual)
+
+        if len(rota_atual) < 2: # Se não há pontos suficientes, não há rota a otimizar
+            self.nodes = rota_atual 
+            return
+
         custo_atual = self._custo_rota([inicio] + rota_atual)
 
         melhor_rota = rota_atual[:]
         melhor_custo = custo_atual
 
         # Parâmetros do SA
-        T = 100.0
-        T_min = 1e-2
-        beta = 0.99
-        iter_por_T = 10
+        T = 5000.0
+        T_min = 1e-4
+        beta = 0.95
+        iter_por_T = 100
 
         while T > T_min:
             for _ in range(iter_por_T):
-                # Gerar vizinho trocando dois pontos da rota
                 i = random.randint(0, len(rota_atual) - 2)
-                j = random.randint(i+1, len(rota_atual) - 1)
+                j = random.randint(i + 1, len(rota_atual) - 1)
                 nova_rota = rota_atual[:i] + rota_atual[i:j+1][::-1] + rota_atual[j+1:]
 
                 novo_custo = self._custo_rota([inicio] + nova_rota)
-                # print(f"Temperatura = {T:.2f} - iteração {it}: custo atual = {novo_custo}, melhor custo = {melhor_custo}")
-
                 delta = novo_custo - custo_atual
-                if delta < 0 or np.exp(-delta / T) > random.random():
+
+                if delta < 0 or random.random() < np.exp(-delta / T):
                     rota_atual = nova_rota
                     custo_atual = novo_custo
                     if custo_atual < melhor_custo:
-                        melhor_rota = rota_atual[:]
                         melhor_custo = custo_atual
+                        melhor_rota = rota_atual[:]
             T *= beta
-
         self.nodes = melhor_rota
-
-
+        
     def step(self):
         # Atualização de rota conforme política
         if self.politica == "greed":
             self.greed()
-        elif self.politica == "SA" and self.novo_detectado:
+        elif self.politica == "SA" and self.novo_detectado > 1:
             self.simulated_annealing()
-            self.novo_detectado = False
+            self.novo_detectado = 0
 
-        # Checar se continua o voo
-        if len(self.nodes) < 1 or self.odometro() >= self.autonomia:
+        if len(self.nodes) < 1:
             self.continuar_voo = False
             return
 
@@ -131,24 +127,29 @@ class VANT:
         dx = destino[0] - self.x
         dy = destino[1] - self.y
         dist = np.hypot(dx, dy)
+        deslocamento = self.velocidade * self.delta_t / 60
 
-        deslocamento = self.velocidade * self.delta_t / 60 
+        # Verificar se próximo passo ultrapassa autonomia
+        proximo_odometro = self.odometro() + min(deslocamento, dist)
+        if proximo_odometro >= self.autonomia:
+            self.continuar_voo = False
+            return
+
+        # Atualizar posição
         if dist < deslocamento:
             self.x, self.y = destino
             self.nodes.pop(0)
-            if (self.x,self.y) in self.waypoints_restantes:
+            if (self.x, self.y) in self.waypoints_restantes:
                 self.ultimo_wp = (self.x, self.y)
                 self.waypoints_restantes.remove((self.x, self.y))
         else:
-            self.x += deslocamento * dx / dist # deslocamento * cos(direção)
-            self.y += deslocamento * dy / dist # deslocamento * sin(direção)
+            self.x += deslocamento * dx / dist
+            self.y += deslocamento * dy / dist
 
         self.trajeto.append((self.x, self.y))
 
+
     def odometro(self):
-        """
-        Retorna a distância total percorrida pelo VANT, em milhas náuticas (MN).
-        """
         if len(self.trajeto) < 2:
             return 0.0
 
@@ -158,18 +159,13 @@ class VANT:
     )
 
     def verificar_navios_proximos(self, ambiente):
-        """
-        Atualiza os estados dos navios próximos com base nos sensores do VANT.
-        Também armazena localmente os navios detectados e inspecionados.
-        Retorna uma tupla: (novos_detectados, novos_inspecionados)
-        """
         # Radar
         navios_radar = ambiente.obter_navios_em_raio(self.x, self.y, self.alcance_radar)
         for navio in navios_radar:
             if navio.estado == "nao_detectado":
                 navio.estado = "detectado"
                 self.navios_detectados.append(navio)
-                self.novo_detectado = True
+                self.novo_detectado += 1
 
         # Câmera
         navios_camera = ambiente.obter_navios_em_raio(self.x, self.y, self.alcance_camera)

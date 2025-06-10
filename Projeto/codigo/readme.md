@@ -48,7 +48,9 @@
 
 ### 🧪 Sprint 6 – Estatísticas e relatório final
 - [x] Simulação sem imagem
-- [ ] Salvar todas as execuções em CSV por política e cenário
+- [x] Função para salvar todas as execuções em CSV por política e cenário
+- [ ] Calibrar o Simulated Annealing
+- [ ] Coletar resultados
 - [ ] Calcular métricas desempenho: cobertura, eficiência, distância total
 - [ ] Comparar resultados entre políticas
 - [ ] Gerar visualização final da missão (GIF ou imagem)
