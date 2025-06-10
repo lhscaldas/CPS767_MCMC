@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # combinar dois csvs em um só
-def combinar_csvs(caminho_csv1, caminho_csv2, caminho_saida):
+def combinar_csvs(caminho_csv1, caminho_csv2):
     df1 = pd.read_csv(caminho_csv1)
     df2 = pd.read_csv(caminho_csv2)
 
@@ -13,13 +13,10 @@ def combinar_csvs(caminho_csv1, caminho_csv2, caminho_saida):
     # Concatenar os DataFrames
     df_combinado = pd.concat([df1, df2], ignore_index=True)
 
-    # Salvar o DataFrame combinado em um novo CSV
-    df_combinado.to_csv(caminho_saida, index=False)
-    print(f"CSV combinado salvo em: {caminho_saida}")
+    # Retornar o DataFrame combinado em um novo CSV
+    return df_combinado
 
-def resumir_resultados_csv(caminho_csv):
-    df = pd.read_csv(caminho_csv)
-
+def resumir_resultados_csv(df):
     # Agrupar por política e quantidade de navios
     agrupado = df.groupby(["politica", "navios"]).mean(numeric_only=True)
 
@@ -32,10 +29,7 @@ def resumir_resultados_csv(caminho_csv):
         print(f"  - Média de distância percorrida: {linha['distancia_percorrida']:.2f}")
         print(f"  - Média de tempo de execução: {linha['tempo_execucao']:.2f} s")
 
-def plotar_resultados_por_politica(caminho_csv, coluna_y, percentual=False):
-    # Ler CSV
-    df = pd.read_csv(caminho_csv)
-
+def plotar_resultados_por_politica(df, coluna_y, percentual=False):
     # Verifica se a coluna existe
     if coluna_y not in df.columns:
         print(f"Coluna '{coluna_y}' não encontrada no CSV.")
@@ -71,9 +65,9 @@ def plotar_resultados_por_politica(caminho_csv, coluna_y, percentual=False):
 if __name__ == "__main__":
     # resumir_resultados_csv("resultados_simulacoes.csv")
     
-    combinar_csvs("SA_02.csv", "passiva_greed.csv", "resultados_simulacoes.csv")
+    df = combinar_csvs("SA_old.csv", "passiva_greed.csv")
 
-    plotar_resultados_por_politica("resultados_simulacoes.csv", "inspecionados", percentual=True)
-    plotar_resultados_por_politica("resultados_simulacoes.csv", "distancia_percorrida", percentual=True)
-    plotar_resultados_por_politica("resultados_simulacoes.csv", "tempo_execucao", percentual=True)
+    plotar_resultados_por_politica(df, "inspecionados", percentual=True)
+    plotar_resultados_por_politica(df, "distancia_percorrida", percentual=True)
+    plotar_resultados_por_politica(df, "tempo_execucao", percentual=True)
     

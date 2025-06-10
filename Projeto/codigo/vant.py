@@ -97,7 +97,7 @@ class VANT:
         T = 10.0
         T_min = 1e-4
         beta = 0.9
-        iter_por_T = 100
+        iter_por_T = 50
 
         while T > T_min:
             for _ in range(iter_por_T):

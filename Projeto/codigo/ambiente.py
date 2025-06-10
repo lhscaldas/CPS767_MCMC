@@ -14,7 +14,7 @@ class Navio:
     estado: str = "nao_detectado"  # 'nao_detectado', 'detectado', 'inspecionado'
 
 class AmbienteMaritimo:
-    def __init__(self, largura=350.0, altura=400.0, num_navios=20, seed=42):
+    def __init__(self, largura=350.0, altura=400.0, num_navios=20, seed=None):
         self.largura = largura
         self.altura = altura
         self.num_navios = num_navios
