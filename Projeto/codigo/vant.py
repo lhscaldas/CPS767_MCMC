@@ -87,10 +87,16 @@ class VANT:
         melhor_rota = rota_atual[:]
         melhor_custo = custo_atual
 
-        # Parâmetros do SA
-        T = 5000.0
+        # # Parâmetros do SA_01
+        # T = 5000.0
+        # T_min = 1e-4
+        # beta = 0.95
+        # iter_por_T = 100
+
+        # Parâmetros do SA_2
+        T = 1.0
         T_min = 1e-4
-        beta = 0.95
+        beta = 0.9
         iter_por_T = 100
 
         while T > T_min:

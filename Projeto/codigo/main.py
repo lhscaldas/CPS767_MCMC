@@ -7,7 +7,7 @@ def preparar_simulacao(num_navios=50, politica="passiva", seed=42):
     ambiente = AmbienteMaritimo(largura=300, altura=300, num_navios=num_navios, seed=seed)
     vant = VANT(x=0.0, y=50.0, velocidade=300.0, autonomia=2400,
                 alcance_radar=50.0, alcance_camera=10.0, politica=politica, delta_t=5)
-    vant.definir_linhas_paralelas(inicial=(0, 50), final=300, espacamento=50, num_linhas=3, gap=50)
+    vant.definir_linhas_paralelas(inicial=(0, 50), final=300, espacamento=100, num_linhas=3, gap=50)
     return ambiente, vant
 
 def simulacao_estatica(num_navios=50, politica="passiva", seed=42):
@@ -24,9 +24,7 @@ def simulacao_texto(num_navios=50, politica="passiva", seed=42):
     resultado = ambiente.executar_simulacao(vant)
     return resultado
 
-def simulacao_csv(nome_arquivo="resultados_simulacoes.csv"):
-    # lista_politicas = ["passiva", "greed", "SA"]
-    lista_politicas = ["SA"]
+def simulacao_csv(lista_politicas =["passiva", "greed", "SA"], nome_arquivo="resultados_simulacoes.csv"):
     lista_navios = [10, 25, 50, 75, 100, 125, 150, 175, 200]
     num_iteracoes = 100
     resultados = []
@@ -46,12 +44,14 @@ def simulacao_csv(nome_arquivo="resultados_simulacoes.csv"):
         escritor.writerows(resultados)
 
 if __name__ == "__main__":
-    simulacao_csv(nome_arquivo="SA.csv")
+    # lista_politicas = ["SA"] # ["passiva", "greed", "SA"]
+    # simulacao_csv(lista_politicas=lista_politicas, nome_arquivo="SA_02.csv")
     # resumir_resultados_csv("resultados_simulacoes.csv")
 
-    # num = 80
+    num = 50
+    # simulacao_estatica(num_navios=num, politica="passiva", seed=1)
     # simulacao_estatica(num_navios=num, politica="greed", seed=1)
-    # simulacao_estatica(num_navios=num, politica="SA", seed=1)
+    simulacao_estatica(num_navios=num, politica="SA", seed=1)
 
     # simulacao_animada(num_navios=50, politica="greed", seed=1)
     # simulacao_animada(num_navios=50, politica="SA", seed=1)

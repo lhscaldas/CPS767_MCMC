@@ -1,0 +1,36 @@
+\section{Resultados}
+
+Nesta seção, são apresentadas comparações entre as três políticas de navegação descritas anteriormente: passiva, \textit{greed} e \textit{simulated annealing}. O VANT percorre uma trajetória sistemática sobre a área de interesse (AI), sendo redirecionado dinamicamente de acordo com a política adotada ao detectar novos alvos.
+
+\subsection{Valores de Entrada}
+
+Os valores constantes utilizados no modelo são:
+
+\begin{itemize}
+    \item Tamanho da AI: $300 \times 300$ milhas náuticas (MN)
+    \item Velocidade do VANT: 300 nós (MN / hora)
+    \item Alcance do radar (detecção): 50 MN
+    \item Alcance da câmera (inspeção): 20 MN
+    \item Autonomia: 2400 MN
+\end{itemize}
+
+Os parâmetros que variam nas simulações são:
+
+\begin{itemize}
+    \item Número de navios na AI: 10, 25, 50, 75, 100, 125, 150, 175, 200. Esse parâmetro controla a densidade de alvos na área de interesse.
+    
+    \item Distribuição espacial dos navios: uniformente aleatória. As posições dos navios são sorteadas aleatoriamente dentro dos limites da área.
+\end{itemize}
+
+Os parâmetros utilizados especificamente na política de \textit{Simulated Annealing} são:
+
+\begin{itemize}
+    \item Temperatura inicial $T_0$: 5000.0
+    \item Temperatura mínima $T_{\text{min}}$: $10^{-4}$
+    \item Fator de resfriamento $\beta$: 0.95
+    \item Número de perturbações por temperatura: 100
+\end{itemize}
+
+Para cada combinação de parâmetros, os experimentos são repetidos sobre 100 instâncias geradas aleatoriamente, o que totaliza $3 \times 9 \times 100 = 2700$ simulações. Os resultados são agregados por média e as métricas são apresentadas em valores absolutos (como distância percorrida e tempo de execução) ou normalizados em percentual (como proporção de navios detectados ou inspecionados), conforme apropriado para a análise.
+
+

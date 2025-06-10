@@ -71,7 +71,7 @@ def plotar_resultados_por_politica(caminho_csv, coluna_y, percentual=False):
 if __name__ == "__main__":
     # resumir_resultados_csv("resultados_simulacoes.csv")
     
-    # combinar_csvs("SA.csv", "passiva_greed.csv", "resultados_simulacoes.csv")
+    combinar_csvs("SA_02.csv", "passiva_greed.csv", "resultados_simulacoes.csv")
 
     plotar_resultados_por_politica("resultados_simulacoes.csv", "inspecionados", percentual=True)
     plotar_resultados_por_politica("resultados_simulacoes.csv", "distancia_percorrida", percentual=True)
