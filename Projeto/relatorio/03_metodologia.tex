@@ -4,7 +4,7 @@ A abordagem proposta consiste em simular missões de vigilância marítima utili
 
 Durante o voo, o VANT está equipado com dois sensores: um radar, responsável por detectar navios dentro de um raio de ação (50 milhas náuticas), e uma câmera de inspeção visual com alcance menor (20 milhas náuticas), utilizada para confirmar a identificação de alvos. Quando um navio entra na zona de alcance do radar, seu estado é atualizado para ``detectado''. Caso venha a entrar na área de alcance da câmera, ele é considerado ``inspecionado''.
 
-Ao detectar novos alvos, o VANT atualiza sua lista de destinos a serem visitados com base em diferentes políticas de decisão:
+O VANT atualiza sua lista de destinos a serem visitados com base em diferentes políticas de decisão:
 
 \begin{itemize}
     \item \textbf{Política passiva}: o VANT mantém sua rota original, ignorando completamente os alvos detectados e identificando apenas os navios que a câmera alcança sem que ele desvie da trajetória planejada.

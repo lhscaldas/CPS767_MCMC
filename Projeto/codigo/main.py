@@ -26,6 +26,7 @@ def simulacao_texto(num_navios=50, politica="passiva", seed=None):
 
 def simulacao_csv(lista_politicas =["passiva", "greed", "SA"], nome_arquivo="resultados_simulacoes.csv"):
     lista_navios = [10, 25, 50, 75, 100, 125, 150, 175, 200]
+    lista_navios = [200]
     num_iteracoes = 100
     resultados = []
 
@@ -45,10 +46,10 @@ def simulacao_csv(lista_politicas =["passiva", "greed", "SA"], nome_arquivo="res
 
 if __name__ == "__main__":
     lista_politicas = ["SA"] # ["passiva", "greed", "SA"]
-    simulacao_csv(lista_politicas=lista_politicas, nome_arquivo="SA.csv")
+    simulacao_csv(lista_politicas=lista_politicas, nome_arquivo="SA_teste.csv")
     # resumir_resultados_csv("resultados_simulacoes.csv")
 
-    # num = 50
+    num = 50
     # simulacao_estatica(num_navios=num, politica="passiva", seed=1)
     # simulacao_estatica(num_navios=num, politica="greed", seed=1)
     # simulacao_estatica(num_navios=num, politica="SA", seed=1)

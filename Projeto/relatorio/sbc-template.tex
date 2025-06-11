@@ -5,9 +5,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
 
-\usepackage{float}
-\usepackage{mathtools}
-\usepackage{needspace}
+\usepackage{float} % para usar [H] nas figuras
+\usepackage{mathtools} % para usar \text em $$
+\usepackage{subcaption} % para subfigure
      
 \sloppy
 
@@ -34,10 +34,11 @@
   página do artigo.
 \end{resumo}
 
-\include{01_introducao}
-\include{02_objetivo}
-\include{03_metodologia}
-\include{04_resultados}
+\input{01_introducao}
+\input{02_objetivo}
+\input{03_metodologia}
+\input{04_resultados}
+\input{05_conclusao}
 
 
 \bibliographystyle{sbc}

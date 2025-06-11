@@ -66,7 +66,6 @@ class VANT:
             for i in range(len(rota) - 1)
         )
 
-
     def simulated_annealing(self):
         detectados = [(navio.x, navio.y) for navio in self.navios_detectados]
         pontos = detectados + self.waypoints_restantes
@@ -93,7 +92,7 @@ class VANT:
         # beta = 0.95
         # iter_por_T = 100
 
-        # Parâmetros do SA
+        # Parâmetros do SA (best)
         T = 10.0
         T_min = 1e-4
         beta = 0.9
@@ -115,6 +114,7 @@ class VANT:
                         melhor_custo = custo_atual
                         melhor_rota = rota_atual[:]
             T *= beta
+
         self.nodes = melhor_rota
         
     def step(self):
