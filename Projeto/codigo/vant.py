@@ -1,6 +1,5 @@
 import numpy as np
 import random
-from scipy.spatial import KDTree
 
 class VANT:
     def __init__(self, x=0.0, y=0.0, velocidade=60.0, autonomia=1400.0,

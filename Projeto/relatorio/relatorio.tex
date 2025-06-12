@@ -1,0 +1,45 @@
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+\usepackage{graphicx,url}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+
+\usepackage{float} % para usar [H] nas figuras
+\usepackage{mathtools} % para usar \text em $$
+\usepackage{subcaption} % para subfigure
+     
+\sloppy
+
+\title{Planejamento Dinâmico de Rotas para VANTs em Patrulha Naval}
+
+\author{Luiz Henrique Souza Caldas\inst{1}, Daniel Ratton Figueiredo\inst{1}} 
+
+
+\address{Programa de Engenharia de Sistemas e Computação (PESC) \\ Instituto Alberto Luiz Coimbra de Pós-Graduação e Pesquisa de Engenharia (COPPE) \\ Universidade Federal do Rio de Janeiro (UFRJ)\\
+  \email{lhscaldas@cos.ufrj.br, daniel@cos.ufrj.br}
+}
+
+\begin{document} 
+
+\maketitle
+
+% \begin{abstract}
+% This work presents a dynamic route planning approach for Unmanned Aerial Vehicles (UAVs) in maritime patrol missions, considering the progressive detection of targets during flight. Three navigation policies are compared: \textit{passive}, which follows a fixed route; \textit{greed}, which prioritizes nearby targets; and \textit{Simulated Annealing}, which uses stochastic sampling to optimize the visitation order. Simulations are conducted in a modular environment with randomly placed ships, and metrics such as distance traveled, detection rate, and execution time are evaluated. Results show that while the \textit{Simulated Annealing} policy performs better in sparse scenarios, the \textit{greed} policy is computationally more efficient and better suited for real-time re-planning in denser environments.
+% \end{abstract}
+     
+\begin{resumo} 
+Este trabalho apresenta uma abordagem de planejamento dinâmico de rotas para VANTs em patrulhas navais, considerando a detecção progressiva de alvos ao longo da missão. São comparadas três políticas de navegação: \textit{passiva}, com rota fixa; \textit{greed}, que prioriza alvos próximos; e \textit{Simulated Annealing}, que utiliza amostragem estocástica para otimizar a ordem de visita. As simulações, conduzidas em ambiente modular com geração aleatória de navios, avaliam métricas como distância percorrida, taxa de detecção e tempo de execução. Os resultados mostram que, embora a política \textit{Simulated Annealing} obtenha melhor desempenho com poucos navios, a \textit{greed} é mais eficiente computacionalmente e mais adequada para replanejamentos em tempo real.
+\end{resumo}
+
+\input{01_introducao}
+\input{02_objetivo}
+\input{03_metodologia}
+\input{04_resultados}
+\input{05_conclusao}
+
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{document}

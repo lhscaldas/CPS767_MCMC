@@ -1,0 +1,16 @@
+% \section{Conclusão}
+
+% Este trabalho apresentou uma abordagem de planejamento dinâmico de rotas para VANTs em missões de patrulha naval, com inserção progressiva de alvos detectados durante o voo. Três políticas de navegação foram implementadas e comparadas: \textit{passiva}, com trajetória fixa; \textit{greed}, que reordena os alvos com base na proximidade; e \textit{Simulated Annealing}, que utiliza uma estratégia estocástica para otimização da sequência de visita. As simulações consideraram diferentes densidades de navios e avaliaram métricas como distância percorrida, cobertura e tempo de execução.
+
+% Os resultados mostraram que a política \textit{greed} obteve, de forma geral, o melhor desempenho, superando o \textit{Simulated Annealing} em cenários com mais de 75 navios. A política baseada em \textit{Simulated Annealing} apresentou vantagens apenas em cenários menos densos, com menor número de alvos. Em cenários com alta densidade de navios, o desempenho das políticas ativas foi impactado pela limitação de autonomia do VANT, que impediu a inspeção completa da área. A comparação evidencia o potencial de estratégias simples, como a política \textit{greed}, em fornecer bons resultados com baixo custo computacional.
+
+% Como trabalhos futuros, propõe-se considerar a dinâmica da aeronave de forma mais realista, incorporando restrições de manobra e aceleração, além de estender o modelo para permitir que os navios estejam em movimento durante a missão. Também seria interessante explorar formas de paralelizar a execução da simulação e da etapa de otimização, permitindo que o replanejamento da rota ocorra em segundo plano sem interromper o avanço do VANT. Além disso, podem ser avaliadas políticas de priorização de alvos, penalidades por cruzamento de trajetória e estratégias de balanceamento entre cobertura e eficiência de percurso. Essas extensões contribuiriam para aproximar ainda mais a simulação de cenários operacionais reais.
+
+
+\section{Conclusão}
+
+Este trabalho apresentou uma abordagem de planejamento dinâmico de rotas para VANTs em patrulhas navais, com inserção progressiva de alvos detectados durante o voo. Foram comparadas três políticas de navegação: \textit{passiva} (rota fixa), \textit{greed} (priorização por proximidade) e \textit{Simulated Annealing} (otimização estocástica da sequência de visita). As simulações avaliaram diferentes densidades de navios, considerando métricas como distância percorrida, cobertura e tempo de execução.
+
+A política \textit{greed} obteve melhor desempenho geral, especialmente em cenários com mais de 75 navios, combinando bons resultados com baixo custo computacional. Já o \textit{Simulated Annealing} mostrou vantagens em cenários menos densos. Em ambientes mais carregados, a limitação de autonomia do VANT reduziu a eficácia das estratégias ativas.
+
+Como trabalhos futuros, propõe-se: (i) incorporar dinâmica realista do VANT, com restrições de manobra e aceleração; (ii) permitir movimento dos navios; (iii) paralelizar simulação e otimização para replanejamento em tempo real; (iv) investigar funções de custo mais elaboradas, que penalizem cruzamentos de trajetória, priorizem alvos relevantes e equilibrem cobertura com eficiência de percurso. Tais avanços podem tornar a abordagem mais aplicável a cenários operacionais reais.

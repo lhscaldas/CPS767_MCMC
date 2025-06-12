@@ -1,29 +1,50 @@
+% \section{Metodologia}
+
+% A abordagem proposta consiste em simular missões de vigilância marítima utilizando Veículos Aéreos Não Tripulados (VANTs), os quais percorrem uma rota pré-definida composta por linhas paralelas. Essa rota representa um padrão sistemático de patrulhamento e é gerada automaticamente com base em parâmetros como ponto inicial, largura da área, espaçamento entre linhas e número de passagens.
+
+% Durante o voo, o VANT está equipado com dois sensores: um radar, responsável por detectar navios dentro de um raio de ação (50 milhas náuticas), e uma câmera de inspeção visual com alcance menor (20 milhas náuticas), utilizada para confirmar a identificação de alvos. Quando um navio entra na zona de alcance do radar, seu estado é atualizado para ``detectado''. Caso venha a entrar na área de alcance da câmera, ele é considerado ``inspecionado''.
+
+% O VANT atualiza sua lista de destinos a serem visitados com base em diferentes políticas de decisão:
+
+% \begin{itemize}
+%     \item \textbf{Política passiva}: o VANT mantém sua rota original, ignorando completamente os alvos detectados e identificando apenas os navios que a câmera alcança sem que ele desvie da trajetória planejada.
+
+%     \item \textbf{Política \textit{greed}}: os navios detectados e os waypoints ainda não percorridos da rota original são considerados simultaneamente, sendo reordenados com base na distância em relação à posição atual do VANT, priorizando os mais próximos em cada instante.
+%     \item \textbf{Política \textit{simulated annealing}}: os navios detectados e os waypoints ainda não percorridos da rota original também são considerados simultaneamente, mas utilizando uma técnica de amostragem estocástica baseada em \textit{Markov Chain Monte Carlo (MCMC)}. A lógica do algoritmo se baseia em uma cadeia de Markov com distribuição estacionária proporcional a uma função de Boltzmann, permitindo explorar o espaço de permutações de forma mais ampla, em busca de uma sequência globalmente mais eficiente em termos de distância percorrida.
+% \end{itemize}
+
+% O algoritmo de \textit{Simulated Annealing} implementado parte de uma solução inicial aleatória, composta pela lista de navios detectados e waypoints restantes, obtida por uma permutação aleatória desses pontos. O objetivo é encontrar a melhor ordem de visita, minimizando a distância total percorrida pelo VANT a partir de sua posição atual. A cada iteração, uma nova solução vizinha é gerada invertendo a ordem dos pontos em um subintervalo aleatório da rota atual. Essa operação de vizinhança é simples, mas suficientemente expressiva para explorar o espaço de soluções e escapar de mínimos locais.
+
+% Esse espaço de soluções pode ser interpretado como um grafo em que cada vértice representa uma permutação possível dos pontos a visitar, e as arestas conectam permutações que diferem por uma única inversão de subsegmento. Esse grafo é conexo e possui transições simétricas, o que garante que todas as soluções podem ser eventualmente alcançadas a partir de qualquer configuração inicial.
+
+% A nova solução é aceita com probabilidade 1 se sua distância total $f(s')$ for menor que a da rota atual $f(s)$, onde $s$ é a rota atual e $s'$ a rota vizinha gerada, e $f(s)$ denota a distância total percorrida ao seguir a rota $s$. Caso contrário, a nova rota ainda pode ser aceita com probabilidade $e^{-\frac{f(s') - f(s)}{T}}$, onde $T$ é um parâmetro chamado temperatura, que vai decaindo ao longo do processo. Essa estratégia permite aceitar, no início da execução, soluções piores de forma controlada, favorecendo a diversidade de caminhos explorados e contribuindo para escapar de mínimos locais.
+
+% A temperatura $T$ é atualizada ao longo do processo por meio de uma estratégia de resfriamento exponencial, seguindo a equação $T = T_0 \cdot \beta^t$, onde $T_0$ é a temperatura inicial, $\beta$ é um fator de decaimento ($0 < \beta < 1$), e $t$ representa a etapa atual. Em cada nível de temperatura, o algoritmo realiza um número fixo $N$ de perturbações da rota. Ao longo do processo, a melhor rota encontrada e seu respectivo custo são salvos sempre que superam o melhor valor anterior. Assim, ao final da execução, o algoritmo retorna a melhor sequência observada durante toda a busca, e não necessariamente a última solução gerada.
+
+% % Apesar de sua flexibilidade, o algoritmo de \textit{Simulated Annealing} não está livre de limitações. Em particular, se a temperatura for reduzida rapidamente demais ao longo da execução, o processo pode ficar preso em mínimos locais, impedindo a descoberta de soluções mais eficientes. A escolha da estratégia de resfriamento adequada é, portanto, um fator crítico para o sucesso do método, sendo geralmente determinada por experimentação e ajuste fino para cada cenário.
+
+% Considera-se que os navios permanecem estáticos durante a simulação, dada a alta velocidade relativa do VANT em comparação às embarcações. O voo é interrompido automaticamente quando a autonomia total é atingida ou quando não há mais destinos a serem visitados. Os dados de desempenho como número de alvos detectados e inspecionados, distância percorrida e tempo de execução são registrados ao final da missão.
+
 \section{Metodologia}
 
-A abordagem proposta consiste em simular missões de vigilância marítima utilizando Veículos Aéreos Não Tripulados (VANTs), os quais percorrem uma rota pré-definida composta por linhas paralelas. Essa rota representa um padrão sistemático de patrulhamento e é gerada automaticamente com base em parâmetros como ponto inicial, largura da área, espaçamento entre linhas e número de passagens.
+A abordagem proposta consiste em simular missões de vigilância marítima com Veículos Aéreos Não Tripulados (VANTs) que percorrem rotas pré-definidas compostas por linhas paralelas, geradas a partir de parâmetros como ponto inicial, largura da área, espaçamento entre linhas e número de passagens.
 
-Durante o voo, o VANT está equipado com dois sensores: um radar, responsável por detectar navios dentro de um raio de ação (50 milhas náuticas), e uma câmera de inspeção visual com alcance menor (20 milhas náuticas), utilizada para confirmar a identificação de alvos. Quando um navio entra na zona de alcance do radar, seu estado é atualizado para ``detectado''. Caso venha a entrar na área de alcance da câmera, ele é considerado ``inspecionado''.
+Durante o voo, o VANT utiliza dois sensores: um radar com alcance de 50 milhas náuticas (MN), que detecta navios, e uma câmera de inspeção visual com alcance de 20 MN, que confirma sua identificação. Um navio detectado pelo radar tem seu estado atualizado para ``detectado'', e se estiver ao alcance da câmera, passa a ser ``inspecionado''.
 
-O VANT atualiza sua lista de destinos a serem visitados com base em diferentes políticas de decisão:
+A cada passo da missão, o VANT atualiza sua rota com base em uma das seguintes políticas de decisão:
 
 \begin{itemize}
-    \item \textbf{Política passiva}: o VANT mantém sua rota original, ignorando completamente os alvos detectados e identificando apenas os navios que a câmera alcança sem que ele desvie da trajetória planejada.
-
-    \item \textbf{Política \textit{greed}}: os navios detectados e os waypoints ainda não percorridos da rota original são considerados simultaneamente, sendo reordenados com base na distância em relação à posição atual do VANT, priorizando os mais próximos em cada instante.
-    \item \textbf{Política \textit{simulated annealing}}: os navios detectados e os waypoints ainda não percorridos da rota original também são considerados simultaneamente, mas utilizando uma técnica de amostragem estocástica baseada em \textit{Markov Chain Monte Carlo (MCMC)}. A lógica do algoritmo se baseia em uma cadeia de Markov com distribuição estacionária proporcional a uma função de Boltzmann, permitindo explorar o espaço de permutações de forma mais ampla, em busca de uma sequência globalmente mais eficiente em termos de distância percorrida.
+    \item \textbf{Política passiva}: mantém a rota original, inspecionando apenas os navios que entram no alcance da câmera sem alterar o trajeto.
+    \item \textbf{Política \textit{greed}}: reordena dinamicamente os waypoints restantes e os navios detectados, priorizando os mais próximos da posição atual do VANT.
+    \item \textbf{Política \textit{simulated annealing}}: aplica uma técnica estocástica baseada em \textit{Markov Chain Monte Carlo (MCMC)} para buscar uma sequência de visita aos waypoints restantes e aos navios detectados mais eficiente em termos de distância.
 \end{itemize}
 
-O algoritmo de \textit{Simulated Annealing} implementado parte de uma solução inicial aleatória, composta pela lista de navios detectados e waypoints restantes, obtida por uma permutação aleatória desses pontos. O objetivo é encontrar a melhor ordem de visita, minimizando a distância total percorrida pelo VANT a partir de sua posição atual. A cada iteração, uma nova solução vizinha é gerada invertendo a ordem dos pontos em um subintervalo aleatório da rota atual. Essa operação de vizinhança é simples, mas suficientemente expressiva para explorar o espaço de soluções e escapar de mínimos locais.
+O algoritmo de \textit{Simulated Annealing} inicia com uma permutação aleatória dos navios detectados e waypoints remanescentes. Em cada iteração, uma nova rota é gerada invertendo a ordem de um subintervalo da rota atual, escolhendo dois pontos da rota atual de forma uniforme e invertendo a ordem dos pontos entre eles. O espaço de soluções é representado por um grafo conexo, onde vértices são permutações possíveis e arestas conectam soluções que diferem por uma inversão, formando uma cadeia de Markov irredutível, aperiódica e simétrica.
 
-Esse espaço de soluções pode ser interpretado como um grafo em que cada vértice representa uma permutação possível dos pontos a visitar, e as arestas conectam permutações que diferem por uma única inversão de subsegmento. Esse grafo é conexo e possui transições simétricas, o que garante que todas as soluções podem ser eventualmente alcançadas a partir de qualquer configuração inicial.
+A nova rota $s'$ é aceita se sua distância total $f(s')$ for menor que a atual $f(s)$; caso contrário, ainda pode ser aceita com probabilidade $e^{-\frac{f(s') - f(s)}{T}}$, onde $T$ é a temperatura. Esse mecanismo permite explorar soluções subótimas no início do processo, ajudando a escapar de mínimos locais.
 
-A nova solução é aceita com probabilidade 1 se sua distância total $f(s')$ for menor que a da rota atual $f(s)$, onde $s$ é a rota atual e $s'$ a rota vizinha gerada, e $f(s)$ denota a distância total percorrida ao seguir a rota $s$. Caso contrário, a nova rota ainda pode ser aceita com probabilidade $e^{-\frac{f(s') - f(s)}{T}}$, onde $T$ é um parâmetro chamado temperatura, que vai decaindo ao longo do processo. Essa estratégia permite aceitar, no início da execução, soluções piores de forma controlada, favorecendo a diversidade de caminhos explorados e contribuindo para escapar de mínimos locais.
+A temperatura $T$ decresce exponencialmente segundo $T = T_0 \cdot \beta^t$, com $T_0$ como temperatura inicial, $\beta$ como fator de decaimento ($0 < \beta < 1$) e $t$ representando a iteração atual. A cada nível de temperatura, são realizadas $N$ perturbações, salvando-se a melhor rota encontrada até então. O algoritmo retorna a melhor solução global observada, não necessariamente a última.
 
-A temperatura $T$ é atualizada ao longo do processo por meio de uma estratégia de resfriamento exponencial, seguindo a equação $T = T_0 \cdot \beta^t$, onde $T_0$ é a temperatura inicial, $\beta$ é um fator de decaimento ($0 < \beta < 1$), e $t$ representa a etapa atual. Em cada nível de temperatura, o algoritmo realiza um número fixo $N$ de perturbações da rota. Ao longo do processo, a melhor rota encontrada e seu respectivo custo são salvos sempre que superam o melhor valor anterior. Assim, ao final da execução, o algoritmo retorna a melhor sequência observada durante toda a busca, e não necessariamente a última solução gerada.
-
-Apesar de sua flexibilidade, o algoritmo de \textit{Simulated Annealing} não está livre de limitações. Em particular, se a temperatura for reduzida rapidamente demais ao longo da execução, o processo pode ficar preso em mínimos locais, impedindo a descoberta de soluções mais eficientes. A escolha da estratégia de resfriamento adequada é, portanto, um fator crítico para o sucesso do método, sendo geralmente determinada por experimentação e ajuste fino para cada cenário.
-
-Considera-se que os navios permanecem estáticos durante a simulação, dada a alta velocidade relativa do VANT em comparação às embarcações. O voo é interrompido automaticamente quando a autonomia total é atingida ou quando não há mais destinos a serem visitados. Os dados de desempenho como número de alvos detectados e inspecionados, distância percorrida e tempo de execução são registrados ao final da missão.
-
+Assume-se que os navios estejam estáticos durante a simulação, dada a alta velocidade do VANT. A missão termina quando a autonomia é atingida ou não restam destinos a visitar. Dados como número de alvos detectados e inspecionados, distância percorrida e tempo de execução são registrados ao final da simulação.
 
 

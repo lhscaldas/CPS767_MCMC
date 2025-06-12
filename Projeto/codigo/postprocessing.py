@@ -69,16 +69,17 @@ def plotar_resultados_por_politica(df, coluna_y, percentual=False, y_limit=None)
     plt.grid(True)
     plt.legend(title="Política")
     plt.tight_layout()
-    # plt.show()
-    plt.savefig(f"resultado_{coluna_y[0:3]}.png")
+    plt.show()
+    # plt.savefig(f"resultado_{coluna_y[0:3]}.png")
 
 if __name__ == "__main__":
     # resumir_resultados_csv("resultados_simulacoes.csv")
     
-    df = combinar_csvs("SA.csv", "passiva_greed.csv")
+    df = combinar_csvs("passiva_greed.csv", "passiva_greed.csv")
 
-    plotar_resultados_por_politica(df, "inspecionados", percentual=True, y_limit=[0, 100])
-    plotar_resultados_por_politica(df, "detectados", percentual=True, y_limit=[60, 100])
-    plotar_resultados_por_politica(df, "distancia_percorrida", y_limit=[500, 2500])
-    plotar_resultados_por_politica(df, "tempo_execucao", y_limit=[-0.5,40])
+    # plotar_resultados_por_politica(df, "inspecionados", percentual=True, y_limit=[0, 100])
+    # plotar_resultados_por_politica(df, "detectados", percentual=True, y_limit=[60, 100])
+    # plotar_resultados_por_politica(df, "distancia_percorrida", y_limit=[500, 2500])
+    # plotar_resultados_por_politica(df, "tempo_execucao", y_limit=[-0.5,40])
+    plotar_resultados_por_politica(df, "tempo_execucao", y_limit=None)
     
