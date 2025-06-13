@@ -122,7 +122,7 @@ class AmbienteMaritimo:
             cache_frame_data=False
         )
 
-        ani.save(filename, writer='pillow', fps=20)
+        ani.save(filename, writer='pillow', fps=5)
         plt.close(fig)
 
     def _plotar_elementos_cenario(self, ax, vant):

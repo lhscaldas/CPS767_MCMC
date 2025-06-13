@@ -43,7 +43,7 @@ O algoritmo de \textit{Simulated Annealing} inicia com uma permutação aleatór
 
 A nova rota $s'$ é aceita se sua distância total $f(s')$ for menor que a atual $f(s)$; caso contrário, ainda pode ser aceita com probabilidade $e^{-\frac{f(s') - f(s)}{T}}$, onde $T$ é a temperatura. Esse mecanismo permite explorar soluções subótimas no início do processo, ajudando a escapar de mínimos locais.
 
-A temperatura $T$ decresce exponencialmente segundo $T = T_0 \cdot \beta^t$, com $T_0$ como temperatura inicial, $\beta$ como fator de decaimento ($0 < \beta < 1$) e $t$ representando a iteração atual. A cada nível de temperatura, são realizadas $N$ perturbações, salvando-se a melhor rota encontrada até então. O algoritmo retorna a melhor solução global observada, não necessariamente a última.
+A temperatura $T$ decresce exponencialmente segundo $T = T_0 \cdot \beta^i$, com $T_0$ como temperatura inicial, $\beta$ como fator de decaimento ($0 < \beta < 1$) e $i$ representando o ciclo de temperatura. A cada ciclo de temperatura $i$, são realizadas $N$ perturbações, salvando-se a melhor rota encontrada até então. O algoritmo retorna a melhor solução global observada, não necessariamente a última.
 
 Assume-se que os navios estejam estáticos durante a simulação, dada a alta velocidade do VANT. A missão termina quando a autonomia é atingida ou não restam destinos a visitar. Dados como número de alvos detectados e inspecionados, distância percorrida e tempo de execução são registrados ao final da simulação.
 

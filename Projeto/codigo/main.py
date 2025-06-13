@@ -45,8 +45,8 @@ def simulacao_csv(lista_politicas =["passiva", "greed", "SA"], nome_arquivo="res
         escritor.writerows(resultados)
 
 if __name__ == "__main__":
-    lista_politicas = ["SA"] # ["passiva", "greed", "SA"]
-    simulacao_csv(lista_politicas=lista_politicas, nome_arquivo="SA_teste.csv")
+    # lista_politicas = ["SA"] # ["passiva", "greed", "SA"]
+    # simulacao_csv(lista_politicas=lista_politicas, nome_arquivo="SA_teste.csv")
     # resumir_resultados_csv("resultados_simulacoes.csv")
 
     num = 50
@@ -54,5 +54,6 @@ if __name__ == "__main__":
     # simulacao_estatica(num_navios=num, politica="greed", seed=1)
     # simulacao_estatica(num_navios=num, politica="SA", seed=1)
 
-    # simulacao_animada(num_navios=50, politica="greed", seed=1)
-    # simulacao_animada(num_navios=50, politica="SA", seed=1)
+    # simulacao_animada(num_navios=num, politica="passiva", seed=1)
+    # simulacao_animada(num_navios=num, politica="greed", seed=1)
+    simulacao_animada(num_navios=num, politica="SA", seed=1)
